@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך הליווי למנטוריות - כוחה של קהילה והמלצות</title>
+
+  <!-- no index google -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- linkedin icon -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #0891b2 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    section {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      margin: 40px auto;
+      max-width: 1200px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: var(--text-bright);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #93c5fd;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .description {
+      padding: 45px;
+      text-align: right;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      max-width: 1200px;
+      margin: 40px auto;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .profile-card-wrapper::before {
+      content: "";
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+
+    .pc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+      margin-bottom: 0;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .pc-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 25px;
+    }
+
+    .pc-pillar-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      text-align: right;
+    }
+
+    .pc-pillar-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 24px;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 0 0 4px 4px;
+    }
+
+    .pc-pillar-card h3 {
+      font-size: 1.2rem;
+      color: var(--text-bright);
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      white-space: nowrap;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: #fca5a5;
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+
+    .step-list {
+      margin-right: 20px;
+      margin-top: 10px;
+      color: var(--text);
+    }
+
+    .step-list li {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .profile-card-wrapper, .description { padding: 30px 20px; }
+      .pc-header { flex-direction: column-reverse; gap: 20px; text-align: center; align-items: center; }
+      .pc-title h1 { font-size: 1.8rem; }
+      .pc-pillars { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- New classes centralizing inline styles ---------- */
+    .section-wrapper-custom {
+      background: var(--card-alt);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 0 0 30px 0;
+      border: 1px solid var(--border);
+    }
+
+    .section-inner-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+    }
+
+    .paragraph-spacer-bottom-large {
+      margin-bottom: 25px;
+    }
+
+    .section-wrapper-spacing {
+      background: var(--card-alt);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 30px 0;
+      border: 1px solid var(--border);
+    }
+
+    .paragraph-spacer-bottom-medium {
+      margin-bottom: 20px;
+    }
+
+    .ai-helper-box {
+      background: rgba(96, 165, 250, 0.05);
+      border: 1px dashed var(--primary);
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+    }
+
+    .ai-helper-title {
+      color: var(--secondary);
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .paragraph-spacer-bottom-small {
+      margin-bottom: 15px;
+    }
+
+    .btn-generator-link {
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      margin-bottom: 15px;
+    }
+
+    .ai-helper-footer-tip {
+      font-size: 0.95rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 15px;
+      margin-top: 10px;
+    }
+
+    .visibility-notice-box {
+      background: rgba(34, 211, 238, 0.05);
+      border: 1px solid rgba(34, 211, 238, 0.2);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+    }
+
+    .visibility-notice-title {
+      color: var(--text-bright);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .golden-rule-highlight {
+      font-weight: 600;
+      color: #86efac;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .actions-grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .action-card-styled {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .action-card-main-title {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .action-card-subtitle {
+      color: var(--text-bright);
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .step-list-inner-spacing-bottom {
+      margin-right: 15px;
+      margin-bottom: 15px;
+    }
+
+    .action-card-subtitle-spacing {
+      color: var(--text-bright);
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .step-list-inner-reset {
+      margin-right: 15px;
+    }
+
+    .info-container-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .info-box-title {
+      color: var(--secondary);
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .info-nested-list {
+      margin-right: 20px;
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .section-footer-link-hint {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-top: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 15px;
+    }
+
+    .section-footer-link {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-nav-container {
+      margin-top: 30px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>עריכת פרופיל לינקדאין: <span class="highlight">כוחה של קהילה והמלצות עמיתים</span></h1>
+      </div>
+    </header>
+
+    <!-- The importance of recommendations and mutual assistance -->
+    <section class="description section-wrapper-custom">
+      <h3 class="section-inner-title">🤝 למה קשרים והמלצות הם קריטיים להצלחה?</h3>
+      <p class="paragraph-spacer-bottom-large">
+        פרופיל לינקדאין חזק הוא לא רק קורות חיים יבשים – הוא הוכחה חברתית (Social Proof) חיה ונושמת. כשמגייסים או מנהלים נכנסים לפרופיל של המנטית שלך, they מחפשים לראות שאנשים אמיתיים מהתעשייה מעריכים את העבודה שלה ואת יכולותיה. כאן נכנס כוחה של הקהילה התומכת.
+      </p>
+
+      <!-- Important platform update box -->
+      <div class="alert-box">
+        <i class="bi bi-exclamation-triangle-fill"></i> <strong>עדכון לגבי פיצ'ר ה-Kudos:</strong> לינקדאין הסירה רשמית את כפתור ה-Kudos מהפלטפורמה. הדרך המשפיעה ביותר כיום לתת "שאוט-אאוט" מקצועי ולהאיר את היכולות הטכנולוגיות היא באמצעות **אישור מיומנויות (Endorsements)** וכתיבת **המלצות רשמיות (Recommendations)**.
+      </div>
+
+      <div class="pc-pillars">
+        <!-- Card: Skills endorsement -->
+        <div class="pc-pillar-card">
+          <h3>אישור מיומנויות (Skills Endorsements)</h3>
+          <p>הצעי למנטית לפנות לכמה חברים קרובים או קולגות מהעבר, ולבקש מהם להיכנס לפרופיל שלה ולתת לה הערכות (Endorse) על ה-Skills השונים שלה, כדי לחזק את האמינות המקצועית שלה.</p>
+        </div>
+
+        <!-- Card: Barter deal -->
+        <div class="pc-pillar-card">
+          <h3>"עסקת חליפין" של המלצות</h3>
+          <p>הדרך הקלה ביותר להשיג המלצה כתובה ומפרגנת המדגישה תכונות טובות או יכולות טכנולוגיות היא פשוט להציע קח-תן: <em>"תכתבי לי המלצה קצרה על העבודה המשותפת שלנו, ואני אכתוב עלייך המלצה מכל הלב בחזרה!"</em>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- gudie-->
+    <section class="description section-wrapper-spacing">
+      <h3 class="section-inner-title">📝יצירת המלצות ובקשתן (Recommendations)</h3>
+      <p class="paragraph-spacer-bottom-medium">
+        ניתן לכתוב המלצה אך ורק לחברים בדרגה ראשונה (1st-degree connections) שאת מעריכה את עבודתם (קולגה, שותף לצוות, סטודנט וכו'). מקבל ההמלצה יכול לבחור האם להציג אותה בפרופיל שלו או להסתיר אותה.
+      </p>
+
+      <!-- use friend -->
+      <div class="ai-helper-box">
+        <h4 class="ai-helper-title">
+          🤖  לא טובה בניסוחים?
+        </h4>
+        <p class="paragraph-spacer-bottom-small">
+          אין שום בעיה! המנטית יכולה לנסח את ההמלצה על עצמה (או לכתוב את הטיוטה עבור החברה שלה), והחברה רק תצטרך לאשר ולפרסם אותה בלחיצת כפתור. כדי להפוך את זה לקל אפילו יותר, ניתן להשתמש במחולל ההמלצות האוטומטי:
+        </p>
+        <a href="https://www.linkedjetpack.com/linkedin-recommendation-generator/" target="_blank" class="pc-btn-cta btn-generator-link">
+          <i class="bi bi-magic"></i> מעבר למחולל ההמלצות של LinkedJetpack
+        </a>
+        <p class="ai-helper-footer-tip">
+          💡 <strong>תקועה עם מה לכתוב?</strong> תייעצי למנטית שלך להשתמש ב-AI (כמו ChatGPT או Gemini) על מנת לנסח פניות לחברים, או ליצור טיוטות ראשוניות להמלצות הדדיות בקלות ובמהירות!
+        </p>
+      </div>
+
+      <!--golden rule -->
+      <div class="visibility-notice-box">
+        <h4 class="visibility-notice-title"><i class="bi bi-eye-fill"></i> שימי לב: הכל גלוי בפרופיל שלך!</h4>
+        <p class="paragraph-spacer-bottom-small">
+          באזור ההמלצות בלינקדאין, כל מי שמבקר בפרופיל יכול לראות גם את ההמלצות ש<strong>קיבלת (Received)</strong> וגם את ההמלצות ש<strong>את נתת לאחרים (Given)</strong>!
+        </p>
+        <p class="golden-rule-highlight">
+          ✨ כלל הזהב: תחשבי שאת רוצה מאנשים המלצה טובה, כתבי המלצה שאת היית שמחה לקבל!
+        </p>
+        <p>
+          לכן, כשאת כותבת המלצה לחברה או קולגה, הקפידי לכתוב אותה בצורה תקינה, רהוטה, מקצועית ומפרגנת – כי היא משקפת גם את רמת המקצועיות והניסוח שלך בפרופיל הציבורי שלך.
+        </p>
+      </div>
+
+      <!-- add endorsement -->
+      <div class="actions-grid-layout">
+        <!--desktop add -->
+        <div class="action-card-styled">
+          <h4 class="action-card-main-title"><i class="bi bi-laptop"></i> פעולות דרך המחשב (Desktop):</h4>
+
+          <h5 class="action-card-subtitle">איך להמליץ על מישהו מהפרופיל שלו:</h5>
+          <ol class="step-list step-list-inner-spacing-bottom">
+            <li>היכנסי לפרופיל של החבר/ה (בדרגה ראשונה) שברצונך להמליץ עליו.</li>
+            <li>לחצי על כפתור <strong>More...</strong> (עוד) שנמצא בחלק המבוא בראש הפרופיל.</li>
+            <li>בחרי באפשרות <strong>Recommend</strong> (המלץ).</li>
+            <li>מלאי את השדות <strong>Relationship</strong> (מערכת היחסים) ו-<strong>Position at the time</strong> (התפקיד שלכם באותה תקופה), ולחצי על Next.</li>
+            <li>כתבי את ההמלצה בשדה ההודעה ולחצי על <strong>Send</strong> (שלח).</li>
+          </ol>
+
+          <h5 class="action-card-subtitle-spacing">מענה לבקשת המלצה שקיבלת:</h5>
+          <ol class="step-list step-list-inner-reset">
+            <li>לחצי על אייקון <strong>Messaging</strong> (הודעות) בראש דף הבית של לינקדאין.</li>
+            <li>בחרי בהודעת בקשת ההמלצה ("Write [member name] a recommendation") המופיעה משמאל או בתוך חלון הצ'אט.</li>
+            <li>לחצי על הקישור המצורף בתוך ההודעה כדי להתחיל בכתיבה.</li>
+            <li>בחלון הקופץ, לחצי על <strong>Write recommendation</strong> (או על <em>Ignore</em> כדי להתעלם).</li>
+          </ol>
+        </div>
+
+        <!--mobile add -->
+        <div class="action-card-styled">
+          <h4 class="action-card-main-title"><i class="bi bi-phone"></i> פעולות דרך אפליקציית הנייד (Mobile):</h4>
+
+          <h5 class="action-card-subtitle">איך להמליץ על מישהו מהפרופיל שלו:</h5>
+          <ol class="step-list step-list-inner-spacing-bottom">
+            <li>היכנסי לפרופיל של החבר/ה (בדרגה ראשונה) שברצונך להמליץ עליו.</li>
+            <li>לחצי על כפתור <strong>More...</strong> (שלוש נקודות) בראש הפרופיל.</li>
+            <li>לחצי על <strong>Recommend</strong>. פעולה זו תעביר אותך לעמוד הגדרת הקשר.</li>
+            <li>בחרי את מערכת היחסים המקצועית ואת התפקיד מתוך התפריטים הנגללים, ולחצי על Next.</li>
+            <li>כתבי את ההמלצה שלך בשדה הטקסט ולחצי על <strong>Send</strong>.</li>
+          </ol>
+
+          <h5 class="action-card-subtitle-spacing">מענה לבקשת המלצה שקיבלת:</h5>
+          <ol class="step-list step-list-inner-reset">
+            <li>לחצי על אייקון <strong>Messaging</strong> (הודעות) בפינה הימנית העליונה.</li>
+            <li>לחצי על הקישור המופיע בתוך הודעת בקשת ההמלצה שקיבלת.</li>
+            <li>במסך הבקשות שהתקבלו (Requests Received), לחצי על <strong>Recommend</strong> כדי לכתוב (או על <em>Delete</em> כדי למחוק).</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- more info -->
+      <div class="info-container-box">
+        <h4 class="info-box-title">📌 מידע נוסף שחשוב לדעת:</h4>
+        <ul class="info-nested-list">
+          <li>תוכלי לערוך או למחוק המלצות ששלחת לאחרים בכל עת שתרצי.</li>
+          <li>או שאת או מקבל ההמלצה יכולים לבחור להסתיר אותה מהפרופיל הציבורי בכל שלב.</li>
+          <li>המלצות יכולות להופיע בפרופיל הלינקדאין שלך **רק אם הן נשלחו ובוצעו דרך המערכת של לינקדאין** ושני הצדדים מחזיקים בפרופיל פעיל. לא ניתן להעלות מיילים או הודעות טקסט חיצוניות כהמלצה רשמית באזור זה.</li>
+        </ul>
+      </div>
+
+      <p class="section-footer-link-hint">
+        ℹ️ למידע מפורט נוסף, פתרון בעיות או הנחיות על הסתרה וביטול הסתרה של המלצות, מומלץ לבקר ב<a href="https://www.linkedin.com/help/linkedin/answer/a543723/recommend-someone-on-linkedin" target="_blank" class="section-footer-link">מדריך הרשמי של לינקדאין לכתיבת המלצות</a>.
+      </p>
+    </section>
+
+    <!-- back to guide -->
+    <div class="footer-nav-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

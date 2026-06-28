@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך הליווי למנטוריות - Baot</title>
+
+  <!-- no index google -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #0891b2 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ---------- GLOBAL SECTIONS ---------- */
+    section {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      margin: 40px auto;
+      max-width: 1200px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: var(--text-bright);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    h3 {
+      color: #93c5fd;
+    }
+
+    p {
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .description {
+      padding: 45px;
+      text-align: right;
+    }
+
+    /* ---------- PROFILE CARD WRAPPER ---------- */
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      max-width: 1200px;
+      margin: 40px auto;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .profile-card-wrapper::before {
+      content: "";
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(96, 165, 250, 0.15) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+
+    .pc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+      margin-bottom: 0;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .pc-intro {
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 25px;
+      max-width: 100% !important;
+    }
+
+    .pc-intro strong {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* Guide confidentiality and sharing guidelines */
+    .pc-confidentiality-box {
+      background: rgba(34, 211, 238, 0.05);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      border-right: 4px solid var(--secondary);
+      border-radius: 12px;
+      padding: 20px 25px;
+      margin-bottom: 35px;
+      box-shadow: 0 4px 20px rgba(34, 211, 238, 0.05);
+    }
+
+    .pc-confidentiality-title {
+      color: var(--secondary) !important;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pc-confidentiality-text {
+      color: #e2e8f0;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .pc-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .pc-pillar-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      position: relative;
+      transition: all 0.3s ease;
+      text-align: right;
+    }
+
+    .pc-pillar-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.4);
+      box-shadow: 0 10px 30px rgba(96, 165, 250, 0.12);
+    }
+
+    .pc-pillar-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 28px;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 0 0 4px 4px;
+    }
+
+    .pc-pillar-card.alt::before {
+      background: var(--secondary);
+    }
+
+    .pc-pillar-card.warning-highlight {
+      background: rgba(245, 158, 11, 0.06) !important;
+      border: 2px solid #f59e0b !important;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.15) !important;
+    }
+
+    .pc-pillar-card.warning-highlight::before {
+      background: #f59e0b !important;
+      width: 60px !important;
+      height: 4px !important;
+    }
+
+    .pc-pillar-card h3 {
+      font-size: 1.2rem;
+      color: var(--text-bright);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    /* EMBEDDED CTA FOOTER VARIATION */
+    .pc-footer-cta {
+      border-top: 1px solid var(--border);
+      padding-top: 35px;
+      margin-top: 20px;
+    }
+
+    .pc-footer-body-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+
+    .pc-footer-text {
+      font-size: 1.05rem;
+      color: var(--text);
+      max-width: 800px;
+      line-height: 1.6;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      white-space: nowrap;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    /* ---------- DOCUMENTATION & CORE GRID ---------- */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    .docs-grid .card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      transition: all 0.3s ease;
+      text-align: right;
+    }
+
+    .docs-grid .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.4);
+      box-shadow: 0 10px 30px rgba(96, 165, 250, 0.12);
+    }
+
+    .docs-grid .card h3 {
+      font-size: 1.2rem;
+      color: var(--text-bright);
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .docs-grid .card ul {
+      list-style: none;
+    }
+
+    .docs-grid .card ul li {
+      margin-bottom: 10px;
+    }
+
+    .docs-grid .card ul li a {
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .docs-grid .card ul li a:hover {
+      color: var(--text-bright);
+    }
+
+    /* warning ok button  */
+    .warning-accept-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f59e0b;
+      color: #0f172a;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.2s ease;
+    }
+
+    .warning-accept-btn:hover {
+      background: #d97706;
+      transform: scale(1.02);
+    }
+
+    /* hide guide */
+    #docs-section {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #docs-section.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- NEW STYLES FROM INLINE TRANSFER ---------- */
+    .warning-title {
+      color: #fbbf24;
+      font-size: 1.35rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .warning-text-primary {
+      color: #f8fafc;
+      font-weight: 500;
+      line-height: 1.7;
+    }
+
+    .warning-strong {
+      color: #fbbf24;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .warning-text-secondary {
+      color: #e2e8f0;
+    }
+
+    .contact-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .about-header {
+      border-bottom: none;
+      margin-bottom: 20px;
+      padding-bottom: 0;
+    }
+
+    .about-title {
+      border-bottom: none;
+      margin-bottom: 10px;
+      padding-bottom: 0;
+      text-align: right;
+    }
+
+    .site-section-title {
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .linkedin-icon {
+      color: #0a66c2;
+    }
+
+    @media (max-width: 900px) {
+      .pc-footer-body-wrapper { flex-direction: column; align-items: stretch; }
+      .pc-btn-cta { text-align: center; justify-content: center; }
+    }
+
+    @media (max-width: 768px) {
+      .profile-card-wrapper { padding: 30px 20px; }
+      .pc-header { flex-direction: column-reverse; gap: 20px; text-align: center; align-items: center; }
+      .pc-title h1 { font-size: 1.8rem; }
+      .pc-pillars { grid-template-columns: 1fr; }
+      section { padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>ברוכות הבאות למדריך הליווי למנטוריות ב-<span class="highlight">Baot</span> 🤍</h1>
+      </div>
+    </header>
+
+    <div class="pc-intro">
+      <p>היי וברוכה הבאה! אם הגעת לכאן, כנראה שאת חלק מקהילת <strong>באות</strong> ובחרת לקחת חלק במסע מדהים ליווי נשים בדרך למציאת המשרה הבאה שלהן בפיתוח תוכנה.</p>
+      <br>
+      <p>כמנטורית, יש לך כוח עצום להשפיע, לכוון ולהעניק מהניסיון שלך. כדי לעשות לך קצת סדר, ריכזתי במדריך הזה את השלבים המרכזיים שמומלץ לעבור עליהם יחד עם המנטית שלך, צעד אחר צעד.</p>
+    </div>
+
+    <!-- Guide Confidentiality Notice -->
+    <div class="pc-confidentiality-box">
+      <h4 class="pc-confidentiality-title">
+        <i class="bi bi-shield-lock-fill"></i> דבר חשוב לפני שמתחילות: המדריך מיועד למנטוריות בלבד!
+      </h4>
+      <p class="pc-confidentiality-text">
+        המדריך הזה וכל התוכן שבו נכתבו ונבנו במיוחד <strong>עבורכן, המנטוריות של "באות" בלבד</strong>. הושקעה כאן עבודה קשה, ממושכת ואינטנסיבית והוא מתעדכן באופן שוטף. <br>
+        אנא, <strong>אל תעבירו את הקישור או את התוכן ישירות למנטיות שלכן</strong>, אלא השתמשו בו ככלי עזר והעבירו להן את המסרים והתובנות בעצמכן במהלך המפגשים. כמו כן, אנא הימנעו משיתוף של המדריך עם גורמים מחוץ לארגון. אשמח מאוד שהכלי הזה יישאר פנימי וישמש אך ורק את מערך המנטורשיפ של הקהילה שלנו. תודה על ההבנה וההערכה!
+      </p>
+    </div>
+
+    <div class="pc-pillars">
+
+      <div class="pc-pillar-card warning-highlight">
+        <h3 class="warning-title">
+          הבהרה⚠️:
+        </h3>
+        <p class="warning-text-primary">
+          המדריך הזה <strong class="warning-strong">אינו מדריך רשמי</strong> של ארגון "באות". הוא נכתב לחלוטין על סמך הידע, והניסיון האישי שלי ועל דעתי בלבד.
+        </p>
+        <br>
+        <p class="warning-text-secondary">
+          השלבים המוצעים כאן הם המלצה בלבד. את לגמרי יכולה לאמץ אותם, לקחת רק מה שמתאים לך, או לפעול בדרך שלך.
+        </p>
+
+        <button class="warning-accept-btn" id="accept-warning-btn"> הבנתי, אני רוצה לראות את המדריכים</button>
+      </div>
+
+      <div class="pc-pillar-card alt">
+        <h3>אשמח להיות בקשר💬</h3>
+        <p>המדריך הזה הוא דינמי ומתפתח. אם יש לך הערות, תובנות, או רעיונות לשיפור, אני יותר מאשמח לשמוע!</p>
+        <br>
+        <p><strong>דברי איתי:</strong> מוזמנת לשלוח לי מייל לכתובת: <a href="mailto:orlyswork@gmail.com" class="contact-link">orlyswork@gmail.com</a> ואשמח שנפתח את זה לשיחה ונוסיף עוד ערך למדריך.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!--about my self-->
+  <section class="description">
+    <div class="pc-header about-header">
+      <div class="pc-title">
+        <h2 class="about-title">נעים להכיר: מי אני?</h2>
+      </div>
+    </div>
+
+    <!-- Professional Profile -->
+    <p>אני מפתחת Backend מנוסה ומלאת תשוקה, המתמחה בפיתוח Java, ארכיטקטורת SQL ועיצוב פתרונות מקצה לקצה (End-to-End). המומחיות שלי היא בבניית תכונות בקאנד יציבות וסקילביליות המסוגלות להתמודד עם עומסי עבודה אינטנסיביים. הלב המקצועי שלי נמצא בתוך ה-Codebase: כתיבת קוד Java נקי ותחזוקתי, כתיבת שאילתות מורכבות ומבני נתונים ב-SQL, והבטחה שמערכות מורכבות ירוצו ביעילות מקסימלית בסביבת הפרודקשן.</p>
+
+    <p>אני אוטודידקטית עם דחף מתמיד להרחבת סט היכולות שלי, אני מסתגלת במהירות לטכנולוגיות חדשות. אני מאמינה גדולה בעבודת צוות, נהנית מפתרון תקלות (Troubleshooting) ומאתגרים הנדסיים מורכבים, ומשקיעה רבות בשיתוף ידע וסנכרון לאורך הספרינטים.</p>
+
+    <br>
+    <!-- Website Overview -->
+    <h3 class="site-section-title">🌐 על האתר שלי – Orly's Code Corner</h3>
+    <p>האתר שלי נולד מתוך רצון לחקור לעומק נושאי Java ו-SQL שכולנו למדנו בשלב כלשהו, אך לא תמיד יוצא לנו לחזור אליהם ביום-יום. ב-Code Corner אנחנו צוללים לקונספטים ייחודיים, פיצ'רים מאתגרים שפתאום צצים בראיונות טכניים, ופנינים נסתרות של שפת Java שמזכירות לנו כמה היא חזקה.</p>
+
+    <p><strong>הפינות באתר משלבות הסברים קצרים לצד דוגמאות קוד מעשיות, והכל מוגש בעברית!</strong> בחרתי לכתוב את התכנים בעברית במטרה להנגיש את המידע הטכני המורכב, להפחית את מחסום השפה ולאפשר לקהילה המקומית ללמוד, להתרענן ולהבין טוב יותר מה קורה מאחורי הקלעים של ה-JVM וה-Runtime כדי להפוך למפתחים ולפותרות בעיות טובים יותר.</p>
+
+    <div class="pc-footer-cta">
+      <div class="pc-footer-body-wrapper">
+        <p class="pc-footer-text">בימים אלו אני מחפשת את האתגר הבא שלי כ-Senior Java Developer / Backend Engineer. אם הצוות שלכם מחפש מפתחת שכותבת לוגיקה יציבה ויודעת לצלול מהר למערכות מורכבות אשמח לשוחח!</p>
+        <div class="btn-container">
+          <a href="https://orlysharon.com" class="pc-btn-cta" target="_blank">לביקור באתר הרשמי שלי ➔</a>
+          <a href="https://www.linkedin.com/in/orlysharon/" class="pc-btn-cta" target="_blank">לביקור בלינקדאין שלי ➔</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MAIN SITE: DOCUMENTATION GRID  -->
+<section dir="rtl" id="docs-section">
+  <h2>🛠 מדריכים לפי נושאים</h2>
+  <div class="docs-grid">
+
+    <!--  linkedin -->
+    <div class="card">
+      <div class="card-icon"><i class="bi bi-linkedin linkedin-icon"></i> linkedin</div>
+      <ul>
+        <li><a href="linkedin/linkedinIntro.html">לינקדאין-פתיחה ➔</a></li>
+        <li><a href="linkedin/linkedinChangeUrl.html">שינוי URL ➔</a></li>
+        <li><a href="linkedin/linkedinAbout.html">about ➔</a></li>
+        <li><a href="linkedin/linkedinCv.html">work experience ➔</a></li>
+        <li><a href="linkedin/linkedinKudos.html">linkedin kudos ➔</a></li>
+        <li><a href="linkedin/linkedinSsi.html">SSI Social Selling Index ➔</a></li>
+      </ul>
+    </div>
+
+    <!-- Resume -->
+    <div class="card">
+      <div class="card-icon"><i class="bi bi-suitcase-lg"></i> Resume </div>
+      <ul>
+        <li><a href="resume/resumeIntro.html"> כללי ➔</a></li>
+        <li><a href="resume/resumePersonnelAndLang.html">פרטיים אישיים + שפות ➔</a></li>
+        <li><a href="resume/resumeExperience.html">נסיון תעסוקתי + לימודים ➔</a></li>
+      </ul>
+    </div>
+
+    <!-- job hunt -->
+    <div class="card">
+      <div class="card-icon">💾 Find your next job</div>
+      <ul>
+        <li><a href="jobHunt/jobHuntIntro.html">חיפוש עבודה ➔</a></li>
+        <li><a href="jobHunt/jobTracking.html">מעקב אחרי משרות ➔</a></li>
+      </ul>
+    </div>
+
+    <!-- interview-->
+    <div class="card">
+      <div class="card-icon">⚙️ interview</div>
+      <ul>
+        <li><a href="interview/selfPresentation.html">הצגה עצמית ➔</a></li>
+        <li><a href="interview/PreparingForATechnicalInterview.html">הכנה לראיון טכני ➔</a></li>
+        <li><a href="interview/ProjectPresentation.html">הצגת פרויקט ➔</a></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- script show / hide  -->
+<script>
+  //show
+  function showDocumentation() {
+    var docsSection = document.getElementById('docs-section');
+    docsSection.style.display = 'block';
+    setTimeout(function() {
+      docsSection.classList.add('show');
+    }, 10);
+  }
+
+  // istener from main
+  document.getElementById('accept-warning-btn').addEventListener('click', function() {
+    showDocumentation();
+    document.getElementById('docs-section').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // showDocs=true listener from iner page
+  window.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('showDocs') === 'true') {
+      showDocumentation();
+      // jump to guide
+      setTimeout(function() {
+        document.getElementById('docs-section').scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  });
+</script>
+
+</body>
+</html>

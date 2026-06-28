@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - int poll </title>
+  <link rel="stylesheet" href="../../style/style.css">
+  <style>
+    pre {
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+    }
+    .code-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <main class="article">
+<h1> Java Integer Pool (Integer Cache)</h1>
+
+<p>
+  ב-Java קיימים שני אזורי זיכרון עיקריים:
+</p>
+
+<h3>📚 Stack (מחסנית)</h3>
+<ul>
+  <li>שומר משתנים מקומיים.</li>
+  <li>שומר רפרנסים (כתובות) לאובייקטים.</li>
+  <li>מהיר מאוד לגישה.</li>
+</ul>
+
+<h3>🗄 Heap (ערימה)</h3>
+<ul>
+  <li>שומר אובייקטים.</li>
+  <li>שומר מערכים (Arrays).</li>
+  <li>כל אובייקט שנוצר באמצעות <code>new</code> נשמר בו.</li>
+</ul>
+
+<p><h3>
+  אז מה בעצם קורה בזיכרון כאשר אנחנו יוצרים משתנה מסוג Integer?
+</h3>
+</p>
+
+
+
+<pre ><code>
+
+Integer x = 10;
+</code> </pre>
+
+<ul>
+  <li>נוצר אובייקט Integer ב-Heap.</li>
+  <li>המשתנה x נשמר ב-Stack.</li>
+  <li>x מחזיק רפרנס לאובייקט שנמצא ב-Heap.</li>
+</ul>
+
+
+<pre ><code>
+
+Integer a = new Integer(5); </code></pre>
+
+
+<ul>
+  <li>נוצר אובייקט חדש ב-Heap.</li>
+  <li>המשתנה a מחזיק רפרנס אליו.</li>
+</ul>
+
+<h2>🔍 השוואת Integer</h2>
+
+<p>
+  כאשר רוצים להשוות ערכים של Integer, בדרך כלל נשתמש ב-equals:
+</p>
+
+
+<pre ><code>
+
+Integer x = 200;
+Integer y = 200;
+
+System.out.println(x.equals(y)); </code></pre>
+
+
+<p><strong>פלט:</strong> true</p>
+
+<p>
+  הסיבה היא ש-equals משווה את הערך עצמו ולא את מיקום האובייקט בזיכרון.
+</p>
+
+<p>
+  עכשיו ננסה להשתמש ב-== :
+</p>
+
+
+
+<pre ><code>
+Integer x = 200;
+Integer y = 200;
+
+System.out.println(x == y); </code></pre>
+
+
+<p><strong>פלט:</strong> false</p>
+
+<p>
+  הסיבה היא שהאופרטור == משווה רפרנסים ולא ערכים.
+</p>
+
+<p>
+  אבל מה יקרה אם נשתמש בערך 100?
+</p>
+<pre ><code>
+Integer x = 100;
+Integer y = 100;
+
+System.out.println(x == y); </code></pre>
+
+
+<p><strong>פלט:</strong> true</p>
+
+<p>
+  רגע... למה הפעם קיבלנו true?
+</p>
+
+<h2>🚀 הכירו את Integer Cache</h2>
+
+<p>
+  Java מכילה מנגנון אופטימיזציה בשם Integer Cache (או Integer Pool).
+</p>
+
+<p>
+  עבור ערכים בטווח:
+</p>
+
+
+
+
+-128 עד 127
+
+
+<p>
+  Java שומרת אובייקטים מוכנים מראש וממחזרת אותם במקום ליצור אובייקטים חדשים.
+</p>
+
+<pre ><code>
+Integer x = 100;
+Integer y = 100; </code></pre>
+
+
+<p>
+  במקרה זה שני המשתנים מצביעים לאותו אובייקט בזיכרון ולכן:
+</p>
+
+
+
+
+x == y
+
+
+<p>
+  מחזיר true.
+</p>
+
+<h2>❌ מה קורה מחוץ לטווח?</h2>
+
+<pre ><code>
+Integer x = 200;
+Integer y = 200; </code></pre>
+
+
+<p>
+  הערך 200 נמצא מחוץ לטווח ה-Cache ולכן נוצרים שני אובייקטים שונים.
+</p>
+
+<p>
+  כתוצאה מכך:
+</p>
+
+
+
+
+x == y
+
+
+<p>
+  מחזיר false.
+</p>
+
+<h2>💡 למה Java עושה את זה?</h2>
+
+<ul>
+  <li>חיסכון בזיכרון.</li>
+  <li>פחות יצירת אובייקטים.</li>
+  <li>ביצועים טובים יותר.</li>
+  <li>פחות עומס על ה-Garbage Collector.</li>
+</ul>
+
+<p>
+  בתקופה שבה זיכרון היה משאב יקר, המנגנון הזה סיפק שיפור משמעותי בביצועים ובצריכת הזיכרון.
+</p>
+
+<h2>⚙️ הקשר ל-Autoboxing</h2>
+
+<p>
+  כאשר Java ממירה אוטומטית מ-int ל-Integer:
+</p>
+
+<pre ><code>
+        Integer x = 100; </code></pre>
+
+
+<p>
+  מאחורי הקלעים Java מבצעת פעולה דומה ל:
+</p>
+
+<pre ><code>
+Integer x = Integer.valueOf(100); </code></pre>
+
+
+<p>
+  המתודה valueOf בודקת האם הערך קיים ב-Cache ומחזירה אובייקט קיים במידת האפשר.
+</p>
+
+<h2>🏗 איפה המנגנון ממומש?</h2>
+
+<p>
+  המנגנון ממומש בתוך המחלקה:
+</p>
+
+
+
+
+java.lang.Integer
+
+
+<p>
+  בעת טעינת המחלקה נוצר מערך Cache פנימי המכיל את הערכים בטווח הנתמך.
+</p>
+
+<h2>🔧 האם ניתן לשנות את הטווח?</h2>
+
+<p>
+  התשובה היא כן ולא.
+</p>
+
+<ul>
+  <li>הגבול התחתון (128-) קבוע ואינו ניתן לשינוי.</li>
+  <li>הגבול העליון (127) ניתן להגדלה.</li>
+</ul>
+<p>
+  באמצעות הפרמטר:
+</p>
+
+
+<span dir="ltr">-XX:AutoBoxCacheMax=1000</span>
+
+<p>
+  Java תשמור Cache עבור ערכים בטווח:
+</p>
+
+min:-128
+max:1000
+
+<h2>🎯 סיכום</h2>
+
+<p>
+  כאשר משווים Integer-ים, מומלץ להשתמש ב-equals ולא ב-==.
+</p>
+
+<pre ><code>
+Integer a = 100;
+Integer b = 100;
+
+System.out.println(a == b);      // true
+
+Integer c = 200;
+Integer d = 200;
+
+System.out.println(c == d);      // false
+
+System.out.println(c.equals(d)); // true </code></pre>
+
+
+<p>
+  Integer Cache הוא אחד מאותם מנגנונים קטנים ב-Java שמזכירים לנו שלא תמיד מה שאנחנו רואים בקוד הוא כל הסיפור. לפעמים יש לא מעט קסם שמתרחש מאחורי הקלעים.
+</p>
+
+<br>
+<br>
+
+<div style="text-align: center; margin-top: 40px;">
+  <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+</div>
+</body>
+</section>

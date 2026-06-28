@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מבנה מרכזי בקורות חיים: ניסיון, לימודים ותוכן מקצועי</title>
+
+  <!-- no index google -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      max-width: 1200px;
+      margin: 40px auto;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .pc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+      margin-bottom: 0;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      padding: 10px 0;
+    }
+
+    .pc-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      margin: 25px 0;
+    }
+
+    .pc-pillar-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .pc-pillar-card h3 {
+      font-size: 1.25rem;
+      color: var(--text-bright);
+      margin-bottom: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    ul {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    /* ---------- New classes centralizing inline styles ---------- */
+    .section-title-large {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .paragraph-spacer-bottom {
+      margin-bottom: 20px;
+    }
+
+    .pillar-card-title-highlight {
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 12px;
+    }
+
+    .pillar-card-list-styled {
+      font-size: 0.95rem;
+      padding-right: 15px;
+    }
+
+    .juniors-accent-text {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .code-primary-accent {
+      color: var(--primary);
+    }
+
+    .code-error-accent {
+      color: #ef4444;
+    }
+
+    .section-spacing-top {
+      margin-top: 20px;
+    }
+
+    .role-guidelines-box {
+      background: rgba(34, 211, 238, 0.04);
+      border-right: 4px solid var(--secondary);
+      padding: 20px;
+      border-radius: 4px 16px 16px 4px;
+      margin-bottom: 25px;
+    }
+
+    .role-guidelines-title {
+      color: var(--text-bright);
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .role-guidelines-list {
+      margin-right: 25px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .role-guidelines-badge {
+      color: var(--primary);
+      display: block;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .code-secondary-accent {
+      color: var(--secondary);
+    }
+
+    .golden-rule-months {
+      font-weight: 500;
+      color: #fcd34d;
+      margin-top: 10px;
+    }
+
+    .section-divider-top {
+      margin-top: 25px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+    }
+
+    .section-title-medium {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .digital-footprint-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .digital-footprint-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 16px;
+      position: relative;
+    }
+
+    .digital-footprint-title {
+      color: var(--text-bright);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-github-color {
+      color: var(--secondary);
+      font-size: 1.3rem;
+    }
+
+    .icon-stackoverflow-color {
+      color: var(--warning);
+      font-size: 1.3rem;
+    }
+
+    .card-text-small {
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .card-list-nested {
+      padding-right: 15px;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .text-success-accent {
+      color: var(--success);
+    }
+
+    .mission-summary-box {
+      background: rgba(96, 165, 250, 0.08);
+      border-right: 4px solid var(--primary);
+      padding: 15px;
+      border-radius: 4px 12px 12px 4px;
+      font-size: 0.95rem;
+    }
+
+    .addons-card-wrapper {
+      background: var(--card-alt);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .addons-card-title {
+      color: var(--secondary);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .addons-warning-text {
+      color: #fca5a5;
+      display: block;
+      margin-top: 8px;
+    }
+
+    .footer-nav-container {
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>חלק ב' של קורות החיים: <span class="highlight">בניית שלד המסמך והתוכן המקצועי</span></h1>
+      </div>
+    </header>
+
+    <!-- Resume structure: According to experience level -->
+    <section class="description">
+      <h3 class="section-title-large">🏗️ סידור המבנה המרכזי: ניסיון מול לימודים</h3>
+      <p class="paragraph-spacer-bottom">הסידור וההיררכיה של מרכז קורות החיים משתנים לחלוטין בהתאם לנקודת הזמן המקצועית שבה את נמצאת ברגע זה:</p>
+
+      <div class="pc-pillars">
+        <!-- Juniors / Students tab -->
+        <div class="pc-pillar-card">
+          <h3><i class="bi bi-mortarboard-fill" class="code-primary-accent"></i> ללא ניסיון בתחום (בוגרות/סטודנטיות)</h3>
+          <p class="pillar-card-title-highlight">פרק הלימודים (Education) מופיע ראשון בראש הדף!</p>
+          <ul class="pillar-card-list-styled">
+            <li>הדגישי בהרחבה את <strong>פרויקטי הגמר</strong> שלכן (או פרויקטי ביניים משמעותיים אם אתן עדיין במהלך התואר).</li>
+            <li><span class="juniors-accent-text">סטודנטיות וג'וניוריות:</span> תארו בקצרה פרויקטים משמעותיים מהתואר או הבוטקאמפ, וציינו במפורש באילו טכנולוגיות השתמשתן ובאילו חברות (Companies) מהשוק שיתפתן איתן פעולה במהלך העבודה על הפרויקט.</li>
+            <li>אם ממוצע הציונים שלך הוא <strong>מעל 80</strong> – צייני אותו בהחלט במסמך.</li>
+            <li>אם הממוצע הוא <strong>מעל 85</strong> – כתבי בגאווה "בהצטיינות" (Graduated with honors) לצד ציון הממוצע.</li>
+            <li>אם ציון הפסיכומטרי שלך גבוה במיוחד, שווה לציין אותו בשלב זה (בשלבים מתקדמים בקריירה אין בו צורך יותר, אלא אם נדרש במפורש במשרה).</li>
+          </ul>
+        </div>
+
+        <!-- Experienced professionals tab -->
+        <div class="pc-pillar-card">
+          <h3><i class="bi bi-briefcase-fill" class="code-secondary-accent"></i> בעלות ניסיון מקצועי רלוונטי</h3>
+          <p class="pillar-card-title-highlight">פרק הניסיון התעסוקתי (Experience) מופיע ראשון!</p>
+          <ul class="pillar-card-list-styled">
+            <li>פרק הלימודים והתארים האקדמיים יעבור אוטומטית אל מתחת לניסיון התעסוקתי.</li>
+            <li><strong>מילות מפתח ודקדוק:</strong> חובה לוודא שהמושגים הטכנולוגיים רשומים בדיוק כפי שהם מקובלים ושגורים בתעשייה (לדוגמה: רשמי <code class="code-primary-accent">AWS</code> ולא <code class="code-error-accent">Aws</code>).</li>
+            <li>צייני בקצרה מה היו תחומי האחריות והיכולות שלך ובאילו טכנולוגיות עבדת ביומיום. בניסיון תעסוקתי רשמי **אין צורך לפרט או לשרטט פרויקטים אקדמיים**.</li>
+            <li><strong>חוק הזמנים (דקדוק):</strong> עבור תפקידי עבר השתמשי בזמן עבר (e.g., Developed, Managed), ועבור התפקיד הנוכחי שלך השתמשי בזמן הווה (e.g., Developing, Leading).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Critical role structure definition -->
+    <section class="description section-spacing-top">
+      <div class="role-guidelines-box">
+        <h3 class="role-guidelines-title"><i class="bi bi-info-circle-fill" class="code-secondary-accent"></i> כיצד להציג כל תפקיד ותפקיד?</h3>
+        <p class="paragraph-spacer-bottom">
+          עבור כל מקום עבודה (או שירות צבאי רלוונטי) שאת מציינת בפרק הניסיון, חובה להקפיד על ציון שלושת הפרמטרים הבאים באופן ברור ובאנגלית:
+        </p>
+        <ol class="role-guidelines-list">
+          <li><strong>תיאור וכותרת התפקיד המדויקת:</strong> לדוגמה, <code class="code-primary-accent">Backend Developer</code> או <code class="code-primary-accent">Full Stack Engineer</code>.</li>
+          <li><strong>שם החברה:</strong> שם הארגון או הסטארטאפ שבו עבדת.</li>
+          <li>
+            <strong>השנים בהן היית בתפקיד:</strong> צייני את טווח השנים (למשל: 2025 - 2023).
+            <span class="role-guidelines-badge">
+              💡 במידה ואת עדיין עובדת באותו מקום עבודה, צייני את שנת ההתחלה ועד היום. לדוגמה: <code class="code-secondary-accent">2023-Present </code>.
+            </span>
+          </li>
+        </ol>
+        <p class="golden-rule-months">
+          💡 <strong>חוק החודשים:</strong> במידה והיית בתפקיד תקופה של <u>מעל שנה אחת</u>, אין שום צורך לציין חודשים מדויקים (כמו Mar 2023 - Nov 2024), ציון השנים בלבד (2023 - 2024) הוא מספיק, נקי ומקובל מאוד בתעשייה.
+        </p>
+      </div>
+    </section>
+
+    <!-- Section: Professionalism is the name of the game (Git & Stack Overflow) -->
+    <section class="description section-divider-top">
+      <h3 class="section-title-medium">
+        <i class="bi bi-code-slash" class="code-primary-accent"></i> 💻 מקצועיות היא שם המשחק: בניית טביעת רגל דיגיטלית
+      </h3>
+      <p class="paragraph-spacer-bottom">
+        בשוק טכנולוגי תחרותי, קורות חיים מודפסים הם רק ההתחלה. מגייסים, מנהלי צוותים וארכיטקטים של תוכנה מחפשים הוכחות בשטח ליכולות הכתיבה, פתרון הבעיות והמעורבות של המנטית בקהילת הפיתוח. הנחי אותה לשדרג ולתחזק באדיקות את שני הנכסים הדיגיטליים המובילים שלה:
+      </p>
+
+      <div class="digital-footprint-grid">
+
+        <!-- Git card -->
+        <div class="digital-footprint-card">
+          <h4 class="digital-footprint-title">
+            <i class="bi bi-github icon-github-color"></i> פרופיל GitHub: חלון הראווה של הקוד שלך
+          </h4>
+          <p class="card-text-small">
+            העלי לחשבון הגיט האישי שלך כל קוד שניתן להצגה (כמובן קוד מקורי ופרטי שלך בלבד, ולא קוד קנייני ממקום העבודה הנוכחי או הקודם).
+          </p>
+          <ul class="card-list-nested">
+            <li>📝 <strong>סדר וארגון:</strong> ודאי שכל פרויקט מחולק נכון לתיקיות וכולל קובץ <code class="code-secondary-accent">README.md</code> עם תיעוד ראוי והסבר על אופן ההרצה.</li>
+            <li>📊 <strong class="text-success-accent">כמות ואיכות:</strong> ככל שיש לך יותר פרויקטים וקמיטים (Commits) בגיט, כך המעסיק מקבל אינדיקציה טובה יותר על הדרך בה את חושבת וכותבת קוד.</li>
+            <li>🆔 <strong>מיתוג אישי:</strong> ודאי שחשבון הגיט שלך נושא את <strong>שמך המלא באנגלית</strong> בצורה ברורה ומקצועית.</li>
+          </ul>
+        </div>
+
+        <!-- Stack Overflow card -->
+        <div class="digital-footprint-card">
+          <h4 class="digital-footprint-title">
+            <i class="bi bi-stack-overflow icon-stackoverflow-color"></i> Stack Overflow: הגוגל של המפתחים
+          </h4>
+          <p class="card-text-small">
+            מעורבות בפלטפורמה הזו היא סימן מובהק למקצועיות וליכולת מחקר עצמאית. ישנם מגייסים ומנהלים טכנולוגיים שמחפשים את הפרופיל שלך שם עוד לפני הזימון לראיון!
+          </p>
+          <ul class="card-list-nested">
+            <li>🆔 <strong>שם מלא:</strong> פתחי חשבון (או עדכני קיים) וודאי שהוא מופיע תחת <strong>שמך המלא</strong> כדי שיקשר ישירות אלייך.</li>
+            <li>🙋‍♀️ <strong>שאילת שאלות:</strong> נתקלת בבאג מורכב או בבעיה ארכיטקטונית שלא מצאת לה פתרון ברשת? אל תהססי לשאול בצורה מנוסחת היטב בקהילה.</li>
+            <li>💡 <strong>תרומה ומענה:</strong> נסי לענות על שאלות של מפתחים אחרים בנושאים שאת שולטת בהם. משתתפת פעילה ב-Stack Overflow היא נכס שכל חברה טכנולוגית רוצה אצלה בצוות.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Summary and CTA line -->
+      <div class="mission-summary-box">
+        🚀 <strong>משימה למפגש הקרוב:</strong> עברי עם המנטית על חשבונות ה-GitHub וה-Stack Overflow שלה. ודאו שהם מעודכנים, ייצוגיים ונושאים את שמה. זכרו, קוד נקי ונוכחות דיגיטלית פעילה פותחים דלתות מהר יותר מכל קורות חיים יבשים!
+      </div>
+    </section>
+
+    <!-- Volunteering, military service, and redundant sentences -->
+    <section class="description section-divider-top">
+      <h3 class="section-title-large">📌 דגשים חשובים נוספים: התנדבות וצבא</h3>
+
+      <div class="digital-footprint-grid">
+        <!-- Volunteering -->
+        <div class="addons-card-wrapper">
+          <h4 class="addons-card-title"><i class="bi bi-heart-fill"></i> פרק התנדבות (Volunteering)</h4>
+          <p class="card-text-small">
+            אם את מתנדבת (במיוחד בארגונים טכנולוגיים, עמותות מקצועיות או קהילות פיתוח), צייני זאת ואת תחומי האחריות שלך! מעסיקים רבים רואים בכך ערך מוסף אדיר ומודל למחויבות ומעריכים זאת מאוד.
+            <br><span class="addons-warning-text">⚠️ סייג חשוב: אם ההתנדבות היא בעלת אופי פוליטי או מפלגתי, מומלץ להשמיט אותה לחלוטין מהמסמך כדי למנוע ויכוחים, חיכוכים או אפליה אידיאולוגית, יש להתרחק מכל עילה לפסילה.</span>
+          </p>
+        </div>
+
+        <!-- Military service -->
+        <div class="addons-card-wrapper">
+          <h4 class="addons-card-title"><i class="bi bi-shield-check"></i> שירות צבאי / לאומי</h4>
+          <p class="card-text-small">
+            בישראל נהוג להכניס את השירות הצבאי או הלאומי כחלק מרצף הניסיון התעסוקתי שלכן.
+            <br>• במידה והמנטית שירתה ב<strong>יחידה טכנולוגית משמעותית</strong> (כמו 8200, אופק, ממר"ם, בסמ"ח וכו') – יש לציין זאת בראש פרק הניסיון, לכתוב את השנים, ולפרט בהרחבה את העשייה הטכנולוגית, הארכיטקטורה והכלים בהם השתמשה.
+            <br>• במידה והיא לא ביצעה שירות צבאי, אין צורך לציין, להסביר או לתרץ זאת כלל במסמך קורות החיים.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- back to guide -->
+    <div class="footer-nav-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

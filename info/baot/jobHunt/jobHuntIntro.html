@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך איתור משרות והגשת קורות חיים</title>
+
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .pc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 35px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      padding: 10px 0;
+    }
+
+    .mentor-panel {
+      background: rgba(96, 165, 250, 0.05);
+      border: 1px solid var(--primary);
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 35px;
+    }
+
+    .pc-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin: 25px 0;
+    }
+
+    .pc-pillar-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .pc-pillar-card h3 {
+      font-size: 1.25rem;
+      color: var(--text-bright);
+      margin-bottom: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .job-link-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .job-link-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .job-link-card i {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    ul {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    /* ---------- NEW STYLES FROM INLINE TRANSFER ---------- */
+    .panel-title {
+      color: var(--text-bright);
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .icon-warning {
+      color: var(--warning);
+    }
+
+    .icon-secondary {
+      color: var(--secondary);
+    }
+
+    .icon-primary {
+      color: var(--primary);
+    }
+
+    .icon-success {
+      color: var(--success);
+    }
+
+    .paragraph-spacer {
+      margin-bottom: 15px;
+    }
+
+    .paragraph-spacer-bold {
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+
+    .success-badge-box {
+      background: rgba(52, 211, 153, 0.08);
+      border-right: 4px solid var(--success);
+      padding: 15px;
+      border-radius: 4px 12px 12px 4px;
+      margin-bottom: 20px;
+    }
+
+    .panel-subtitle {
+      color: var(--text-bright);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .panel-subtitle-secondary {
+      color: var(--secondary);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .alert-text-danger {
+      color: #fca5a5;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+
+    .section-divider-top {
+      margin-top: 25px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+    }
+
+    .section-title-flex {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title-simple {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-bright);
+    }
+
+    .parameter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .parameter-card {
+      background: var(--card-alt);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .parameter-card strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .parameter-card span {
+      font-size: 0.9rem;
+    }
+
+    .info-badge-box {
+      background: rgba(34, 211, 238, 0.04);
+      border-right: 4px solid var(--secondary);
+      padding: 15px;
+      border-radius: 4px 12px 12px 4px;
+    }
+
+    .pillar-full-width {
+      grid-column: 1 / -1;
+    }
+
+    .quote-container {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .quote-label {
+      font-size: 0.8rem;
+      color: #94a3b8; /* fallback for missing --muted */
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .quote-text {
+      color: var(--text-bright);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .paragraph-highlight-text {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    .text-primary-bold {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .notice-section {
+      margin-top: 30px;
+      background: rgba(245, 158, 11, 0.03);
+      border: 1px dashed rgba(245, 158, 11, 0.3);
+      padding: 20px;
+      border-radius: 16px;
+    }
+
+    .notice-title {
+      color: var(--warning);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .notice-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    .notice-text a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .link-card-muted-text {
+      color: #94a3b8; /* fallback for missing --muted */
+    }
+
+    .link-card-whatsapp {
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+
+    .footer-container {
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>אסטרטגיית איתור משרות: <span class="highlight">איך להביא את המנטית לראיונות עבודה</span></h1>
+      </div>
+    </header>
+
+    <section class="mentor-panel">
+      <h3 class="panel-title"><i class="bi bi-lightning-charge-fill icon-warning"></i> דף הנחיות ודגשים למנטורית (קריטי!)</h3>
+      <p class="paragraph-spacer">
+        כמנטורית, התפקיד המרכזי שלך בשלב זה הוא <strong>לדחוף את המנטית לפעול באופן אקטיבי, אגרסיבי ומסודר</strong>. שוק הגיוס דורש עבודה סטטיסטית מדויקת, ולכן המטרה היא להביא אותה ליעד הבא:
+      </p>
+
+      <div class="success-badge-box">
+        📊 <strong>חוק המספרים ויחסי ההמרה:</strong> על המנטית לשלוח <strong>לפחות 20 קורות חיים ביום</strong> (במשך 5 ימי עבודה בשבוע = כ-100 הגשות בשבוע).
+        מתוך 100 הגשות בשבוע, יחס המרה מצוין לתעשייה עומד על <strong>3% (כלומר 2 עד 3 זימונים לראיונות בשבוע)</strong>. אם היא לא מגיעה למספרים האלה, יש להניע אותה לפעולה ולהסביר לה את הרציונל!
+      </div>
+
+      <h4 class="panel-subtitle">🧠 שינוי תפיסה מנטלי: "לחשוב כמו גבר"</h4>
+      <p class="paragraph-spacer">
+        שכנעי את המנטית שלך להגיש מועמדות <strong>גם אם אין לה התאמה מלאה של 100%</strong> לדרישות המשרה! נשים רבות נוטות להסס אם הן לא עונות על כל סעיף. הסבירי לה שמודעות דרושים מייצגות את רשימת המשאלות האולטמטיבית והאידיאלית של המעסיק, אך בפועל, <strong>אם יש לה 60% ומעלה של התאמה, היא חייבת לשלוח!</strong>
+      </p>
+
+      <p class="alert-text-danger">
+        ⚠️ חוסן נפשי: אסור להתייאש מתשובות שליליות ("לא"). בנוסף, אם נפתח תפקיד חדש באותה חברה, או תפקיד שהיא נפסלה ממנו לפני 3 חודשים ומעלה, עליה להגיש מועמדות מחדש ללא היסוס.
+      </p>
+    </section>
+
+    <!-- Employer examination and significant parameters -->
+    <section class="description section-divider-top">
+      <h3 class="section-title-flex">
+        <i class="bi bi-search icon-secondary"></i> 🔍 בחינת המעסיק: הראיון הוא תהליך דו-כיווני!
+      </h3>
+      <p class="paragraph-spacer">
+        כמו שהמעסיק והמגייסת מחפשים פרופיל של עובדת ספציפית שמתאימה לצוות ולתפקיד, <strong>חשוב לזכור שגם אנחנו בוחנות את המעסיק!</strong> חיפוש עבודה מוצלח דורש סינון מקדים כדי למנוע בזבוז זמן על מקומות שלא יתאימו לצרכים או לערכים של המנטית.
+      </p>
+      <p class="paragraph-spacer-large-bold">
+        לפני שליחת קורות החיים (ובמהלך הראיונות), הנחי את המנטית לוודא את הפרמטרים הבאים:
+      </p>
+
+      <div class="parameter-grid">
+        <div class="parameter-card">
+          <strong>🎯 תחום העיסוק (Domain)</strong>
+          <span>במה החברה עוסקת? האם זה עולם תוכן שמעניין אותה ומלהיב אותה לפתח בו (למשל: סייבר, פינטק, AI, מדיקל)?</span>
+        </div>
+        <div class="parameter-card">
+          <strong>🏢 גודל ואופי החברה</strong>
+          <span>האם מדובר בסטארטאפ בתחילת הדרך (סיכון גבוה, קצב מהיר, הרבה כובעים), חברה יציבה ורווחית, קורפורייט ענק, חברה ישראלית או חברה אמריקאית ותרבותה?</span>
+        </div>
+        <div class="parameter-card">
+          <strong>📍 מיקום ונגישות</strong>
+          <span>איפה המשרדים יושבים? האם המיקום נגיש לה פיזית (רכבת, פקקים, חניה)? הגעה מתישה למשרד שוחקת את העובד מהר מאוד.</span>
+        </div>
+        <div class="parameter-card">
+          <strong>🌐 מודל עבודה (היברידיות)</strong>
+          <span>מהי מדיניות העבודה מהבית? (האם נדרשת הגעה מלאה, 3 ימים במשרד, או מודל גמיש לחלוטין)? נתון קריטי לניהול לו"ז ואיזון חיים-עבודה.</span>
+        </div>
+      </div>
+
+      <div class="info-badge-box">
+        💡 <strong>איך מבררים את זה מראש?</strong> את רוב המידע על אופי החברה, התרבות הארגונית, הסביבה החברתית וממרכיבי השכר המקובלים בה, המנטית יכולה לגלות מראש באמצעות פלטפורמת <strong>Glassdoor</strong> (הקישור הישיר אליה מופיע במדריך הלינקים בעמוד הבא).
+      </div>
+    </section>
+
+    <section class="description">
+      <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 20px; color: var(--text-bright); border-bottom: 1px solid var(--border); padding-bottom: 8px;">🏗️ הדרכים האפקטיביות ביותר לפיצוח שוק העבודה</h3>
+
+      <div class="pc-pillars">
+
+        <div class="pc-pillar-card pillar-full-width">
+          <h3><i class="bi bi-linkedin icon-primary"></i> רשת לינקדאין ושיטת "חבר מביא חברה" (Referral)</h3>
+          <p class="paragraph-spacer">
+            הגעה למשרה דרך עובד קיים בתוך החברה משפרת דרמטית את סיכויי קורות החיים שלך לעבור את הסינון הראשוני ולהגיע ישירות לשולחן של המגייסת. ברוב החברות קיימת תוכנית מתגמלת של "חבר מביא חברה" (העובד מקבל בונוס כספי על גיוס מוצלח), ולכן <strong>עובדים ישמחו מאוד לעזור לך ולהעביר את קורות החיים שלך פנימה!</strong>
+          </p>
+
+          <h4 class="panel-subtitle-secondary">כיצד לבצע את הפנייה בצורה נכונה?</h4>
+          <p class="paragraph-spacer">
+            מצאי משרה פתוחה שמתאימה לכישורים שלך בחברה שמעניינת אותך. לאחר מכן, חפשי עובדים (עדיף מפתחים/ות או קולגות לתפקיד) באותה חברה בלינקדאין, שלחי בקשת חברות ופתחי איתם בשיחת חולין כללית, נעימה ולא תוקפנית. שאלי שאלות קלות על הטכנולוגיות, הארכיטקטורה או אופי הצוות.
+          </p>
+
+          <div class="quote-container">
+            <span class="quote-label">💬 דוגמה לנוסח פנייה מנצח (ניתן להתאמה):</span>
+            <p class="quote-text">
+              "היי [שם העובד/ת], ראיתי שאת/ה עובד/ת בחברת XYZ והחברה נראית לי סופר מעניינת! האם אוכל לשאול אותך כמה שאלות כלליות על הטכנולוגיות ואופי העבודה אצלכם?"
+            </p>
+          </div>
+
+          <p class="paragraph-highlight-text">
+            הצד השני בדרך כלל יענה בשמחה (אם לא עונים, לא נורא - עוברים לעובד הבא). לאחר שיחה קצרה ונעימה, צייני בנימוס: <br>
+            <span class="text-primary-bold">"ראיתי שפתוחה אצלכם משרה מספר XXXXX (או תיאור המשרה המדויק). האם יהיה רלוונטי שאעביר דרכך את קורות החיים שלי למשרה הזו?"</span>
+          </p>
+
+          <div class="section-divider-top" style="border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px;">
+            <h4 class="panel-subtitle-secondary"><i class="bi bi-linkedin icon-primary"></i> טיפ זהב: שליטה ברדיוס החיפוש בלינקדאין</h4>
+            <p class="paragraph-spacer">
+              ניתן לשנות את המרחק שבו מחפשים בלינקדאין כדי לגלות תוצאות חיפוש שונות לגמרי. זהו פיצ'ר מעולה במיוחד כאשר המנטית מחפשת משרה מחוץ לאזור תל אביב, או רוצה למקד את החיפוש לאזור גיאוגרפי ספציפי כדי להיחשף למשרות שלא הופיעו בתוצאות הכלליות.
+            </p>
+            <p class="paragraph-spacer">
+              <strong>איך עושים זאת?</strong>
+            </p>
+            <ul>
+              <li>ניכנס ללשונית ה-<strong>Jobs</strong> בלינקדאין.</li>
+              <li>נרשום בשורות החיפוש את התפקיד והעיר שאנחנו מחפשות, לדוגמה: <em>Back end developer, Tel Aviv</em>.</li>
+              <li>מתחת לשורות החיפוש, ולפני רשימת המשרות, יופיע מד מרחק (למשל: <em>Tel Aviv-Yafo (50 mi)</em>).</li>
+              <li>נלחץ עליו ונראה שניתן לערוך את המרחק: נוריד אותו ל-5 או 10 מייל כדי לראות תוצאות קרובות יותר לעיר, או שנעלה אותו ל-100 כדי להרחיב את החיפוש לאזורים מרוחקים יותר.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="description section-divider-top">
+      <h3 class="section-title-simple">🔗 לוחות דרושים, קבוצות וקהילות מומלצות</h3>
+      <section class="notice-section">
+        <h4 class="notice-title">📢 מנטוריות יקרות - שימו לב</h4>
+        <p class="notice-text">
+          שוק התעסוקה והגיוס הוא דינמי לחלוטין, ולוח הקישורים הזה משתנה ללא הרף, אתרים וקבוצות נפתחים ונסגרים בהתאם למצב השוק.
+          כמנטוריות שרוצות לעזור ולתמוך אחת בשנייה, במידה ומצאתן כי אחד הלינקים השתנה, שבור או כבר אינו רלוונטי, או לחילופין אם מצאתן דרך חדשה ואפקטיבית לאיתור משרות.
+          אשמח מאוד אם תעדכנו אותי במייל: <a href="mailto:orlyswork@gmail.com">orlyswork@gmail.com</a>.
+          אני אדאג לעדכן את האתר, להוסיף או להסיר קישורים בהתאם כדי שהמדריך יישאר תמיד הכי רלוונטי שיש!
+        </p>
+      </section>
+      <p>לפניכן ריכוז הלינקים המובילים והחיוניים ביותר למשפך חיפוש העבודה היומי של המנטית. מומלץ לעבור עליהם באופן קבוע:</p>
+
+      <div class="links-grid">
+        <a href="https://www.linkedin.com" target="_blank" class="job-link-card">
+          <div><strong>LinkedIn</strong><br><small class="link-card-muted-text">הפלטפורמה המרכזית לשוק ההייטק</small></div>
+          <i class="bi bi-linkedin"></i>
+        </a>
+        <a href="https://www.shaharpolak.com/job-search" target="_blank" class="job-link-card">
+          <div><strong>לוח המשרות של שחר פולק</strong><br><small class="link-card-muted-text">מאגר משרות הייטק ממוקד</small></div>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+        <a href="https://www.glassdoor.com" target="_blank" class="job-link-card">
+          <div>
+            <strong>Glassdoor</strong><br>
+            <small class="link-card-muted-text">לוח משרות וחוות דעת על חברות. ניתן למצוא פה מדרגות שכר ושאלות מראיונות עבודה באותה חברה (דורש הרשמה והזנת חוות דעת אחת על חברת עבר).</small>
+          </div>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+        <a href="https://www.gloat.com/marketplace/" target="_blank" class="job-link-card">
+          <div><strong>Gloat Marketplace</strong><br><small class="link-card-muted-text">זירת פיתוח קריירה ומשרות</small></div>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+        <a href="https://hiremetech.com" target="_blank" class="job-link-card">
+          <div><strong>HireMeTech</strong><br><small class="link-card-muted-text">פלטפורמת השמה וגיוס טכנולוגי</small></div>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+        <a href="https://iltechjobs.urbanbubbleora.com/" target="_blank" class="job-link-card">
+          <div><strong>IL Tech Jobs</strong><br><small class="link-card-muted-text">לוח משרות הייטק מקומי ומעודכן</small></div>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+        <a href="https://my.greenhouse.io" target="_blank" class="job-link-card">
+          <div><strong>Greenhouse Jobs</strong><br><small class="link-card-muted-text">פורטל משרות מבוסס מערכות ATS</small></div>
+          <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+        <a href="https://referally.link" target="_blank" class="job-link-card link-card-whatsapp">
+          <div><strong>קהילת Referally בוואטסאפ</strong><br><small class="icon-success">משרות ממוקדות לפי רמות ונושאים</small></div>
+          <i class="bi bi-whatsapp icon-success"></i>
+        </a>
+        <a href="https://lp.vp4.me/qh5z" target="_blank" class="job-link-card link-card-whatsapp">
+          <div><strong>נשים בתעשייה בוואטסאפ</strong><br><small class="icon-success">קבוצת עדכונים ומשרות לנשים</small></div>
+          <i class="bi bi-whatsapp icon-success"></i>
+        </a>
+        <a href="https://www.facebook.com/groups/1433362546987936/" target="_blank" class="job-link-card">
+          <div><strong>קהילת "באות" בפייסבוק</strong><br><small class="link-card-muted-text">קבוצה חיונית למפתחות תוכנה</small></div>
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a href="https://www.facebook.com/groups/womenintechisr/?locale=he_IL" target="_blank" class="job-link-card">
+          <div><strong>נשים בהייטק בפייסבוק</strong><br><small class="link-card-muted-text">נטוורקינג, משרות ושיתוף ידע</small></div>
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a href="https://www.facebook.com/groups/womenwhocode/" target="_blank" class="job-link-card">
+          <div><strong>she codes; בפייסבוק</strong><br><small class="link-card-muted-text">קהילת נשים טכנולוגית מובילה</small></div>
+          <i class="bi bi-facebook"></i>
+        </a>
+      </div>
+    </section>
+
+    <div class="footer-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

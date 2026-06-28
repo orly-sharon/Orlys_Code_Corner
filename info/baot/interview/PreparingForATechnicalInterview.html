@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>פיצוח הראיון הטכני</title>
+
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .pc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 35px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 35px;
+      margin-bottom: 20px;
+      color: var(--text-bright);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 16px;
+    }
+
+    .info-box h4 {
+      color: var(--text-bright);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-box {
+      background: rgba(52, 211, 153, 0.05);
+      border-right: 4px solid var(--success);
+      padding: 15px 20px;
+      border-radius: 4px 12px 12px 4px;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    ul {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- NEW STYLES FROM INLINE TRANSFER ---------- */
+    .icon-secondary {
+      color: var(--secondary);
+    }
+
+    .icon-warning {
+      color: var(--warning);
+    }
+
+    .icon-primary {
+      color: var(--primary);
+    }
+
+    .icon-danger {
+      color: var(--danger);
+    }
+
+    .icon-success {
+      color: var(--success);
+    }
+
+    .icon-linkedin {
+      color: #0a66c2;
+    }
+
+    .paragraph-spacer {
+      margin-bottom: 15px;
+    }
+
+    .list-nested-small {
+      padding-right: 15px;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .list-nested-inline {
+      padding-right: 15px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .badge-success-alt {
+      background: rgba(52, 211, 153, 0.04);
+      border-right: 3px solid var(--success);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+    }
+
+    .badge-primary-alt {
+      background: rgba(96, 165, 250, 0.04);
+      border-right: 3px solid var(--primary);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+    }
+
+    .box-border-warning {
+      border-right: 4px solid var(--warning);
+    }
+
+    .box-border-danger {
+      border-right: 4px solid var(--danger);
+    }
+
+    .section-spacer {
+      margin-top: 30px;
+    }
+
+    .success-box-large {
+      background: rgba(52, 211, 153, 0.08);
+      padding: 20px;
+      border-radius: 16px;
+    }
+
+    .footer-container {
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>הכנה למפגש הטכני: <span class="highlight">פיצוח שאלות קוד וארכיטקטורה</span></h1>
+      </div>
+    </header>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-shield-check icon-secondary"></i> צעד 0: מודיעין מקדים ("סטוקריות היא לא מילה גסה!")</h3>
+      <p class="paragraph-spacer">
+        הכנה מנטלית וטכנולוגית מתחילה במחקר שטח. הנחי את המנטית לא להגיע "על עיוור" לראיון, אלא לבצע עבודת הכנה ממוקדת שתעניק לה יתרון פסיכולוגי ותחרותי משמעותי:
+      </p>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <h4><i class="bi bi-linkedin icon-linkedin"></i> פרופיל המראיינים בלינקדאין</h4>
+          <p class="paragraph-spacer">
+            גלי לה מי הם האנשים שהולכים לשבת מולה בראיון? חפשי אותם בלינקדאין <strong>וכנסי ישירות לפרופיל שלהם</strong>.
+          </p>
+          <ul class="list-nested-small">
+            <li>👁️ <strong>הם רואים את זה:</strong> כן, הם יקבלו התראה שנכנסת להסתכל עליהם – וזה מעולה! זה משדר רצינות ופרואקטיביות.</li>
+            <li>🤝 <strong>שלחי בקשת קשר (Connection):</strong> אל תהססי לשלוח להם הזמנת חברות עוד לפני הראיון. זה יוצר חיבור אנושי ראשוני וירשים אותם מאוד.</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="bi bi-globe icon-primary"></i> פיצוח ה-One Liner של החברה</h4>
+          <p class="paragraph-spacer">
+            אחת השאלות הנפוצות ביותר בפתיחת הראיון היא: <em>"שמעת עלינו?"</em> או <em>"את יודעת מה אנחנו עושים כאן?"</em>. חוסר ידיעה בשלב הזה הוא נורת אזהרה קריטית.
+          </p>
+          <ul class="list-nested-small">
+            <li>📝 <strong>הכניסי את זה למשפט:</strong> עברי על אתר החברה ונסחי לעצמך משפט אחד ברור ומדויק שמסכם את עולם התוכן והמוצר שלהם.</li>
+            <li>💡 <strong>הפגיני בקיאות:</strong> היכולת להסביר במילים שלך מה העסק עושה תראה שהשקעת זמן ושאת באמת רוצה לעבוד אצלם.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-code-square icon-warning"></i> ארגז הכלים הטכני: תרגול והצגת ביצועים</h3>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <h4><i class="bi bi-braces icon-warning"></i> הכנה לאלגוריתמיקה באמצעות LeetCode</h4>
+          <p class="paragraph-spacer">
+            האתר המוביל לתרגול אלגוריתמים, מבני נתונים ופתרון בעיות קוד בשוטף. התכונני מראש באמצעות אתרים שמפרסמים שאלות ממבחני קבלה אמיתיים.
+          </p>
+          <div class="badge-success-alt">
+            🚀 <strong>טריק ה-GitHub:</strong> פתרת שאלה בצורה חדשנית והגעת לטופ העונים (Beats גבוה)? שקלי להוסיף את הפרויקט של השאלה לחשבון ה-GitHub שלך עם תיעוד קצר!
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="bi bi-diagram-3 icon-secondary"></i> הכנה לארכיטקטורה באמצעות HelloInterview</h4>
+          <p class="paragraph-spacer">
+            אתר מדהים המיועד לתרגול ראיונות תכנון מערכות וארכיטקטורה (System Design). האתר מספק תרגול מעשי מצוין לבניית מערכות מורכבות ברמת פרודקשן.
+          </p>
+          <div class="badge-primary-alt">
+            💡 <strong>טיפ לתרגול:</strong> האתר מציע מסלול בתשלום, אך <strong>החלק החינמי שלו מקיף בהחלט</strong> ומספק את כל הכלים שצריך כדי ללמוד איך לגשת לשאלות עיצוב מערכת בצורה מקצועית.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-journal-code icon-primary"></i> שלב אסטרטגי: תיאור פרויקטים בהתאם לניסיון</h3>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <h4><i class="bi bi-mortarboard icon-success"></i> הגעה למשרה ראשונה (אחרי תואר/קורס/בוטקאמפ)</h4>
+          <ul class="list-nested-small">
+            <li>📐 <strong>שליטה ב-2 פרויקטים:</strong>  דעי לתאר במדויק 2 פרויקטים שעבדת עליהם. עלייך לדעת לשרטט את הרכיבים ולהסביר למה נבחרה טכנולוגיה מסוימת. (ראי פירוט במדריך היעודי לחלק זה)</li>
+            <li>🛡️ <strong>הגנה על הפתרון:</strong> במשרה ראשונה מותר להגיד: <em>"בחרנו בזה כי זה מה שהתבקשנו/כי זה היה חינם/הכי פשוט"</em>. אבל חובה לדעת לענות: <strong>מה היית משנה היום?</strong> ואילו טכנולוגיות חלופיות היו עושות עבודה טובה יותר.</li>
+            <li>👥 <strong>עבודה קבוצתית:</strong> דעי להגן גם על חלקים שלא את כתבת (למשל בפרויקט גמר). אם יש חלק שאינך בטוחה בו לגמרי – נסי לבדוק אם ניתן להשמיט אותו מההסבר מבלי לפגוע בשלמות הפרויקט.</li>
+            <li>⭐ <strong>ניים דרופינג (Name Dropping) מבוקר:</strong> זה הזמן והמקום! אם עבדת עם מרצים/אנשים מוכרים או טכנולוגיות ידועות בתעשייה (לדוגמה: "בחרנו בזה כי ידענו שמיקרוסופט עובדים איתה ורצינו ללמוד את זה") – צייני זאת, זה מראה על עניין רב ותשוקה לתחום.</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="bi bi-award icon-primary"></i> הגעה למשרה שנייה ומעלה (עם ניסיון)</h4>
+          <ul class="list-nested-small">
+            <li>🏢 <strong>מבנה ארגוני:</strong> דעי לתאר בצורה ברורה עם אילו מחלקות וצוותים עבדת ממשקית בשוטף.</li>
+            <li>🗺️ <strong>ארכיטקטורה מקצה לקצה:</strong> דעי לתאר לפחות 2 פרויקטים מתחילתם ועד סופם, כולל שרטוט מלא של הארכיטקטורה של כל הפיתוח בחברה, ובפרט את החלקים שאת הובלת. (ראי פירוט במדריך היעודי לחלק זה)</li>
+            <li>📊 <strong>החלטות דאטה בייס:</strong> דעי בדיוק עם אילו דאטה-בייסים עבדת ולמה הם נבחרו (לגיטימי לחלוטין להגיד: <em>"זה מה שהיה כשהגעתי וזה התאים במדויק לצרכי הפרויקט"</em>).</li>
+            <li>🤝 <strong>ניים דרופינג עסקי:</strong> אם החברה הקודמת עבדה עם לקוחות ענק או חברות מוכרות בשוק, זה הזמן "להשחיל" את השמות האלו בטבעיות במהלך השיחה כדי למצב את עצמך כמפתחת שעבדה בסביבת Scale גבוהה.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-lightning-charge icon-danger"></i> חוקי ברזל במהלך הראיון הטכני</h3>
+
+      <div class="info-box paragraph-spacer">
+        <h4><i class="bi bi-database-check icon-secondary"></i> 1. אל תפחדי מ-SQL!</h4>
+        <p>
+          שאלות SQL נשאלות בכמעט כל ראיון עבודה של פיתוח תוכנה. <strong>חובה לשלוט ב-SQL ברמה טובה ולא לפחד מכתיבת שאילתות גדולות או מורכבות.</strong>
+          זכרי: כל עוד השאילתה מחזירה תוצאה נכונה ועובדת, אין לך ממה לפחד. תמיד יהיה מישהו בחדר שיודע לכתוב את זה קצר או אופטימלי יותר, ואת זה לומדים תוך כדי תנועה.
+        </p>
+      </div>
+
+      <div class="info-box paragraph-spacer">
+        <h4><i class="bi bi-megaphone icon-primary"></i> 2. תהליך החשיבה (Think Aloud) ופסאדו-קוד</h4>
+        <p>
+          כשניתנת לך שאלה חדשה (במיוחד שאלות תכנון או קוד מורכבות), <strong>אל תתקפי את הבעיה מיד עם פתרון ראשוני שנראה לך בעין.</strong> פעלי לפי השלבים הבאים:
+        </p>
+        <ul class="list-nested-inline">
+          <li>❓ <strong>שאלי את כל השאלות הנכונות לפני שאת כותבת שורת קוד אחת.</strong> שאילת שאלות מראה על הבנה עמוקה של הסביבה וחשיבה הנדסית נכונה.</li>
+          <li>🗣️ <strong>דברי בקול רם:</strong> ודאי שאת משתפת בקול את תהליך החשיבה שלך, כדי שהמראיינים ישמעו איך את ניגשת לפתרון בעיות.</li>
+          <li>🎯 <strong>הסבירי בחירות:</strong> בכל שלב, אימרי למה בחרת לפנות לפתרון בדרך הזו ולא באחרת, ואיך היא מתחברת לשלב הבא של המערכת.</li>
+          <li>📝 <strong>נתקעת בקוד? עברי לפסאדו-קוד:</strong> אם נתקעת במבנה הסינטקטי של השפה, אל תעצרי! המשיכי לכתוב את הלוגיקה כפסאדו-קוד, וצייני בפני המראיין שתחזרי להשלים את הקוד המדויק בהמשך.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-diagram-3-fill icon-success"></i> מקרה בוחן קלאסי: תכנון שירות קיצור לינקים (URL Shortener כמו Bit.ly)</h3>
+      <p class="paragraph-spacer">
+        זוהי שאלת תכנון מערכות קלאסית שנראית במבט ראשון פשוטה מאוד, אך היא מהווה פלטפורמה מעולה להצגת עומק מחשבתי באמצעות שאילת שאלות מקדימות ובחינת מקרי קצה.
+      </p>
+
+      <div class="grid-2">
+        <div class="info-box box-border-warning">
+          <h4><i class="bi bi-question-circle icon-warning"></i> שאלות שחובה לשאול לפני הניגש לפתרון:</h4>
+          <ul class="list-nested-small">
+            <li>• <strong>אורך ותווים:</strong> האם השירות מוגבל במספר התווים שלו? (לדוגמה, האם הלינק המקוצר חייב להיות עד 50 תווים בלבד?).</li>
+            <li>• <strong>תוקף הלינק:</strong> האם הלינק צריך להיות זמין לתמיד, או שיש לו הגבלת זמן והוא פג תוקף (למשל, נמחק אחרי 30 יום)?</li>
+            <li>• <strong>רנדומיזציה מול מיתוג:</strong> האם הלינק המקוצר נקבע רנדומלית על ידי המערכת, או שהמשתמש יכול להכניס קיצור מותאם אישית משלו?</li>
+            <li>• <strong>אבטחה:</strong> האם הלינק צריך להיות מוגן בסיסמה? (כך שרק לאחר הקשת סיסמה נכונה בשירות שלנו, המשתמש יופנה לאתר היעד).</li>
+          </ul>
+        </div>
+
+        <div class="info-box box-border-danger">
+          <h4><i class="bi bi-exclamation-triangle icon-danger"></i> הרצת מקרי קצה (Edge Cases) לפני ההגשה:</h4>
+          <p class="paragraph-spacer">
+            לפני שאת "מגישה" את המטלה או מסיימת את השירטוט, הריצי על המערכת שלך מקרי קצה קריטיים:
+          </p>
+          <ul class="list-nested-small">
+            <li>• <strong>התנגשות כתובות (Collision):</strong> אם המשתמש קובע את הכתובת בעצמו, ומשתמש אחר כבר בחר בדיוק את אותה הכתוב, כיצד המערכת שלנו מגיבה? האם היא מקפיצה שגיאה או דורסת את הכתובת הישנה?</li>
+            <li>• <strong>בשאלות קוד ומערכים (Arrays):</strong> תשאלי תמיד: האם המערך ממוין? האם יש מספרים שליליים? האם הגודל המקסימלי שלו ידוע מראש או דינמי?</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section class="section-spacer">
+      <div class="success-box-large">
+        🎯 <strong>המנטית שלך מרגישה שהיא מוכנה ועברה על כל החומר?</strong>
+        <br>זה הזמן להמליץ לה בחום לקבוע <strong>ראיון סימולציה (Mock Interview) רשמי בקהילת באות!</strong> אין תחליף לתרגול "על רטוב" מול מראיינת מקצועית כדי להוריד את מפלס הלחץ ולדייק את הביצועים הטכניים לרמה הגבוהה ביותר.
+
+        <div style="margin-top: 20px; text-align: center;">
+          <a href="https://www.baot-simulation.com/" class="pc-btn-cta" target="_blank" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);">
+            <i class="bi bi-laptop"></i> למערכת הראיונות Baot Mock ➔
+          </a>
+        </div>
+
+        <div style="margin-top: 15px; font-size: 0.9rem; color: #fca5a5; border-top: 1px solid rgba(248, 113, 113, 0.2); padding-top: 12px;">
+          ⚠️ <strong>שים לב:</strong> אין לחלוק קישור זה מחוץ לארגון! מערכת הסימולציות מיועדת <strong>אך ורק עבור מנטיות של "באות" המשתתפות בתוכנית חיפוש העבודה הרשמית</strong>.
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

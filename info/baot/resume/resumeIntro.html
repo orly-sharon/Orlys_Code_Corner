@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מדריך לכתיבת קורות חיים מנצחים בתעשיית הפיתוח וההייטק</title>
+
+  <!-- no index google -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      max-width: 1200px;
+      margin: 40px auto;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .profile-card-wrapper::before {
+      content: "";
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(96, 165, 250, 0.12) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+
+    .pc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+      margin-bottom: 0;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      padding: 10px 0;
+    }
+
+    .alert-box {
+      background: rgba(96, 165, 250, 0.05);
+      border: 1px dashed var(--primary);
+      padding: 20px;
+      border-radius: 16px;
+      margin: 25px 0;
+    }
+
+    .danger-box {
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: #fca5a5;
+      margin: 20px 0;
+    }
+
+    .pc-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
+
+    .pc-pillar-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .pc-pillar-card h3 {
+      font-size: 1.25rem;
+      color: var(--text-bright);
+      margin-bottom: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      margin-top: 15px;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    ul, ol {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .profile-card-wrapper { padding: 30px 20px; }
+      .pc-header { flex-direction: column-reverse; gap: 20px; text-align: center; }
+      .pc-pillars { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- New classes centralizing inline styles ---------- */
+    .one-page-rule-box {
+      background: rgba(52, 211, 153, 0.05);
+      border-right: 4px solid var(--success);
+      padding: 20px;
+      border-radius: 4px 16px 16px 4px;
+      margin-bottom: 30px;
+    }
+
+    .one-page-rule-title {
+      color: var(--text-bright);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .icon-success-color {
+      color: var(--success);
+    }
+
+    .text-muted-small {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .paragraph-muted-small {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .ats-section-box {
+      background: rgba(147, 197, 253, 0.04);
+      border: 1px solid var(--primary);
+    }
+
+    .ats-section-title {
+      color: var(--primary);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .ats-list-spacing {
+      margin-right: 20px;
+      margin-bottom: 15px;
+    }
+
+    .champion-tip-box {
+      background: rgba(34, 211, 238, 0.08);
+      padding: 15px;
+      border-radius: 12px;
+      border-right: 4px solid var(--secondary);
+      margin-top: 15px;
+    }
+
+    .champion-tip-title {
+      color: var(--text-bright);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .champion-tip-text {
+      font-size: 0.95rem;
+    }
+
+    .section-divider-top {
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      margin-top: 25px;
+    }
+
+    .section-title-large {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+    }
+
+    .icon-secondary-color {
+      color: var(--secondary);
+    }
+
+    .paragraph-spacer-bottom {
+      margin-bottom: 15px;
+    }
+
+    .canva-step-list {
+      margin-right: 25px;
+      margin-bottom: 20px;
+    }
+
+    .link-primary-styled {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .text-secondary-highlight {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .saving-trick-box {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px dashed var(--warning);
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: #fcd34d;
+    }
+
+    .footer-nav-container {
+      margin-top: 30px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>מדריך קורות חיים (CV): <span class="highlight">כך תייצרי מסמך מנצח ומותאם לתעשייה</span></h1>
+      </div>
+    </header>
+
+    <section class="description">
+      <!-- The golden rule of document length -->
+      <div class="one-page-rule-box">
+        <h3 class="one-page-rule-title"><i class="bi bi-file-earmark-text-fill" class="icon-success-color"></i> חוק העמוד האחד</h3>
+        <p>
+          בתעשיית ההייטק, קורות חיים צריכים להיות ממוקדים, ברורים, לא עמוסים ו<strong>לא לחרוג מדף אחד בלבד!</strong> מגייסות מקדישות שניות בודדות לסינון ראשוני, ומסמך ארוך ומפוזר פשוט מתפספס.
+          <br><span class="text-muted-small">*החריגה היחידה המותרת ל-2 עמודים היא במקרה של ניסיון מקצועי עשיר של מעל 10-15 שנים או מעל 4 מקומות עבודה משמעותיים רלוונטיים.</span>
+        </p>
+      </div>
+
+      <p class="paragraph-muted-small">
+        ❌ <strong>משפטים מיושנים:</strong> המשפט המוכר <em>"References will be provided upon request"</em> (המלצות יינתנו לפי דרישה) הוא מיותר לחלוטין, מיושן ותופס שורה יקרה. הסירי אותו מיד.
+      </p>
+    </section>
+
+    <!-- The golden tip and ATS systems preparation -->
+    <section class="alert-box ats-section-box">
+      <h3 class="ats-section-title"><i class="bi bi-cpu-fill"></i> התאמה למערכות מיון אוטומטיות (ATS) ופונטים</h3>
+      <p class="paragraph-spacer-bottom">
+        חברות רבות משתמשות ברובוטים ומערכות אוטומטיות לסינון וקריאת קורות חיים (Parsing). כדי שהקובץ שלך לא ייפסל טכנית:
+      </p>
+      <ul class="ats-list-spacing">
+        <li>תמיד השתמשי ב<strong>פונטים סטנדרטיים וחינמיים</strong> שזמינים בכל מחשב (כמו Arial, Calibri, David). פונטים מעוצבים או מיוחדים מדי עלולים לשבש את מערכות המיון האוטומטיות ולהפוך את הטקסט לג'יבריש.</li>
+        <li><strong>בדיקת תקינות (Parsing Test):</strong> מומלץ להיכנס למערכת הגשת מועמדות של אחת מחברות הענק (כגון Microsoft) ולהעלות את קובץ ה-PDF שלך. המערכת תבצע לו Parsing ותציג לך אילו שדות היא הצליחה למשוך. אם המידע משובש (למשל, עקב שימוש לא נכון בעמודות מעוצבות), תקני את המבנה בהתאם כדי לא לפספס משרות.</li>
+      </ul>
+
+      <!-- Champion tip -->
+      <div class="champion-tip-box">
+        <h4 class="champion-tip-title">👑 טיפ של אלופות: "מילות המפתח הנסתרות"</h4>
+        <p class="champion-tip-text">
+          חובה לשלב בקורות החיים מילות מפתח תואמות למשרה (כמו Backend, Fullstack, SaaS, CI/CD וכו') בתוך משפטים טבעיים.
+          <br><strong>אבל הנה הטריק המנצח:</strong> אם יש מילות מפתח חשובות שלא הצלחת לשלב במשפט הגיוני, קחי שטח ריק בתחתית קורות החיים, רשמי את כל מילות המפתח הללו בשורה אחת עם רווחים, ו<strong>צבעי את הגופן שלהן בצבע לבן</strong>.
+          עין אנושית של מגייסת לא תראה את המילים האלו על הדף הלבן, אך הרובוטים של מערכות ה-ATS יקראו ויסרקו אותן במלואן, מה שיקפיץ את הדירוג של קורות החיים שלך בראש רשימת החיפוש של החברה!
+        </p>
+      </div>
+    </section>
+
+    <!-- Canva design section and correct saving -->
+    <section class="description section-divider-top">
+      <h3 class="section-title-large"><i class="bi bi-palette-fill" class="icon-secondary-color"></i> עיצוב מקצועי באמצעות אתר Canva</h3>
+      <p class="paragraph-spacer-bottom">
+        אל תסתפקי בקורות חיים גנריים ומשעממים מתוך תבניות בסיסיות של Word או Google Docs. אתר <strong>Canva</strong> הוא פלטפורמה מעולה, חינמית ועשירה בטמפלייטים מרהיבים:
+      </p>
+
+      <ol class="canva-step-list">
+        <li>היכנסי לאתר <a href="https://www.canva.com" target="_blank" class="link-primary-styled">Canva.com</a> ובצעי רישום קצר וחינמי.</li>
+        <li>לחצי על לשונית <strong>Templates</strong> ובשורת החיפוש הקלידי: <span dir="ltr" class="text-secondary-highlight">"Professional CV Resume"</span>.</li>
+        <li>בחרי תבנית (Template) חינמית ומקצועית שאת מתחברת למבנה שלה והתחילי לערוך את המלל שלך פנימה.</li>
+        <li>❌ <strong>שימי לב - ללא תמונה:</strong> בישראל נהוג <u>שלא לשים</u> תמונה בקורות החיים (בניגוד לאאירופה או ארה"ב). לכן, אם בחרת בתבנית הכוללת מקום לתמונה, פשוט מחקי את החלק הזה לחלוטין ונצלי את השטח שהתפנה עבור טקסט ליצירת קשר או פסקת ההיכרות.</li>
+      </ol>
+
+      <!-- The trick to saving as PDF for clickable text -->
+      <div class="saving-trick-box">
+        🛠️ <strong>טריק קריטי לשמירת הקובץ:</strong> חובה לוודא שניתן להעתיק ולסמן טקסט מתוך קובץ ה-PDF הסופי שלך (אם אי אפשר לסמן טקסט, הרובוטים לא יצליחו לקרוא אותו!).
+        לעיתים קרובות שמירה ישירה מ-Canva כ-PDF הופכת את הטקסט לתמונה חסומה.
+        <br><strong>הפתרון החינמי והחכם:</strong> שמרי את קובץ קורות החיים מתוך Canva בפורמט מצגת פאוור-פוינט (<span dir="ltr">.pptx</span>). פתחי את קובץ הפאוור-פוינט במחשב שלך, ומשם בצעי שמירה בשם (Save As) כקובץ **PDF**. הדרך הזו מבטיחה קובץ וקטורי עם טקסט חי, לחיץ וקריא לחלוטין עבור מערכות המיון!
+      </div>
+    </section>
+
+    <!-- back to guide -->
+    <div class="footer-nav-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

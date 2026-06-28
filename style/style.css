@@ -1,0 +1,506 @@
+/* ==========================================================================
+   1. CORE VARIABLES & SETTINGS
+   ========================================================================== */
+:root {
+  --background: #0f172a;
+  --card: rgba(30, 41, 59, 0.75);
+  --card-alt: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #cbd5e1;
+  --text-bright: #ffffff;
+  --muted: #94a3b8;
+  --primary: #60a5fa;
+  --secondary: #22d3ee;
+  --code-bg: #020617;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, #1e3a8a 0%, transparent 40%),
+    radial-gradient(circle at bottom right, #0891b2 0%, transparent 40%),
+    var(--background);
+  background-attachment: fixed;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ==========================================================================
+   2. GLOBAL LAYOUT & CONTAINERS
+   ========================================================================== */
+section, .article, .profile-card-wrapper {
+  background: var(--card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  margin: 40px auto;
+  max-width: 1200px;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.profile-card-wrapper {
+  padding: 45px;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   3. TYPOGRAPHY & LINKS
+   ========================================================================== */
+h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 35px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  color: var(--text-bright);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+h3 {
+  color: #93c5fd;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+
+ul, ol {
+  margin-bottom: 20px;
+  padding-right: 25px;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   4. CONTENT MODULES & CARDS
+   ========================================================================== */
+.docs-grid, .pc-pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.pc-pillars {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  margin-bottom: 40px;
+}
+
+.card, .pc-pillar-card, .explain-card {
+  position: relative;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.02);
+  text-align: center;
+}
+
+.explain-card {
+  background: rgba(2, 6, 23, 0.4);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+/* Card Hover Effects */
+.card:hover, .pc-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px rgba(34, 211, 238, 0.1);
+}
+
+.explain-card:hover {
+  border-color: rgba(96, 165, 250, 0.3);
+  background: rgba(2, 6, 23, 0.6);
+}
+
+/* Decorative Card Borders */
+.card::before, .pc-pillar-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 0 0 4px 4px;
+}
+
+.card::before {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pc-pillar-card::before {
+  right: 28px;
+}
+
+.pc-pillar-card.alt::before {
+  background: var(--secondary);
+}
+
+/* Card Elements */
+.card-header {
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 8px;
+}
+
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #93c5fd;
+  vertical-align: middle;
+}
+
+.card h3, .pc-pillar-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+  margin-top: 0;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.card li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.card li:last-child {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   5. CODE, DIAGRAMS & NOTIFICATIONS
+   ========================================================================== */
+pre {
+  direction: ltr;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--code-bg);
+  color: #e2e8f0;
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  border-radius: 16px;
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+code {
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.95rem;
+}
+
+.note {
+  background: rgba(96, 165, 250, 0.1);
+  border-right: 4px solid var(--primary);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.memory-diagram {
+  background: #020617;
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  direction: ltr;
+  font-family: Consolas, monospace;
+  color: var(--secondary);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   6. DATA TABLES & BADGES
+   ========================================================================== */
+.article-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+  font-size: 14pt;
+  background: rgba(2, 6, 23, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.article-table th, .article-table td {
+  padding: 14px 18px;
+  text-align: right;
+}
+
+.article-table th {
+  background-color: #1e293b;
+  color: #93c5fd;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.article-table tr:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.article-table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11pt;
+  font-weight: bold;
+}
+
+.badge-red { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.badge-orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.badge-yellow { background: rgba(234, 179, 8, 0.15); color: #fef08a; }
+
+/* ==========================================================================
+   7. INTERACTIVE BUTTONS & CTA
+   ========================================================================== */
+.back-btn, .pc-btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 20px;
+  transition: all 0.25s;
+}
+
+.pc-btn-cta {
+  padding: 14px 28px;
+  font-size: 1rem;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  white-space: nowrap;
+}
+
+.back-btn:hover, .pc-btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+  color: white;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   8. SPECIFIC PAGE SECTIONS (INDEX / OVERVIEW)
+   ========================================================================== */
+.description { text-align: right; }
+.description h2 {
+  text-align: right;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -1.2px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 30px;
+}
+
+.pc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 35px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 30px;
+}
+
+.pc-title h1 {
+  text-align: right;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  margin-bottom: 0;
+}
+
+.pc-tags-top, .pc-skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pc-skills-container { justify-content: center; }
+
+.pc-tag-mini {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.pc-intro { font-size: 1.1rem; margin-bottom: 25px; }
+.pc-intro strong { color: var(--secondary); font-weight: 600; }
+.pc-strengths-title, .pc-section-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #93c5fd;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.pc-section-label {
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+.pc-strengths-list {
+  list-style: none;
+  margin: 0 0 40px 5px;
+  padding: 0;
+}
+
+.pc-strengths-list li {
+  font-size: 1.05rem;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pc-strengths-list li::before { content: "⚡"; }
+
+.pc-skills-section {
+  margin-bottom: 40px;
+  border: 1px solid var(--border);
+  background: var(--card-alt);
+  border-radius: 24px;
+  padding: 30px;
+}
+
+.pc-skills-container span {
+  background: rgba(96, 165, 250, 0.12);
+  color: #93c5fd;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.pc-skills-container span:hover {
+  background: rgba(34, 211, 238, 0.15);
+  color: var(--secondary);
+  border-color: rgba(34, 211, 238, 0.4);
+  transform: translateY(-2px);
+}
+
+.pc-footer-cta {
+  border-top: 1px solid var(--border);
+  padding-top: 35px;
+  margin-top: 20px;
+}
+
+.pc-footer-headline {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pc-footer-body-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.pc-footer-text { font-size: 1.05rem; color: var(--text); max-width: 800px; }
+
+/* ==========================================================================
+   9. FOOTER & RESPONSIVE DESIGN
+   ========================================================================== */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+@media (max-width: 900px) {
+  .pc-footer-body-wrapper { flex-direction: column; align-items: stretch; }
+  .pc-btn-cta { text-align: center; justify-content: center; }
+}
+
+@media (max-width: 768px) {
+  .profile-card-wrapper, .description, section, .article { padding: 30px 20px; }
+  .pc-header { flex-direction: column; gap: 20px; text-align: center; }
+  .pc-pillars { grid-template-columns: 1fr; }
+}

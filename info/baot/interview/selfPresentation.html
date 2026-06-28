@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>אמנות הראיון: מדריך שלב אחר שלב</title>
+
+  <!-- no index google -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .pc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 35px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 35px;
+      margin-bottom: 20px;
+      color: var(--text-bright);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 16px;
+    }
+
+    .info-box h4 {
+      color: var(--text-bright);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-box {
+      background: rgba(239, 68, 68, 0.06);
+      border-right: 4px solid var(--danger);
+      padding: 15px 20px;
+      border-radius: 4px 12px 12px 4px;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .success-box {
+      background: rgba(52, 211, 153, 0.05);
+      border-right: 4px solid var(--success);
+      padding: 15px 20px;
+      border-radius: 4px 12px 12px 4px;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    ul {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- NEW STYLES FROM INLINE TRANSFER ---------- */
+    .icon-primary {
+      color: var(--primary);
+    }
+
+    .icon-warning {
+      color: var(--warning);
+    }
+
+    .icon-secondary {
+      color: var(--secondary);
+    }
+
+    .icon-success {
+      color: var(--success);
+    }
+
+    .icon-danger {
+      color: var(--danger);
+    }
+
+    .paragraph-spacer {
+      margin-bottom: 15px;
+    }
+
+    .paragraph-spacer-large {
+      margin-bottom: 20px;
+    }
+
+    .text-small {
+      font-size: 0.95rem;
+    }
+
+    .alert-box-primary {
+      border-right-color: var(--primary);
+      background: rgba(96, 165, 250, 0.05);
+    }
+
+    .list-nested {
+      padding-right: 15px;
+      margin-bottom: 0;
+    }
+
+    .list-nested-small {
+      padding-right: 15px;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .list-item-spacer {
+      margin-bottom: 8px;
+    }
+
+    .list-item-spacer-large {
+      margin-top: 10px;
+    }
+
+    .badge-secondary-alt {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      border-right: 3px solid var(--secondary);
+    }
+
+    .box-spacer-bottom {
+      margin-bottom: 20px;
+    }
+
+    .text-danger-bold {
+      color: var(--danger);
+    }
+
+    .footer-container {
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>צליחת שלבי המיון: <span class="highlight">משיחת הסינון ועד שלב ההצגה העצמית</span></h1>
+      </div>
+    </header>
+
+    <!-- Initial phone interview -->
+    <section>
+      <h3 class="section-title"><i class="bi bi-telephone-outbound icon-primary"></i> שלב א': ראיון טלפוני ראשוני / שיחת סינון של מגייסת</h3>
+
+      <div class="success-box">
+        💡 <strong>למה המעקב קריטי כאן?</strong> שיחה זו מבוססת לחלוטין על ההנחה שהמנטית מנהלת מעקב משרות מסודר (Trello/יומן). חובה לדעת מאיפה הגיעה ההפניה למשרה (לינקדאין, אתר החברה, או חבר מביא חבר) ומתי נשלחו קורות החיים, כדי לשדר רצינות ומקצועיות ברגע האמת.
+      </div>
+
+      <p class="paragraph-spacer">
+        כאשר נציגת משאבי אנוש או מגייסת מתקשרת, הצעד הראשון הוא <strong>להקשיב היטב מאיזו חברה היא ומה שמה</strong>. יש לפעול לפי שני תרחישים מרכזיים:
+      </p>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <h4><i class="bi bi-clock-history icon-warning"></i> תרחיש 1: זמן לא נוח לשיחה</h4>
+          <p class="text-small">
+            רבות ממחפשות העבודה עושות זאת תוך כדי עבודה נוכחית, וזה מובן וידוע לחלוטין בתעשייה. אם היא תפוסה, עליה לומר בנימוס: <em>"זה זמן פחות נוח כרגע"</em>, ולבקש מספר טלפון לחזרה או לתאם חלון זמן מדויק שבו המגייסת תחזור אליה.
+          </p>
+        </div>
+        <div class="info-box">
+          <h4><i class="bi bi-patch-question icon-secondary"></i> תרחיש 2: היא לא זוכרת את המשרה/חברה</h4>
+          <p class="text-small">
+            במקום לגמגם, המנטית יכולה להשתמש ב"טריק ה-10 דקות": לומר שהיא בדיוק נכנסה הביתה, הרגע חנתה, או בדיוק מסיימת מטלה דחופה בעבודה, ולבקש 10 דקות פנויות. <strong>חובה לקחת מהמגייסת מספר טלפון לחזרה</strong> במידה והמספר חסום.
+            <br>⏱️ <strong>ב-10 דקות האלו:</strong> ניגשים מיד למערכת מעקב המשרות, בודקים מה החברה עושה, ואיך הועברו קורות החיים (אם זה דרך קשר אישי, כדי שהיא תוכל להזכיר את שם הממליץ ולא תופתע).
+          </p>
+        </div>
+      </div>
+
+      <div class="alert-box alert-box-primary">
+        🎯 <strong>חוק ברזל לשיחה הטלפונית:</strong> יש להתרכז בשיחה באופן בלעדי (ללא רעשי רקע). המגייסת היא <strong>האדם הראשון בחברה שמדבר איתך</strong>, ואותה את צריכה להרשים. אם היא לא תתרשם, התהליך ייעצר שם ולא ימשיך לראיונות הבאים.
+      </div>
+    </section>
+
+    <!-- First interview onwards (in-person vs. virtual) -->
+    <section>
+      <h3 class="section-title"><i class="bi bi-person-workspace icon-secondary"></i> שלב ב': הראיון המקצועי (ראשון ואילך)</h3>
+      <p class="paragraph-spacer-large">
+        זהו בדרך כלל ראיון טכני ומקצועי עמוק. הנחי את המנטית לברר מראש עם קולגות או באמצעות אתרים (כמו Glassdoor) מהו סגנון השאלות הנהוג בחברה.
+        כאשר קובעים את הראיון, <strong>יש לקבוע אותו בשעות הבוקר (השעות המומלצות ביותר)</strong>. מומלץ להימנע מלקבוע צמוד לשעות הצהריים או אחרי השעה 15:00 – את רוצה מראיין שכולו איתך, רענן, ולא לחוץ לצאת להפסקת אוכל או ללכת הביתה.
+      </p>
+
+      <div class="alert-box">
+        🛑 <strong>איחור לראיון (וירטואלי או פרונטלי כאחד) אינו מתקבל בצורה יפה בשום אופן ופוגע אנושות בסיכויי הקבלה!</strong>
+      </div>
+
+      <div class="grid-2">
+        <!-- In-person -->
+        <div class="info-box">
+          <h4><i class="bi bi-building icon-success"></i> דגשים לראיון פרונטלי (במשרדים)</h4>
+          <ul class="list-nested">
+            <li>🗺️ <strong>תכנון הגעה:</strong> לוודא מראש את נתיב הנסיעה, דרכי הגעה, ומיקום חניה פנויה (במידה ומגיעים ברכב) או תחנות קרובות (בתחבורה ציבורית). <strong>יש להגיע לפחות 10 דקות לפני הזמן שנקבע.</strong></li>
+            <li>🍏 <strong>אנרגיה וריכוז:</strong> ראיונות טכניים עלולים להיות ארוכים ומתישים. מומלץ להביא בתיק פרי או משהו מתוק כדי לשמור על פוקוס ורמת סוכר תקינה.</li>
+            <li>👀 <strong>בחינת סביבת העבודה:</strong> הגיעי מוקדם והסתכלי על הדינמיקה בין העובדים במסדרונות ובחדרי האוכל. זהו כלי מעולה לשלבי השכר והתנאים בהמשך: החמאה למגייסת על הדינמיקה הנעימה ועל חדרי האוכל מראה שאת שמה לב לפרטים ומחפשת חיבור אמיתי לחברה.</li>
+            <li>💧 <strong>טריק כוס המים:</strong> בקשי כוס מים בתחילת הראיון. בכל פעם שאת נתקעת בשאלה, רוצה לסדר את המחשבה או להיזהר בלשונך, <strong>קחי לגימת מים</strong>. זה מייצר השהיה טבעית ולגיטימית לחלוטין שנותנת זמן לחשוב. (שתייה חמה זה בסדר, אבל אל תזמיני קפה הפוך מורכב עם קצפת בצד, שמרו על הסיטואציה המקצועית).</li>
+            <li>🚶‍♀️ <strong>בלי בושה:</strong> אם את צריכה להתפנות או למלא מים, בקשי זאת. עדיף לעצור לרגע מאשר לנסות לסיים את הראיון במהירות מתוך אי-נוחות ולפגוע בביצועים.</li>
+          </ul>
+        </div>
+
+        <!-- Virtual -->
+        <div class="info-box">
+          <h4><i class="bi bi-laptop icon-primary"></i> דגשים לראיון וירטואלי (Zoom / Teams / Meet)</h4>
+          <ul class="list-nested">
+            <li>⚙️ <strong>בדיקה טכנית מקדימה:</strong> לוודא תפעול מלא של הפלטפורמה הספציפית יום לפני. מומלץ לעשות שיחת בדיקה עם חברה כדי לוודא שרואים ושומעים אותך בצורה חלקה ותקינה לחלוטין.</li>
+            <li>💡 <strong>תאורה וזווית:</strong> ודאי שהתאורה מחמיאה (אור שמגיע מקדימה ולא מאחורי הגב שמחשיך את הפנים) ושהמצלמה ממוקמת בגובה העיניים.</li>
+            <li>🖼️ <strong>רקע נקי ומקצועי:</strong> ודאי שבחדר אין פריטים שיכולים לעורר התנגדות (כמו כרזות פוליטיות). <strong>אל תשתמשי ברקעים וירטואליים דיגיטליים (Virtual Backgrounds)</strong> – הם נראים לא מקצועיים, חותכים את קווי הגוף בצורה מוזרה ומשדרים חוסר אותנטיות.</li>
+            <li>🥛 <strong>טריק המים עובד גם פה:</strong> דאגי לכוס מים מונחת לידך על השולחן מראש. מאחר שרואים אותך, הלגימה לצורך מחשבה עובדת מצוין גם דרך המסך.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Self-introduction structure -->
+    <section>
+      <h3 class="section-title"><i class="bi bi-person-lines-fill icon-warning"></i> שלב ג': בניית הצגה עצמית מנצחת (Pitch)</h3>
+      <div class="alert-box alert-box-primary">
+        🎯 <strong>משימה משותפת למנטורית ולמנטית:</strong> בנו יחד טקסט הצגה עצמית בהיר ומזוקק. בשלבים הראשונים המנטית יכולה להקריא אותו לעצמה באימונים, אך ככל שהראיונות יתקדמו היא חייבת לשלוט בו בעל פה ולשלוף אותו בטבעיות.
+      </div>
+
+      <div class="info-box box-spacer-bottom">
+        <h4><i class="bi bi-layout-text-sidebar-reverse icon-secondary"></i> מבנה ה-Pitch המומלץ (בסדר כרונולוגי הפוך):</h4>
+        <ol class="list-large-spacing">
+          <li class="list-item-spacer"><strong>פתיח ממותג:</strong> שם מלא, הגדרת התפקיד המקצועי העדכני, והחברה/תפקיד האחרון שביצעת.</li>
+          <li class="list-item-spacer"><strong>מפתח טכנולוגי ונקודות מפתח:</strong> ציוני דרך משמעותיים מהתפקיד האחרון, תוך שילוב <strong>מילות מפתח (Keywords)</strong> חזקות והטכנולוגיות העיקריות איתן עבדת בשוטף.</li>
+          <li class="list-item-spacer"><strong>הליכה "אחורה" בזמן:</strong> מעבר קצר ותמציתי על המשרות הקודמות (מהאחרונה לישנה יותר). אם יש פרויקט ייחודי, ארכיטקטורה מעניינת או טכנולוגיה ייחודית באחת המשרות מהעבר, זה הזמן לציין זאת בקצרה.</li>
+          <li class="list-item-spacer"><strong>הנעה קדימה:</strong> הסבר קצר על מה היא מחפשת בשלב הבא ולאן היא שואפת להתפתח מקצועית.</li>
+        </ol>
+      </div>
+
+      <div class="alert-box">
+        ⚠️ <strong class="text-danger-bold">חוקי ברזל בל יעברו בשלב ההצגה העצמית:</strong>
+        <br>1. <strong>לעולם אל תשקרי:</strong> תעשיית ההייטק בארץ קטנה מאוד, כולם מכירים את כולם וידע מקצועי נבדק בקלות רבה בראיונות המשך או באמצעות בדיקת ממליצים.
+        <br>2. <strong>לעולם אל תלכלכי על חברות קודמות או קולגות:</strong> את לא יודעת מי יושב מולך, מה רשת הקשרים שלו ומי החברים שלו בתעשייה. לכלוך על מקום קודם משדר חוסר מקצועיות מיידי. נסחי את סיבת העזיבה או סיבת החיפוש בצורה חיובית, עניינית ושיווקית (למשל: "מיצוי ורצון לאתגר טכנולוגי חדש").
+      </div>
+    </section>
+
+    <!-- Step 4: Dealing with technological gaps and the strengths/weaknesses question -->
+    <section>
+      <h3 class="section-title"><i class="bi bi-brain icon-success"></i> שלב ד': ניהול פערים, תכונות וחסרונות בשיחה</h3>
+
+      <div class="grid-2">
+        <!-- Gap management -->
+        <div class="info-box">
+          <h4><i class="bi bi-plus-circle icon-primary"></i> איך להציג חוסר ידע? (טון חיובי וגישור)</h4>
+          <p class="text-small box-spacer-bottom">
+            אם המנטית נשאלת על טכנולוגיה שהיא לא מכירה, <strong> מומלץ להשתמש במילה "פער" (Gap) במקום "אני לא יודעת".</strong> מיד לאחר מכן, עליה להציג בצורה אקטיבית וחיובית איך היא לומדת ומגשרת על הפער הזה ברגעים אלו ממש.
+          </p>
+          <div class="badge-secondary-alt">
+            🗣️ <strong>דוגמה מעשית:</strong> <em>"אין לי עדיין ניסיון פרודקשן ב-AI, אז יש לי כרגע פער מסוים בעבודה עם כלי AI. כדי לגשר עליו וללמוד את הנושא לעומק, אני בונה בימים אלו פרויקט צד עצמאי שמבוסס כולו על אינטגרציות של LLM וכללי הנדסת פרומפטים כדי לחוות את האתגרים מקרוב".</em>
+          </div>
+        </div>
+
+        <!-- Pros and Cons -->
+        <div class="info-box">
+          <h4><i class="bi bi-sliders icon-warning"></i> 3 תכונות טובות ו-3 חסרונות (בלי ליפול למלכודות)</h4>
+          <p class="text-small-spacer">
+            מגייסות רבות מנסות לדלות את המידע הזה מתוך שיחה זורמת מבלי לשאול את השאלה השחוקה והישירה. המנטית חייבת להגיע מוכנה ומודעת לעצמה, WITH דוגמאות מבוססות מהשטח:
+          </p>
+
+          <ul class="list-nested-small">
+            <li>⭐ <strong>דוגמאות לתכונות חיוביות:</strong>
+              <br>• <em>ראיית התמונה הגדולה:</em> "בזכות זה שובצתי להוביל משימות רוחביות ואינטגרציות מורכבות".
+              <br>• <em>נאמנות ויציבות:</em> "ניתן לראות בקורות החיים שנשארתי מספר שנים בכל מקום, אך אני יודעת לעשות שינוי כשיש צורך מקצועי".
+              <br>• <em>ניהול זמן ומשימות:</em> "עבדתי במקביל לתואר תובעני/גידול ילדים – יכולת ניהול הזמן שלי גבוהה וממוקדת מאוד".
+            </li>
+            <li class="list-item-spacer-large">🛑 <strong>דוגמאות לחסרונות ופתרונם (הימנעו מהקלישאה "אני פרפקציוניסטית"):</strong>
+              <br>• <em>ירידה מוגזמת לפרטים / תקיעות:</em> "לפעמים נטיתי להיתקע על משימות עד להבנת הביטים האחרונים בקוד. היום, עם השילוב של כלי AI וסביבת עבודה צוותית, אני מתייעצת ומייעלת את הזמן כדי לתקתק משימות בקצב גבוה".
+              <br>• <em>טיפ למנטורית:</em> במידה והיא מרגישה תקועה בניסוח החסרונות הללו, המליצי לה להתייעץ עם חברי צוות לשעבר או קולגות מהתעשייה כדי לקבל משוב כנה ומקצועי, שיעזור לה לנסח זאת נכון.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- back to guide -->
+    <div class="footer-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ניהול ומעקב אחרי משרות</title>
+
+  <!-- no index google -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .pc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 35px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #60a5fa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .description {
+      padding: 10px 0;
+    }
+
+    /* Trello board simulation */
+    .trello-board-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 25px 0;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .trello-column {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 180px;
+    }
+
+    .trello-column h4 {
+      color: var(--text-bright);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trello-card {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .trello-card strong {
+      color: var(--text-bright);
+      display: block;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    ul {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    /* ---------- New classes centralizing inline styles ---------- */
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .section-title-flex {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--text-bright);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-subtitle-secondary {
+      color: var(--secondary);
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .section-subtitle-bright {
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+
+    .paragraph-spacer {
+      margin-bottom: 15px;
+    }
+
+    .paragraph-spacer-large {
+      margin-bottom: 20px;
+    }
+
+    .list-padding-tracked {
+      padding-right: 15px;
+      margin-bottom: 25px;
+    }
+
+    .list-padding-trello {
+      padding-right: 15px;
+      font-size: 0.95rem;
+      margin-top: 15px;
+    }
+
+    .list-padding-calendar {
+      padding-right: 15px;
+      font-size: 0.95rem;
+    }
+
+    .section-trello-wrapper {
+      margin-top: 10px;
+    }
+
+    .section-calendar-wrapper {
+      margin-top: 25px;
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 25px;
+      border-radius: 20px;
+    }
+
+    .alert-box-danger {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      margin-bottom: 15px;
+      color: #fca5a5;
+    }
+
+    .alert-box-danger strong {
+      color: var(--danger);
+    }
+
+    .footer-container {
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+
+    .icon-primary {
+      color: var(--primary);
+    }
+
+    .icon-success {
+      color: var(--success);
+    }
+
+    .icon-secondary {
+      color: var(--secondary);
+    }
+
+    .icon-warning {
+      color: var(--warning);
+    }
+
+    .icon-muted {
+      color: var(--muted);
+    }
+
+    .icon-danger {
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>משפך חיפוש עבודה: <span class="highlight">מעקב מסודר אחרי משרות</span></h1>
+      </div>
+    </header>
+
+    <!-- Why is it important to track? -->
+    <section class="description">
+      <h3 class="section-title">🎯 למה חובה לנהל מעקב ולדעת איפה אנחנו נמצאות בכל חברה?</h3>
+      <p class="paragraph-spacer">
+        כאשר המנטית פועלת לפי אסטרטגיית המשפך המלא ושולחת עשרות קורות חיים בשבוע, קל מאוד ללכת לאיבוד. מעקב מסודר הוא לא רק עניין של סדר, אלא כלי אסטרטגי קריטי מכמה סיבות עיקריות:
+      </p>
+      <ul class="list-padding-tracked">
+        <li>🔄 <strong>הגשה חוזרת של קורות חיים:</strong> אם היא נפסלה בעבר מחברה מסוימת או שהמשרה נסגרה, המעקב יאפשר לה לדעת בדיוק <strong>האם עבר מספיק זמן מההגשה האחרונה</strong> (למשל 3 חודשים) כדי להגיש מועמדות מחדש בלב שקט לתפקיד חדש שנפתח.</li>
+        <li>📝 <strong>תיעוד ההתרשמות מהחברה:</strong> במהלך הראיונות, המנטית מקבלת הצצה לתרבות הארגונית. רישום ההתרשמות שלה (לטובה או לרעה) יעזור לה לקבל החלטה מושכלת אם להתקדם בשלבים או כשיגיעו הצעות חוזים (Offers) מכמה חברות במקביל.</li>
+        <li>📞 <strong>מניעת מבוכה בשיחות הפתעה:</strong> אין דבר מביך ומאכזב יותר ממגייסת שמתקשרת לשיחת היכרות טלפונית בהפתעה, והמנטית בכלל לא זוכרת מה זו החברה הזו, מה התפקיד דורש, או מי העביר את קורות החיים שלה לשם.</li>
+      </ul>
+      <p class="paragraph-spacer-large">
+        ניתן לנהל את המעקב בדרכים שונות. נציג כאן שתי שיטות משלימות: ניהול תהליך רחב ב-<strong>Trello</strong>, וניהול נקודתי ב<strong>יומן האישי</strong>.
+      </p>
+    </section>
+
+    <!--  Trello and Kanban board simulation -->
+    <section class="description section-trello-wrapper">
+      <h4 class="section-subtitle-secondary"><i class="bi bi-kanban"></i> שיטה א': מבנה הלוח המומלץ ב-Trello (תוכנת משימות ויזואלית)</h4>
+      <a href="https://trello.com/">trello</a>
+      <div class="trello-board-demo">
+        <div class="trello-column">
+          <h4><i class="bi bi-file-earmark-arrow-up icon-primary"></i> לשלוח קו"ח</h4>
+          <div class="trello-card"><strong>Cyber Company</strong><br>Backend Developer</div>
+        </div>
+        <div class="trello-column">
+          <h4><i class="bi bi-send-check icon-success"></i> שלחתי</h4>
+          <div class="trello-card"><strong>Fintech Innovate</strong><br>Full Stack (לינקדאין)</div>
+        </div>
+        <div class="trello-column">
+          <h4><i class="bi bi-telephone-inbound icon-secondary"></i> שיחת הכרות</h4>
+          <div class="trello-card"><strong>AI StartUp</strong><br>לוודא איזון בית-עבודה</div>
+        </div>
+        <div class="trello-column">
+          <h4><i class="bi bi-people icon-warning"></i> ראיון ראשון</h4>
+        </div>
+        <div class="trello-column">
+          <h4><i class="bi bi-hourglass-split icon-muted"></i> המתנה לתשובה</h4>
+        </div>
+        <div class="trello-column">
+          <h4><i class="bi bi-x-circle icon-danger"></i> אז לא הפעם</h4>
+        </div>
+      </div>
+
+      <ul class="list-padding-trello">
+        <li>📌 <strong>לשלוח קו"ח:</strong> יוצרים כרטיס עם פרטי המשרה והלינק מיד כשרואים אותה (מומלץ להשתמש בתוסף הכרום של Trello או באפליקציה בנייד).</li>
+        <li>📨 <strong>שלחתי:</strong> מעבירים בגרירה ברגע שהגשנו מועמדות, ורושמים בכרטיס מתי ודרך מי העברנו במידה וזה נעשה דרך "חבר מביא חברה".</li>
+        <li>📞 <strong>שיחת הכרות וראיונות:</strong> מעבירים עמודה כשהתהליך מתקדם ומתעדים בפנים הערות חשובות. <em>לדוגמה: "המגייסת ציינה שיש אנשים במשרד בכל שעה – לוודא בהמשך מה זה אומר על איזון בית-עבודה".</em></li>
+        <li>⏳ <strong>המתנה ואז לא הפעם:</strong> מגדירים תזכורת תאריך (Due Date) כדי לדעת מתי לעשות Follow-up, או מעבירים לעמודת "אז לא הפעם" וממשיכים קדימה.</li>
+      </ul>
+    </section>
+
+    <!-- Calendar tracking -->
+    <section class="description section-calendar-wrapper">
+      <h3 class="section-title-flex">
+        <i class="bi bi-calendar3 icon-primary"></i> שיטה ב': מעקב ורישום ביומן האישי בטלפון (Google Calendar וכדומה)
+      </h3>
+      <p class="paragraph-spacer">
+        במקביל לניהול הלוח הכללי, הדרך הטובה ביותר לנהל את יום הראיון עצמו היא באמצעות יומן הטלפון. בכל פעם שחברה קובעת איתך ראיון (טכני, פרונטלי או בזום), מומלץ לייצר לעצמך עוגן מידע מפורט בתוך האירוע.
+      </p>
+
+      <div class="alert-box-danger">
+        ⚠️ <strong>אזהרה קריטית - שימי לב היטב:</strong>
+        כאשר את מוסיפה או עורכת את פרטי הראיון, <strong>עלייך לשנות אך ורק את האירוע הפרטי שאת יצרת בעצמך ביומן!</strong>
+        לעולם אל תערכי או תוסיפי הערות אישיות לתוך זימון ה-Calendar הרשמי שנשלח אלייך מהמגייסת של החברה, שכן כל שינוי או טקסט שתכתבי שם עלול להישלח או להופיע אצל המראיינים והמגייסת, וזה יגרום למבוכה קשה.
+      </div>
+
+      <p class="section-subtitle-bright">מה כותבים בתוך האירוע הפרטי שלכן ביומן?</p>
+      <ul class="list-padding-calendar">
+        <li>👤 <strong>שם המראיין/ת ותפקידם:</strong> כדי שתוכלי לעשות עליהם מחקר קצר בלינקדאין לפני השיחה ולדעת מול מי את יושבת.</li>
+        <li>📱 <strong>מספר טלפון ופרטי קשר:</strong> למקרה שיש תקלה בזום או עיכוב, שתוכלי להשיג אותם מיד.</li>
+        <li>🏢 <strong>שם החברה ותיאור קצר:</strong> באיזה מוצר או תחום החברה עוסקת.</li>
+        <li>⭐ <strong>התרשמות כללית שלכן:</strong> מיד בסיום הראיון, כשהכל עוד טרי בראש, היכנסי לאירוע וכתבי לעצמך כמה שורות על איך הרגשת, מה אהבת ומה הדליק אצלך נורה אדומה.</li>
+      </ul>
+    </section>
+
+    <!-- back to guide -->
+    <div class="footer-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הראשי
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

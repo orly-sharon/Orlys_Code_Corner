@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הצגת פרויקט טכני בראיון</title>
+
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --card: rgba(30, 41, 59, 0.7);
+      --card-alt: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --primary: #60a5fa;
+      --secondary: #22d3ee;
+      --success: #34d399;
+      --warning: #f59e0b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top right, #1e3a8a 0%, transparent 40%),
+        radial-gradient(circle at bottom left, #1e1b4b 0%, transparent 40%),
+        #0f172a;
+      background-attachment: fixed;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card-wrapper {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: var(--text);
+      padding: 45px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .pc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 35px;
+    }
+
+    .pc-title h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      color: var(--text-bright) !important;
+    }
+
+    .pc-title .highlight {
+      background: linear-gradient(135deg, #34d399, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 35px;
+      margin-bottom: 20px;
+      color: var(--text-bright);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 16px;
+    }
+
+    .info-box h4 {
+      color: var(--text-bright);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-box {
+      background: rgba(245, 158, 11, 0.06);
+      border-right: 4px solid var(--warning);
+      padding: 15px 20px;
+      border-radius: 4px 12px 12px 4px;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    .pc-btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      color: var(--text-bright);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .pc-btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    ul {
+      margin-right: 25px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .pro-tip {
+      background: rgba(34, 211, 238, 0.05);
+      border-right: 4px solid var(--secondary);
+      padding: 15px;
+      border-radius: 6px;
+      font-size: 0.93rem;
+      margin-top: 15px;
+    }
+
+    /* ---------- NEW STYLES FROM INLINE TRANSFER ---------- */
+    .icon-success {
+      color: var(--success);
+    }
+
+    .icon-primary {
+      color: var(--primary);
+    }
+
+    .icon-secondary {
+      color: var(--secondary);
+    }
+
+    .icon-warning {
+      color: var(--warning);
+    }
+
+    .paragraph-spacer {
+      margin-bottom: 15px;
+    }
+
+    .text-small {
+      font-size: 0.95rem;
+    }
+
+    .text-small-spacer {
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .list-nested-small {
+      padding-right: 15px;
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .box-container-large {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .link-underlined {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+
+    .list-large-spacing {
+      padding-right: 15px;
+      font-size: 0.95rem;
+    }
+
+    .text-bright-bold {
+      color: var(--text-bright);
+    }
+
+    .box-border-top-secondary {
+      border-top: 3px solid var(--secondary);
+    }
+
+    .box-border-top-warning {
+      border-top: 3px solid var(--warning);
+    }
+
+    .text-small-spacer-alt {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .footer-container {
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn-secondary-alt {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      padding: 10px 20px;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>מדריך למנטורית: <span class="highlight">אמנות הצגת פרויקט טכני בראיון</span></h1>
+      </div>
+    </header>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-layers icon-success"></i> הכנת פרויקטים וטקטיקת הגנה</h3>
+      <p class="paragraph-spacer">
+        הנחי את המנטית שלך להגיע לראיון כשיש לה <strong> לפחות 2 פרויקטים טכניים שונים,</strong> שהיא מכירה לעומק ומסוגלת להציג בצורה מושלמת.
+      </p>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <h4><i class="bi bi-question-diamond icon-primary"></i> למה חובה להכין שני פרויקטים?</h4>
+          <p class="text-small">
+            לפעמים מראיינים פחות יתרשמו מפרויקט ספציפי אחד, או שהם יבקשו במפורש לדבר על פרויקט מתחום אחר או ארכיטקטורה שונה (למשל, אחד מבוסס Microservices ואחד Monolith, או פרויקט Data-Intensive לעומת פרויקט Real-time).
+            <br><br>
+            <strong>ודאי שיש לה 2 פרויקטים בתחומים שונים ושבשניהם היה לה מספיק אימפקט (Impact) והשפעה ניכרת.</strong>
+          </p>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="bi bi-shield-shaded icon-success"></i> הגנה על החלטות ארכיטקטורה</h4>
+          <p class="text-small-spacer">
+            המנטית חייבת לדעת להסביר מדוע נלקחו החלטות פיתוח מסוימות, ולמה עבדו עם טכנולוגיה א' ולא ב'.
+          </p>
+          <ul class="list-nested-small">
+            <li>💡 <strong>התשובה "זה מה שהיה" היא טובה, אבל...</strong> מותר להגיד <em>"ככה המערכת הייתה בנויה"</em> או <em>"הארכיטקט בחר"</em>. אך מיד לאחר מכן עליה להציג חשיבה ביקורתית: <strong>כיצד היא הייתה משפרת את זה או מה הייתה עושה אחרת?</strong></li>
+            <li>🛡️ <strong>להגן על הקיים:</strong> גם אם היא חושבת שהיה עדיף להשאיר את המצב הקיים, היא חייבת לדעת לנמק ולהגן על ההחלטה הזו (למשל משיקולי ביצועים, עלויות, או זמן פיתוח).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-palette icon-secondary"></i> שרטוט הארכיטקטורה באמצעות Draw.io</h3>
+
+      <div class="box-container-large">
+        <p class="text-small-spacer">
+          כדי להציג פרויקט כמו מקצוענית, המנטית צריכה לפרוס את כל רכיבי המערכת בצורה ויזואלית ברורה. הציעו לה להשתמש באתר הפופולרי <a href="https://www.drawio.com" target="_blank" class="link-underlined"><strong>draw.io</strong></a> – כלי חינמי ומצוין להצגת ארכיטקטורת תוכנה.
+        </p>
+
+        <div class="alert-box">
+          ⚠️ <strong>חוק בל יעבור - אנונימיזציה:</strong> הקפידו להנחות אותה <strong>לא להשתמש בשמות האמיתיים והפנימיים</strong> של הרכיבים מהחברה שלה (כדי לא לעבור על חוקי סודיות/IP). עליה להשתמש בשמות גנריים ומובנים (כמו <code>Notification Service</code>, <code>Auth Component</code>) ולהסביר מה כל רכיב עושה בתוך המערכת.
+        </div>
+
+        <ul class="list-large-spacing">
+          <li>📐 <strong class="text-bright-bold">השתמשו בצורות הנכונות:</strong> בשרטוט ארכיטקטורה לכל רכיב יש צורה מוסכמת בתעשייה. למשל, עבור דאטה-בייס (DB) חובה להשתמש בצורת הצילינדר (גליל), עבור תור משימות (Queue) משתמשים במלבן מחולק, וכד'. שרטוט נכון משדר מקצועיות מיידית.</li>
+          <li>🔄 <strong class="text-bright-bold">הכנת ה-Flow והאימפקט האישי:</strong> לצד השרטוט, על המנטית להכין הסבר מפורט על זרימת המידע (ה-Data Flow). היא חייבת להדגיש בצורה ברורה <strong>באיזה חלק היא ביצעה את השינוי או על איזה רכיב היא השפיעה ישירות!</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-display icon-warning"></i> טקטיקת הגשה: ראיון בזום לעומת ראיון פרונטלי</h3>
+
+      <div class="grid-2">
+        <div class="info-box box-border-top-secondary">
+          <h4><i class="bi bi-camera-video icon-secondary"></i> מתראיינת מרחוק (Zoom / Teams)</h4>
+          <p class="text-small">
+            ראיון אונליין הוא יתרון אדיר! המנטית יכולה להכין מראש את השרטוטים המלאים שלה ב-Draw.io שמורים אצלה במחשב.
+          </p>
+          <div class="pro-tip">
+            😎 <strong>השליפה המנצחת:</strong> ברגע שהמראיין מבקש ממנה לתאר פרויקט, היא יכולה לשתף מסך, לשלוף את השרטוט המעוצב ולהגיד:
+            <br><em>"הכנתי את השרטוט הארכיטקטוני הזה בדיוק עבור ראיון שעשיתי השבוע, אז בוא נשתמש בו כדי שיהיה לנו קל לרוץ על הרכיבים".</em>
+            <br>זה שקר לבן לחלוטין שלא פוגע באף אחד, ומציג אותה כמבוקשת, מאורגנת ומקצוענית ברמות הגבוהות ביותר.
+          </div>
+        </div>
+
+        <div class="info-box box-border-top-warning">
+          <h4><i class="bi bi-people icon-warning"></i> מתראיינת פרונטלית (במשרדי החברה)</h4>
+          <p class="text-small-spacer-alt">
+            בראיון פרונטלי לרוב יבקשו ממנה לקום ללוח המחיק (Whiteboard) ולשרטט את המערכת בלייב מול המראיינים.
+          </p>
+          <ul class="list-nested-small">
+            <li>✍️ <strong>תרגול בעל פה:</strong> ודאי איתה לפני הראיון שהיא יודעת לשרטט את הארכיטקטורה בצורה עיוורת וישרה על דף או לוח.</li>
+            <li>🧩 <strong>זכרון שריר:</strong> התרגול המוקדם ב-Draw.io יעזור לה לזכור את הצורות הנכונות (הגליל של ה-DB, ה-Flow של החצים) כך שהשרטוט שלה על הלוח ייראה נקי, בטוח ומאורגן, ללא היסוסים.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הטכני
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
