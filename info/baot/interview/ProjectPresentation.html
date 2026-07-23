@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>הצגת פרויקט טכני בראיון</title>
+
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../../../style/style.css">
+
+</head>
+<body>
+
+<div class="container">
+
+  <main class="profile-card-wrapper">
+    <header class="pc-header">
+      <div class="pc-title">
+        <h1>מדריך למנטורית: <span class="highlight">אמנות הצגת פרויקט טכני בראיון</span></h1>
+      </div>
+    </header>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-layers icon-success"></i> הכנת פרויקטים וטקטיקת הגנה</h3>
+      <p class="paragraph-spacer">
+        הנחי את המנטית שלך להגיע לראיון כשיש לה <strong> לפחות 2 פרויקטים טכניים שונים,</strong> שהיא מכירה לעומק ומסוגלת להציג בצורה מושלמת.
+      </p>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <h4><i class="bi bi-question-diamond icon-primary"></i> למה חובה להכין שני פרויקטים?</h4>
+          <p class="text-small">
+            לפעמים מראיינים פחות יתרשמו מפרויקט ספציפי אחד, או שהם יבקשו במפורש לדבר על פרויקט מתחום אחר או ארכיטקטורה שונה (למשל, אחד מבוסס Microservices ואחד Monolith, או פרויקט Data-Intensive לעומת פרויקט Real-time).
+            <br><br>
+            <strong>ודאי שיש לה 2 פרויקטים בתחומים שונים ושבשניהם היה לה מספיק אימפקט (Impact) והשפעה ניכרת.</strong>
+          </p>
+        </div>
+
+        <div class="info-box">
+          <h4><i class="bi bi-shield-shaded icon-success"></i> הגנה על החלטות ארכיטקטורה</h4>
+          <p class="text-small-spacer">
+            המנטית חייבת לדעת להסביר מדוע נלקחו החלטות פיתוח מסוימות, ולמה עבדו עם טכנולוגיה א' ולא ב'.
+          </p>
+          <ul class="list-nested-small">
+            <li>💡 <strong>התשובה "זה מה שהיה" היא טובה, אבל...</strong> מותר להגיד <em>"ככה המערכת הייתה בנויה"</em> או <em>"הארכיטקט בחר"</em>. אך מיד לאחר מכן עליה להציג חשיבה ביקורתית: <strong>כיצד היא הייתה משפרת את זה או מה הייתה עושה אחרת?</strong></li>
+            <li>🛡️ <strong>להגן על הקיים:</strong> גם אם היא חושבת שהיה עדיף להשאיר את המצב הקיים, היא חייבת לדעת לנמק ולהגן על ההחלטה הזו (למשל משיקולי ביצועים, עלויות, או זמן פיתוח).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-palette icon-secondary"></i> שרטוט הארכיטקטורה באמצעות Draw.io</h3>
+
+      <div class="box-container-large">
+        <p class="text-small-spacer">
+          כדי להציג פרויקט כמו מקצוענית, המנטית צריכה לפרוס את כל רכיבי המערכת בצורה ויזואלית ברורה. הציעו לה להשתמש באתר הפופולרי <a href="https://www.drawio.com" target="_blank" class="link-underlined"><strong>draw.io</strong></a> – כלי חינמי ומצוין להצגת ארכיטקטורת תוכנה.
+        </p>
+
+        <div class="alert-box">
+          ⚠️ <strong>חוק בל יעבור - אנונימיזציה:</strong> הקפידו להנחות אותה <strong>לא להשתמש בשמות האמיתיים והפנימיים</strong> של הרכיבים מהחברה שלה (כדי לא לעבור על חוקי סודיות/IP). עליה להשתמש בשמות גנריים ומובנים (כמו <code>Notification Service</code>, <code>Auth Component</code>) ולהסביר מה כל רכיב עושה בתוך המערכת.
+        </div>
+
+        <ul class="list-large-spacing">
+          <li>📐 <strong class="text-bright-bold">השתמשו בצורות הנכונות:</strong> בשרטוט ארכיטקטורה לכל רכיב יש צורה מוסכמת בתעשייה. למשל, עבור דאטה-בייס (DB) חובה להשתמש בצורת הצילינדר (גליל), עבור תור משימות (Queue) משתמשים במלבן מחולק, וכד'. שרטוט נכון משדר מקצועיות מיידית.</li>
+          <li>🔄 <strong class="text-bright-bold">הכנת ה-Flow והאימפקט האישי:</strong> לצד השרטוט, על המנטית להכין הסבר מפורט על זרימת המידע (ה-Data Flow). היא חייבת להדגיש בצורה ברורה <strong>באיזה חלק היא ביצעה את השינוי או על איזה רכיב היא השפיעה ישירות!</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h3 class="section-title"><i class="bi bi-display icon-warning"></i> טקטיקת הגשה: ראיון בזום לעומת ראיון פרונטלי</h3>
+
+      <div class="grid-2">
+        <div class="info-box box-border-top-secondary">
+          <h4><i class="bi bi-camera-video icon-secondary"></i> מתראיינת מרחוק (Zoom / Teams)</h4>
+          <p class="text-small">
+            ראיון אונליין הוא יתרון אדיר! המנטית יכולה להכין מראש את השרטוטים המלאים שלה ב-Draw.io שמורים אצלה במחשב.
+          </p>
+          <div class="pro-tip">
+            😎 <strong>השליפה המנצחת:</strong> ברגע שהמראיין מבקש ממנה לתאר פרויקט, היא יכולה לשתף מסך, לשלוף את השרטוט המעוצב ולהגיד:
+            <br><em>"הכנתי את השרטוט הארכיטקטוני הזה בדיוק עבור ראיון שעשיתי השבוע, אז בוא נשתמש בו כדי שיהיה לנו קל לרוץ על הרכיבים".</em>
+            <br>זה שקר לבן לחלוטין שלא פוגע באף אחד, ומציג אותה כמבוקשת, מאורגנת ומקצוענית ברמות הגבוהות ביותר.
+          </div>
+        </div>
+
+        <div class="info-box box-border-top-warning">
+          <h4><i class="bi bi-people icon-warning"></i> מתראיינת פרונטלית (במשרדי החברה)</h4>
+          <p class="text-small-spacer-alt">
+            בראיון פרונטלי לרוב יבקשו ממנה לקום ללוח המחיק (Whiteboard) ולשרטט את המערכת בלייב מול המראיינים.
+          </p>
+          <ul class="list-nested-small">
+            <li>✍️ <strong>תרגול בעל פה:</strong> ודאי איתה לפני הראיון שהיא יודעת לשרטט את הארכיטקטורה בצורה עיוורת וישרה על דף או לוח.</li>
+            <li>🧩 <strong>זכרון שריר:</strong> התרגול המוקדם ב-Draw.io יעזור לה לזכור את הצורות הנכונות (הגליל של ה-DB, ה-Flow של החצים) כך שהשרטוט שלה על הלוח ייראה נקי, בטוח ומאורגן, ללא היסוסים.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-container">
+      <a href="../baotIntro.html?showDocs=true" class="pc-btn-cta btn-secondary-alt">
+        <i class="bi bi-arrow-right"></i> חזרה למדריך הטכני
+      </a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

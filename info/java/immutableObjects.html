@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Immutable Objects</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+  <style>
+    pre {
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+      text-align: left;
+      direction: ltr;
+    }
+    .code-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>אובייקטים בלתי משתנים (Immutable Objects)</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">אובייקטים בלתי משתנים (Immutable Objects) הם אחת מהתפיסות החשובות והחזקות ביותר בתכנות מונחה עצמים (OOP) ובתכנות מקבילי (Concurrency).<br>
+        הכלל הבסיסי פשוט: מרגע שנוצר אובייקט Immutable, אי אפשר לשנות את הערכים (השדות) שלו לאורך כל מחזור החיים שלו. אם נרצה לשנות משהו, נצטרך ליצור אובייקט חדש לגמרי.</p>
+    </div>
+
+    <h2>איך מייצרים Immutable Object ב Java?</h2>
+    <p>כדי לוודא שאף אחד לא יוכל לשנות את מצב האובייקט אחרי בנייתו, יש להקפיד על הכללים הבאים:</p>
+    <ul>
+      <li><strong>סימון המחלקה כ-final:</strong> כדי שאף מחלקה אחרת לא תוכל לרשת אותה ולשנות את ההתנהגות שלה (להוסיף שדות ניתנים לשינוי).</li>
+      <li><strong>הגדרת כל השדות כ-private ו final:</strong> השדות ניתן להגדרה פעם אחת בלבד (בזמן ה Constructor).</li>
+      <li><strong>אין מתודות setter:</strong> אסור שיהיו מתודות המאפשרות לשנות את ערכי השדות מבחוץ.</li>
+      <li><strong>הגנה על שדות מורכבים (Deep Copy):</strong> אם האובייקט שלנו מחזיק שדות שהם בעצמם ניתנים לשינוי (כמו Date, מערכים, או List), עלינו לוודא שאנחנו מעתיקים אותם בבנייה ושליפה (Defensive Copying), כדי שהקוד בחוץ לא יוכל לשנות אותם דרך הפניה פנימית. אם יש לך אובייקט Immutable שמחזיק הפניה לאובייקט אחר שהוא Mutable , ואנחנו לא מבצע להם Defensive Copying (עותק הגנה), האובייקט שלנו לא באמת Immutable!</li>
+    </ul>
+
+    <p>ראו קוד לדוגמה כיצד עלינו להגן על עצמנו במצב כזה</p>
+
+    <div class="code-container">
+      <pre><code>public final class ImmutablePerson {
+ private final String name;
+private final int age;
+private final List&lt;String&gt; hobbies;
+public ImmutablePerson(String name, int age, List&lt;String&gt; hobbies) { this.name = name; this.age = age;
+//deep copy rule
+ this.hobbies = new ArrayList&lt;&gt;(hobbies);
+}
+ public String getName()
+ { return name; }
+ public int getAge()
+ { return age; }
+ public List&lt;String&gt; getHobbies()
+//new copy!
+{ return new ArrayList&lt;&gt;(hobbies); }
+ }</code></pre>
+    </div>
+
+    <h2>יתרונות בשימוש Immutable Object: </h2>
+    <ul>
+      <li><strong>בטיחות מוחלטת ב Multithreading Thread-Safety:</strong> זהו היתרון העצום ביותר. מכיוון שהנתונים לעולם לא משתנים, מספר Threads יכולים לקרוא את אותו אובייקט בו זמנית בבטחה מלאה, ללא שום צורך במנגנוני נעילה (Locks או Synchronization). אין סיכוי ל Race Conditions.</li>
+      <li><strong>אמינות ומניעת באגים (Side Effects):</strong> כשאנחנו מעביר אובייקט למתודה אחרת, אנחנו יודעים בוודאות מוחלטת שהמתודה הזו לא הולכת "להרוס" או לשנות את הערכים של האובייקט מאחורי הגב שלנו.</li>
+    </ul>
+
+    <h2>הקשר ל-String Pooling (אופטימיזציית זיכרון)</h2>
+    <p>הסיבה המרכזית לכך שמחלקת String ב Java היא Immutable היא כדי לאפשר String Pooling. מכיוון שהמחרוזת בלתי משתנה, Java יכולה לשמור מופע (Instance) אחד של המחרוזת בזיכרון (בתוך ה String Pool) ולתת למספר משתנים שונים להצביע אליו בבטחה מלאה. אם String היה משתנה, שינוי אצל משתמש אחד היה הורס את הערך לכל שאר המשתנים במערכת. ניצן לקרוא עוד על String Pooling <a href="/info/java/java-string-pool.html" style="color: var(--primary); text-decoration: underline;">כאן</a></p>
+
+    <h2>שיפורים החל מ JAVA 14 </h2>
+    <p><strong>Java Records (החל מ Java 14):</strong> אם אנחנו צריכים אובייקט שהוא נטו "מיכל נתונים" (Data Carrier), Java מציעה את ה record. רשומות הן Immutable בצורה מובנית ומוצהרת, וחוסכות לנו לכתוב את רוב הקוד (Constructors, Getters, equals, hashCode, toString). מחלקה מסוג record עושה את כל זה אוטומטית בשורה אחת, והיא Immutable (בלתי משתנה) מטבעה. יצירת הקונסטרוקטור מתבצעת אוטומטית, ה get מתקבלים אוטומטית גם, equals and hashCode גם מגיעים בצורה אוטומטית.   </p>
+
+    <p>לדוגמה ניתן לכתוב את המחלקה הבאה: </p>
+    <div class="code-container">
+      <pre><code>public record UserRecord(int id, String username, String email) {}</code></pre>
+    </div>
+
+    <p>אם נרצה להרחיב, למשל לכתוב ולידציה, או להוסיף מתודה משלנו, ניתן לעשות זאת ככה: </p>
+    <div class="code-container">
+      <pre><code>// 1. Define a Record in a single concise line!
+public record UserRecord(int id, String username, String email) {
+
+ // Compact Constructor: Perform validations without boilerplate code
+public UserRecord {
+ if (id &lt;= 0) {
+ throw new IllegalArgumentException("ID must be positive"); }
+ if (email == null || !email.contains("@")) {
+throw new IllegalArgumentException("Invalid email address"); }
+}
+// Add a custom helper method public void printSummary() { System.out.println("User: " + username + " (" + email + ")");
+}
+ }</code></pre>
+    </div>
+
+    <p>שימוש במחלקה: </p>
+    <div class="code-container">
+      <pre><code>public class Main {
+    public static void main(String[] args) {
+        // Create an object (no complex new logic needed, compiler generates the constructor automatically)
+        UserRecord user1 = new UserRecord(1, "john_doe", "john@example.com");
+
+        // Use the automatic getters (method name is directly the field name, without the 'get' prefix!)
+        System.out.println(user1.username()); // Output: john_doe
+        System.out.println(user1.email());    // Output: john@example.com
+
+        // Use the custom method we added
+        user1.printSummary();
+
+        // toString() is built-in and provides a nice automatic format:
+        System.out.println(user1);
+        // Output: UserRecord[id=1, username=john_doe, email=john@example.com]
+
+        // Equality comparison (equals and hashCode are automatically implemented based on values!)
+        UserRecord user2 = new UserRecord(1, "john_doe", "john@example.com");
+        System.out.println(user1.equals(user2)); // true (because the values are identical)
+
+    }
+}</code></pre>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

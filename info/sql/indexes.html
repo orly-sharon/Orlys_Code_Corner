@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL - Indexes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+  <style>
+    pre {
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+    }
+    .code-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>אינדקסים במסדי נתונים (SQL Indexes)</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">אינדקסים (Indexes) במסדי נתונים רלציוניים (SQL) הם כמו תוכן עניינים בספר: במקום שהמסד יסרוק שורה שורה את כל הטבלה (Full Table Scan) כדי למצוא מידע, האינדקס מאפשר לו למצוא את השורה במינימום זמן.<br>
+        ממש כמו בספר, שבמקום לקרוא את כולו, אנחנו ניגש לתוכן העניינים על מנת למצוא נושא מסוים.</p>
+    </div>
+
+    <div class="pc-pillar-card warning-highlight" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 15px;">
+        כל אינדקס שנוסיף לטבלה מאיץ קריאות (SELECT), אבל מאט פעולות כתיבה (INSERT, UPDATE, DELETE) כי המסד חייב לעדכן את האינדקסים בכל שינוי. ולכן יש לנהוג במשנה זהירות בהוספת אינדקסים.
+      </p>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        <strong>התאמה לשאילתות:</strong> אל תייצרו אינדקסים סתם. תסתכלו על ה-EXPLAIN (ראו הרחבה על EXPLAIN <a href="/info/sql/explain.html" style="color: var(--primary); text-decoration: underline;">כאן</a>) ותראו איפה המסד עושה Full Table Scan, שם נפעיל את סוג האינדקס החכם שמתאים לנו.      </p>
+    </div>
+
+    <h2>Hash Index</h2>
+    <p>אינדקס המבוסס על טבלת גיבוב (Hash Table).</p>
+    <p><strong>איך זה עובד?</strong> מפעיל פונקציית Hash על הערך כדי להגיע ישירות לכתובת הפיזית שלו בזיכרון/דיסק.</p>
+    <p><strong>שימוש נפוץ:</strong> אך ורק לחיפושי שוויון מדויקים (WHERE status = 'ACTIVE').</p>
+
+    <div class="code-container">
+      <pre><code>CREATE INDEX idx_hash_auth_token ON sessions USING HASH (auth_token);</code></pre>
+    </div>
+
+    <h2>Bitmap Index</h2>
+    <p>אינדקס שבו הערכים מיוצגים כמערך של ביטים (0 או 1) עבור כל שורה בטבלה. נניח שיש לנו טבלת orders (הזמנות) עם 4 שורות בלבד, ויש בה עמודה בשם status שיכולה לקבל שלושה ערכים בלבד: PENDING, SHIPPED, DELIVERED. זוהי קרדינליות נמוכה (Low Cardinality).</p>
+    <p><strong>איך זה עובד?</strong> עמודות שיש להן מעט ערכים ייחודיים (למשל: מין - זכר/נקבה, סטטוס הזמנה - ממתין/ששולם/בוטל).</p>
+    <p><strong>שימוש נפוץ:</strong> מעולה לעמודות עם קרדינליות נמוכה (Low Cardinality) . במערכות Data Warehouse ו-OLAP (ניתוח נתונים כבד) שבהן עושים שאילתות מורכבות עם הרבה תנאים (AND / OR) על עמודות עם מעט ערכים.</p>
+
+    <div class="code-container">
+      <pre><code>CREATE BITMAP INDEX idx_bitmap_order_status ON orders(status);</code></pre>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+    <h2>B-Tree Index</h2>
+    <p>מבנה נתונים בצורת עץ מאוזן (Balanced Tree). זהו האינדקס הנפוץ והברירת מחדל ברוב מסדי הנתונים. זה האינדקס שבו רובנו משתמשים ביום יום.</p>
+    <p><strong>איך זה עובד?</strong> הנתונים מסודרים בסדר ממויין (עולה או יורד). אפשר לחפש בו בסיבוכיות של חיפוש בינארי מהיר (O(log n).</p>
+
+    <p><strong>שימוש נפוץ:</strong></p>
+    <ul>
+      <li>לחיפושי שוויונות (WHERE id = 5).</li>
+      <li>לחיפושי טווחים (WHERE age > 20 AND age < 40).</li>
+      <li>לפעולות מיון (ORDER BY) או קיבוץ (GROUP BY).</li>
+    </ul>
+
+    <div class="code-container">
+      <pre><code>CREATE INDEX idx_employees_salary ON employees(salary);</code></pre>
+    </div>
+
+    <p>ל-B-Tree Index יש כמה הרחבות, או הגדרה יותר חכמה של B-Tree Index, להלן ההרחבות:</p>
+
+    <h2>1. Partial Index</h2>
+    <p>אינדקס שמוחל רק על חלק מהשורות בטבלה, בהתאם לתנאי WHERE מוגדר.</p>
+    <p><strong>איך זה עובד?</strong> יש לנו טבלת משתמשים עם מיליון שורות, אבל רק ל-1% מהם יש סטטוס is_active = true ואנחנו מחפשים אותם תמיד. במקום לאנדקס מיליון שורות, נבנה אינדקס חלקי רק על הפעילים.</p>
+    <p><strong>שימוש נפוץ:</strong> כשמעוניינים לאנדקס רק תת-קבוצה של הנתונים.</p>
+
+    <div class="code-container">
+      <pre><code>CREATE INDEX idx_active_users ON users(email) WHERE is_active = true;</code></pre>
+    </div>
+
+    <h2>2. Filtered Index</h2>
+    <p>ידוע גם בשם Partial Index. יצירת אינדקס עם תנאי סינון מובנה (WHERE). ביצועים מהירים יותר בכתיבה (INSERT, UPDATE, DELETE): כשיש פחות שורות באינדקס, למסד הנתונים לוקח הרבה פחות זמן לעדכן את האינדקס בזמן שינוי נתונים.</p>
+    <p><strong>איך זה עובד?</strong> במערכות רבות יש מיליוני שורות היסטוריות, אבל 99% מהשאילתות מחפשות רק את הנתונים הפעילים כרגע (למשל: משתמשים פעילים, הזמנות שלא נסגרו, תשלומים ממתינים).</p>
+    <p><strong>שימוש נפוץ:</strong> אם ידוע לנו שיש לנו הרבה רשומות שאנחנו "לא צריכים" ביום יום כמו שורות שאינן פעילות. או הרבה ערכי NULL בעמודה ואנחנו צריכים רק את המלאים.</p>
+
+    <div class="success-box">
+      <p style="margin-bottom: 0;"><strong>שימו לב:</strong> לא ניתן לחפש סטטוס שונה מאינדקס שקבענו במהירות, אם נבחר להשתמש באינדקס זה.</p>
+    </div>
+
+    <div class="code-container">
+      <pre><code>CREATE INDEX idx_pending_orders
+ON orders (customer_id, order_date)
+WHERE status = 'PENDING';</code></pre>
+    </div>
+
+    <h2>3. Function-Based Index (או Expression-Based Index)</h2>
+    <p>אינדקס שלא שומר את הערך הגולמי של העמודה, אלא את התוצאה של פונקציה שמופעלת עליה.</p>
+    <p><strong>איך זה עובד?</strong> כשהשאילתות שלך מפעילות פונקציה על עמודה, מה שבד"כ מבטל את השימוש באינדקס רגיל.</p>
+    <p><strong>שימוש נפוץ:</strong> אם מחפשים לפי אותיות קטנות/גדולות לדוגמה: WHERE LOWER(email) = 'test@gmail.com'. אינדקס רגיל על email לא יעזור כאן.</p>
+
+    <div class="code-container">
+      <pre><code>CREATE INDEX idx_lower_email ON users (LOWER(email));</code></pre>
+    </div>
+
+    <h2>4. Descending Index</h2>
+    <p>אינדקס ממויין מהגדול לקטן (DESC), בניגוד לברירת המחדל שהיא עולה (ASC).</p>
+    <p><strong>איך זה עובד?</strong> כששאילתות רבות מבקשות מיון בסדר הפוך (ORDER BY date DESC), במיוחד בשילוב עם הגבלת תוצאות (LIMIT 10). במסדי נתונים מודרניים, תומך לחלוטין בכיוונים שונים לכל עמודה באינדקס, מה שמונע מהמסד לבצע מיון פיזי נוסף בזמן השליפה.</p>
+    <p><strong>שימוש נפוץ:</strong> חיפוש שאילתות ספציפיות שרוצות להשתמש בסידור מהגדול לקטן, מתאים לנתונים מאוד ספציפיים.</p>
+
+    <div class="code-container">
+      <pre><code>CREATE INDEX idx_logs_created_desc ON system_logs (created_at DESC);</code></pre>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
