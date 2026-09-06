@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Autoboxing & Unboxing</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+  <style>
+    pre {
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+    }
+    .code-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Autoboxing & Unboxing</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">מנגנוני ה Autoboxing (אריזה אוטומטית) וה Unboxing (פריקה אוטומטית) הם פיצ'רים קריטיים ונוחים מאוד ב-Java שהוצגו לראשונה בJava 5. הם מאפשרים המרה אוטומטית ושקופה למתכנת בין הטיפוסים הפרימיטיביים (Primitive Types) לבין מחלקות המעטפת (Wrapper Classes) שלהם.</p>
+
+<br>
+
+    <p><strong>Autoboxing:</strong> המרה אוטומטית של טיפוס פרימיטיבי (כמו int, double, boolean) לאובייקט של מחלקת המעטפת המתאימה לו (כמו Integer, Double, Boolean).</p>
+    <p><strong>Unboxing:</strong> המרה אוטומטית בכיוון ההפוך, מאובייקט מעטפת (כמו Integer) בחזרה לטיפוס הפרימיטיבי שלו (int).</p>
+</div>
+    <h2>מה קורה מאחורי הקלעים? (Bytecode) :</h2>
+
+    <p>כמפתחים אנחנו נכתוב את הקוד הבא:</p>
+
+    <div class="code-container">
+      <pre><code>Integer x = 5;
+int y = x;</code></pre>
+    </div>
+
+    <p>הקומפיילר יהפוף את זה "מאחורי הקלעים"</p>
+
+    <div class="code-container">
+      <pre><code>Integer x = Integer.valueOf(5); // Autoboxing
+int y = x.intValue(); // Unboxing</code></pre>
+    </div>
+
+    <p><strong>יצירת אובייקטים מיותרים (Garbage Collection):</strong> כל פעולת Autoboxing מייצרת אובייקט חדש ב-Heap (כל עוד הערך מחוץ לטווח ה Cache). בלולאות ארוכות, הדבר עלול ליצור מיליוני אובייקטים זמניים שיעמיסו על ה Garbage Collector (GC) ויגרמו להאטה (Memory Overhead).</p>
+
+    <p><strong>הבדל מהירות:</strong> חישוב מתמטי על פרימיטיבי (<code dir="ltr">int a = b + c;</code>) מתבצע ישירות ברמת המעבד במיקרו שניות. חישוב על אובייקטים דורש פריקה (Unboxing), חישוב, ואז אריזה מחדש (Autoboxing), מה שאיטי משמעותית.</p>
+
+    <div class="pc-pillar-card warning-highlight" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> <strong>מלכודת Caching</strong>
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 15px;">
+        כפי שדנו בעבר ישנו Caching ל-<a href="/info/java/java-string-pool.html" style="color: var(--primary); text-decoration: underline;">string</a> ו-<a href="/info/java/Java-int-pool.html" style="color: var(--primary); text-decoration: underline;">int</a> .
+      </p>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        <strong>כלל זהב:</strong> לעולם לא נשתמש באופרטור == כדי להשוות בין אובייקטי Wrapper (כמו Integer או Boolean). השוואת אובייקטים מתבצעת תמיד בעזרת <code dir="ltr">.equals()</code>
+      </p>
+    </div>
+
+    <div class="pc-pillar-card warning-highlight" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> <strong>מלכודת NullPointerException ב Unboxing</strong>
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 15px;">
+        מכיוון שטיפוס פרימיטיבי חייב להכיל ערך (לדוגמה int חייב להיות 0 ומעלה ולא יכול להיות null), Unboxing עלול להיכשל בקריסת מערכת אם האובייקט מכיל null.
+      </p>
+      <div class="code-container" style="margin: 15px 0;">
+        <pre><code>Integer wrapperNum = null;
+int primitiveNum = wrapperNum;</code></pre>
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        <strong>כלל זהב:</strong> תמיד לוודא שהאובייקט אינו null לפני ביצוע Unboxing או השוואות שעלולות לעורר אותו אוטומטית.
+      </p>
+    </div>
+    <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+    <p>לפני JAVA 5 היינו צריכים לבצע ידנית, את ההמרה על הסוג משתנה:</p>
+
+    <div class="code-container">
+      <pre><code>List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+list.add(Integer.valueOf(5));
+int val = list.get(0).intValue();</code></pre>
+    </div>
+
+    <p>היום (java 6 ומעלה), בזכות ה Autoboxing וה Unboxing, הקוד הופך לנקי ושקוף לחלוטין:</p>
+
+    <div class="code-container">
+      <pre><code>Integer wrappedInt = 5;
+int primitiveInt = wrappedInt;</code></pre>
+    </div>
+
+    <div class="code-container"> <pre><code>
+List&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
+numbers.add(10);
+int n = numbers.get(0);</code></pre>
+    </div>
+
+    <h2>טבלת ההתאמות (Primitives vs Wrappers):</h2>
+    <table class="article-table">
+      <thead>
+      <tr>
+        <th>Primitive Type</th>
+        <th>Wrapper Class</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>byte</td>
+        <td>Byte</td>
+      </tr>
+      <tr>
+        <td>short</td>
+        <td>Short</td>
+      </tr>
+      <tr>
+        <td>int</td>
+        <td>Integer</td>
+      </tr>
+      <tr>
+        <td>long</td>
+        <td>Long</td>
+      </tr>
+      <tr>
+        <td>float</td>
+        <td>Float</td>
+      </tr>
+      <tr>
+        <td>double</td>
+        <td>Double</td>
+      </tr>
+      <tr>
+        <td>char</td>
+        <td>Character</td>
+      </tr>
+      <tr>
+        <td>boolean</td>
+        <td>Boolean</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

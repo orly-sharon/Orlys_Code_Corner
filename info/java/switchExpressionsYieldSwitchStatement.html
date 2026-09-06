@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Switch Expressions & Yield</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Switch Statement ו-yield (החל מ-Java 14)</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">החל מגרסה Java 14 ישנה מהפכה במבנה ה-switch המסורתי. מעבר משימוש בו כ-Statement (פקודה שמבצעת פעולות) לשימוש בו כ-Expression (ביטוי שמחזיר ערך ישירות).</p>
+    </div>
+
+    <h2>יתרונות Switch Expressions (חדש - Java 14 ומעלה) לעומת Switch Statement (ישן - Java 13 ומטה).</h2>
+
+    <h3 style="margin-top: 30px;">1. אין Fall-through (אין זליגה אוטומטית)</h3>
+    <p><strong>ב-Switch Statement (ישן):</strong> אם שכחנו לכתוב break בסוף case מסוים, הקוד המשיך לרוץ אוטומטית לתוך ה-case הבא (תופעה שנקראת Fall-through). זו הייתה אחת הסיבות הנפוצות לבאגים. </p>
+
+    <p>לדוגמה קטע קוד עם הגישה הישנה:</p>
+    <div class="code-container">
+      <pre><code>String dayType = "SATURDAY";
+String message;
+
+switch (dayType) {
+    case "MONDAY":
+    case "TUESDAY":
+    case "WEDNESDAY":
+    case "THURSDAY":
+    case "FRIDAY":
+        // This runs for weekdays
+        System.out.println("Processing a standard workday...");
+        message = "Weekday";
+        break; // MANDATORY: Without this break, code would leak into the next case!
+
+    case "SATURDAY":
+    case "SUNDAY":
+        // This runs for weekends
+        message = "Weekend";
+        break; // MANDATORY: Without this break, code would leak into default!
+
+    default:
+        // This runs if no other case matches
+        System.out.println("Invalid day provided.");
+        message = "Unknown";
+        break;
+}
+
+System.out.println("Result: " + message);</code></pre>
+    </div>
+
+    <p><strong>Switch Expressions (חדש):</strong></p>
+
+    <p>לדוגמה קטע קוד עם הגישה החדשה:</p>
+    <div class="code-container">
+      <pre><code>String dayType = "SATURDAY";
+
+String message = switch (dayType) {
+    case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> {
+        // This block runs ONLY for weekdays and exits immediately afterwards
+        System.out.println("Processing a standard workday...");
+        yield "Weekday";
+    }
+    // This runs for weekends
+    case "SATURDAY", "SUNDAY" -> "Weekend";
+
+    default -> {
+        // This only executes if none of the above match
+        System.out.println("Invalid day provided.");
+        yield "Unknown";
+    }
+};
+
+System.out.println("Result: " + message);</code></pre>
+    </div>
+
+    <h3 style="margin-top: 30px;">2. קיבוץ ערכים בשורה אחת (Multiple Constants)</h3>
+    <p>התחביר החדש מאפשר לרכז מספר תנאים שונים שמבצעים בדיוק את אותה הפעולה, תחת שורה אחת מופרדת בפסיקים.</p>
+    <div class="code-container">
+   <pre><code> <p >case "MONDAY", "FRIDAY", "SUNDAY" -> 6;</code></code></pre></p>
+      </div>
+    <p>ולא:</p>
+      <div class="code-container">
+        <pre><code>
+    <p>case "MONDAY":<br>
+      case "TUESDAY":<br>
+      case "WEDNESDAY":<br>
+      case "THURSDAY":<br>
+      case "FRIDY":</code></pre>
+    </p>
+        </div>
+    <h3 style="margin-top: 30px;">3. חובה לכסות את כל האפשרויות (Exhaustiveness)</h3>
+    <p>כאשר משתמשים ב-Switch Expressions (חדש), הקומפיילר דורש שהקוד יכסה את כל הערכים האפשריים מבחינה לוגית, אחרת הקוד לא יתקמפל, תתקבל שגיאת קומפילציה.<br>
+      אם נכתוב switch על Enum, הקומפיילר מצפה שנכסה את כל הערכים האפשריים של אותו Enum.<br>
+      אם מדובר במשתנה רגיל (כמו String או int), חובה לכלול תמיד סעיף default שיסגור את כל המקרים הבלתי צפויים.</p>
+
+    <h3 style="margin-top: 30px;">4. ערך החזרה אחיד מכל ה-Cases</h3>
+    <p>מכיוון שמשתנה מקבל את הערך מתוצאת ה-switch, כל ה-case-ים כולל ה-default חייבים להחזיר את אותו סוג טיפוס (Type).<br>
+      אי אפשר ש-case אחד יחזיר String ואחר יחזיר int. הקומפיילר ידרוש עקביות במשתנים המוחזרים.</p>
+
+    <h3 style="margin-top: 30px;">5. שילוב עם שגיאות (Exceptions)</h3>
+    <p>בתוך case בין אם בחץ או בתוך בלוק עם yield, מותר לזרוק שגיאה Exception. אם משהו לא תקין. הקומפיילר חכם מספיק כדי להבין ששגיאה שנזרקת עוצרת את הריצה, ולכן היא לא פוגעת בדרישה להחזיר ערך תקין.</p>
+
+    <div class="code-container">
+      <pre><code>int val = switch (input) {
+    case 1 -> 10;
+    default -> throw new IllegalArgumentException("Invalid input: " + input);
+};</code></pre>
+    </div>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        כאשר עוברים לJAVA 14 ומעלה, יש נטייה להתבלבל בגישה הישנה, לגישה החדשה. ולכן אם נכתוב בטעות RETURN באמצע ה switch נעצור את כל המטודה ולא נמשיך הלאה במקרים האפשריים.
+      </p>
+    </div>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> דוגמה לשימוש לא נכון!
+      </div>
+
+      <div class="code-container" style="text-align: left;">
+    <pre><code>// Buggy implementation using return
+public static String evaluateStatusBuggy(String status) {
+ String message = switch (status) {
+ case "ACTIVE" -> {
+System.out.println("Executing logic for ACTIVE status...");
+ // BUG: 'return' exits the ENTIRE evaluateStatusBuggy method immediately!
+ // It does NOT just return a value to the switch expression.
+ return "Accidental early exit!";
+}
+ default -> {
+yield "Unknown status.";
+ }
+};
+// This line is dead code for "ACTIVE" because the method already returned above return message;
+}</code></pre>
+      </div>
+    </div>
+
+    <h2>ההבדל בארכיטקטורה (Scope & Context):</h2>
+    <ul>
+      <li>מתודה היא בלוק קוד ראשי שמסתיים תמיד עם return.</li>
+      <li>switch עם בלוקים {} בתוך case הוא למעשה בלוק מקונן (Nested Block) שיושב בתוך מתודה.</li>
+    </ul>
+
+    <p>כאשר מפתחים משדרגים גרסאת JAVA ורואים סוגריים מסולסלים {} בתוך ה-case, ההרגל לפרש זאת אוטומטית כמו מתודה קטנה, ולכן האינסטינקט הראשוני הוא לכתוב return כדי להחזיר את הערך.</p>
+
+    <p><strong>מה קורה בפועל כשמשתמשים ב-return בטעות?</strong></p>
+    <p>מילת המפתח return אומרת ל-Java: "תעצרי הכל, צאי מיד מהמתודה הנוכחית וחזרי למקום שבו קראת לה".<br>
+      כתוצאה מכך, הקוד שאמור לקבל את תוצאת ה-switch (במקרה שלנו המשתנה message) מעולם לא מקבל כלום, והשורה שאחרי ה-switch במתודה הופכת ל Dead Code, קוד מת לעולם לא נגיע לשם.</p>
+
+    <p><strong>התפקיד הייחודי של yield:</strong></p>
+    <p>לעומת זאת, yield הוא פקודה ייעודית שנוצרה אך ורק עבור switch expressions. היא אומרת ל-Java: אל תצאי מהמתודה! רק תעבירי את הערך הספציפי הזה החוצה אל תוך המשתנה שמחכה בתוצאת ה-switch, ותני למתודה להמשיך לרוץ רגיל.</p>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+/* ==========================================================
+   LTR Override for Home Page
+   ========================================================== */
+
+html,
+body,
+.container,
+.profile-card-wrapper,
+.description,
+section {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+  text-align: left;
+}
+
+/* Profile Header */
+.pc-header {
+  flex-direction: row;
+}
+
+.pc-title h1 {
+  text-align: left;
+}
+
+/* Description */
+.description {
+  text-align: left;
+}
+
+.description h2 {
+  text-align: left;
+}
+
+/* Paragraphs */
+p,
+.pc-intro,
+.pc-footer-text {
+  text-align: left;
+}
+
+/* Lists */
+ul,
+ol {
+  padding-left: 25px;
+  padding-right: 0;
+}
+
+li {
+  text-align: left;
+}
+
+/* Strength List */
+.pc-strengths-list {
+  margin: 0 5px 40px 0;
+}
+
+.pc-strengths-list li {
+  justify-content: flex-start;
+}
+
+/* Decorative line on cards */
+.pc-pillar-card::before {
+  left: 28px;
+  right: auto;
+}
+
+/* Note boxes */
+.note {
+  border-left: 4px solid var(--primary);
+  border-right: none;
+}
+
+/* Tables */
+.article-table th,
+.article-table td {
+  text-align: left;
+}
+
+/* Footer CTA */
+.pc-footer-headline,
+.pc-footer-text {
+  text-align: left;
+}
+
+/* Skills */
+.pc-skills-container {
+  justify-content: flex-start;
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+  .pc-header{
+    text-align:left;
+  }
+
+  .pc-title h1{
+    text-align:left;
+  }
+
+}

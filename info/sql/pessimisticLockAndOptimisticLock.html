@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pessimistic Lock & Optimistic Lock</title>
+  <link rel="stylesheet" href="../../style/style.css">
+</head>
+<body>
+<div class="container" dir="rtl">
+  <section class="article">
+
+    <h1>Pessimistic Lock & Optimistic Lock</h1>
+
+    <div class="pc-confidentiality-box">
+      <div class="pc-confidentiality-title">קצת רקע על מסדי נתונים:</div>
+      <p class="pc-confidentiality-text">
+        <strong>מסד נתונים רלציוני (Relational / SQL)</strong><br>
+        מסד נתונים שבו המידע מנוהל בטבלאות (שורות ועמודות), בדומה לגיליונות אקסל. הטבלאות מקושרות זו לזו באמצעות מפתחות (key). מסדי נתונים אלו מחויבים לכללי ACID (עקביות וטרנזקציות נוקשות), מה שאומר שהם אולטימטיביים לשמירה על שלמות מידע פיננסי או מידע מורכב.
+      </p>
+
+    <ul>
+      <li>PostgreSQL</li>
+      <li>MySQL</li>
+      <li>Microsoft SQL Server</li>
+      <li>Oracle Database</li>
+      <li>SQLite (קל משקל, נפוץ באפליקציות מובייל)</li>
+    </ul>
+
+
+      <p class="pc-confidentiality-text">
+        <strong>מסד נתונים לא-רלציוני (Non-Relational / NoSQL)</strong><br>
+        מסד נתונים שאינו כבול למבנה טבלאי נוקשה. המידע נשמר בדרכים גמישות יותר - כמו מסמכי JSON, מפתחות-ערך, גרפים או עמודות רחבות. הם מתוכננים לתת מענה לביצועים גבוהים, סקלביליות מסיבית (יכולת גידול לשרתים רבים) וטיפול בנתונים משתנים או בלתי מובנים.
+      </p>
+
+    <ul>
+      <li>MongoDB (מבוסס מסמכים / Document)</li>
+      <li>Redis (מפתח-ערך מהיר במיוחד בזיכרון / In-Memory Cache)</li>
+      <li>Cassandra / ScyllaDB (מבוססי עמודות רחבות לעומסים אדירים)</li>
+      <li>Neo4j (מסד נתונים גרפי לניהול רשתות וקשרים מורכבים)</li>
+    </ul>
+</div>
+
+    <p>עכשיו כשיש לנו ידע בסיסי בסוגי מסדי נתונים, אנחנו יכולים לדון בגישות השונות.
+      <br>
+    במסדי נתונים רלציוניים מסורתיים (כמו PostgreSQL), בדרך כלל עובדים על שרת בודד (או קלאסטר מוגבל) עם דגש חזק על עקביות מוחלטת (Consistency), ולכן קל מאוד להפעיל בהם נעילות פסימיות.
+  <br>
+    ב-NoSQL, המערכות בנויות לרוב סביב זמינות (Availability) וביזור (Partition Tolerance). לכן:</p>
+    <ul>
+      <li>נעילות פסימיות פיזיות כמעט ולא קיימות שם, כי הן יוצרות צווארי בקבוק שמנוגדים לפילוסופיית ה-NoSQL.</li>
+      <li>נעילה אופטימית (Optimistic Concurrency Control - OCC) היא הבחירה הטבעית והנפוצה ביותר בעולם ה-NoSQL כשצריך להבטיח שלא יהיו דריסות נתונים.</li>
+    </ul>
+
+    <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+    <p>מנגנוני Locking (נעילות) במסדי נתונים רלציוניים (SQL) הם הדרך שלנו להתמודד עם Race Conditions - מצבים שבהם שני משתמשים או שני תהליכים מנסים לעדכן את אותה שורה במקביל, מה שעלול לגרום לאובדן נתונים (Lost Update).</p>
+
+    <h2>Pessimistic Lock</h2>
+    <p>הגישה הפסימית אומרת: "אנחנו מניחים שתמיד יהיו התנגשויות (Conflicts). לכן, מהרגע שקראתי את השורה ועד שסימנתי את העבודה עליה, אני אנעל פיזית את השורה בבסיס הנתונים כדי שאף אחד אחר לא יוכל לקרוא או לעדכן אותה".</p>
+
+    <p><strong>נפוץ בעיקר במצבים הבאים (אבל לא רק):</strong></p>
+    <ul>
+      <li>פעולות פיננסיות רגישות: למשל, משיכת מזומן מכספומט או העברה בנקאית שבה אסור בשום אופן שיהיה מצב של Race Condition.</li>
+      <li>מלאי מוגבל מאוד: כרטיסים להופעה אחרונה שנותרו מהם 2 כרטיסים בלבד ויש עשרות קונים במקביל.</li>
+      <li>טרנזקציות ארוכות ומורכבות: שבהן יש סיכוי גבוה ששתי טרנזקציות ינסו לשנות את אותו מידע במקביל.</li>
+    </ul>
+
+    <p><strong>איך משלבים אותו בשאילתא? (SQL)</strong><br>ברוב מסדי הנתונים הרציונלים SELECT ... FOR UPDATE:</p>
+
+    <div class="code-container">
+        <pre><code>BEGIN TRANSACTION;
+SELECT * FROM Accounts WHERE id = 123 FOR UPDATE; // lock this data in DB
+UPDATE Accounts SET balance = balance - 100 WHERE id = 123; // update the data
+COMMIT; // realese the data </code></pre>
+    </div>
+
+    <div class="success-box">
+      <p><strong>שיקולים, יתרונות וחסרונות:</strong></p>
+      <ul>
+        <li><strong>יתרון:</strong> בטיחות מוחלטת. אין סיכוי שמישהו יצליח לדרוס את הנתונים שלך תוך כדי תנועה.</li>
+        <li><strong>חיסרון משמעותי (ביצועים):</strong> פוגע ב-Concurrency (מקביליות). אם טרנזקציה אחת נועלת שורה, כל השאר נעצרים וממתינים (Blocking). זה עלול ליצור צווארי בקבוק, האטה קשה במערכת, ואפילו Deadlocks.</li>
+      </ul>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+    <h2>Optimistic Lock</h2>
+    <p>הגישה האופטימית אומרת: "אנחנו מניחים שהתנגשויות הן דבר נדיר. לכן, אני קורא את הנתונים בלי לנעול כלום. בזמן העדכון, אנחנו נבדוק האם מישהו אחר שינה את הנתונים מאז שקראתי אותם. אם כן - העדכון ייכשל ואתמודד עם זה. אם לא - העדכון יעבור בהצלחה".</p>
+
+    <p><strong>איך עושים את זה בפועל?</strong> בדרך כלל מוסיפים לטבלה עמודת Version (מספר גרסה רץ) או Timestamp (חותמת זמן).</p>
+
+    <p><strong>נפוץ בעיקר במצבים הבאים (אבל לא רק):</strong></p>
+    <ul>
+      <li>מערכות עם הרבה קריאות ומעט עדכונים (Read-heavy): למשל, מערכות ניהול תוכן (CMS), פרופילים של משתמשים, או עריכת פריטים בקטלוג.</li>
+      <li>טרנזקציות ארוכות מצד המשתמש: למשל, טופס ארוך שמשתמש ממלא במשך 10 דקות (אי אפשר לנעול את השורה במסד הנתונים כל הזמן הזה).</li>
+    </ul>
+
+    <p><strong>איך משלבים אותו בשאילתא? (SQL)</strong></p>
+    <div class="code-container">
+        <pre><code>UPDATE Products
+SET stock = stock - 1,
+    version = version + 1
+WHERE id = 456 AND version = 5;</code></pre>
+    </div>
+
+    <p><strong>איך יודעים אם הייתה התנגשות?</strong> בודקים כמה שורות עודכנו (Rows Affected):</p>
+    <ul>
+      <li>אם התוצאה היא 1, סימן שהכל תקין (אף אחד אחר לא נגע בשורה בזמן הזה).</li>
+      <li>אם התוצאה היא 0, סימן שמישהו אחר כבר הספיק לעדכן את השורה לפניך ולכן ה-version כבר אינו 5. במצב זה המערכת בדרך כלל זורקת חריגה (למשל OptimisticLockException) ומאפשרת למשתמש לנסות שוב.</li>
+    </ul>
+    <div class="success-box">
+    <p><strong>שיקולים, יתרונות וחסרונות:</strong></p>
+    <ul>
+      <li><strong>יתרון (ביצועים גבוהים):</strong> אין נעילות בבסיס הנתונים בזמן הקריאה או ההמתנה. המערכת מאוד מהירה ומאפשרת מקביליות גדולה.</li>
+      <li><strong>חיסרון:</strong> אם יש הרבה התנגשויות אמיתיות (למשל אלפים שמנסים לקנות את אותו מוצר באותו שנייה), המון טרנזקציות ייכשלו, יזרקו שגיאות, ויצטרכו לחזור על התהליך (Retry Loop), מה שייצור עומס מיותר.</li>
+    </ul>
+    </div>
+
+    <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+
+    <h2>דגשים לשימוש בשתי הגישות:</h2>
+    <div class="success-box">
+      <ul>
+      <li><strong>שילוב עם ORM (כמו Hibernate / JPA):</strong> ברוב סביבות הפיתוח המודרניות (כמו Java/Hibernate), אין צורך לכתוב את השאילתות ידנית. ב-Hibernate למשל, מספיק להוסיף את האנוטציה @Version מעל שדה הגרסה באובייקט ה-Entity, והפריימוורק כבר ידאג אוטומטית לבדוק את הגרסה בכל פעולת UPDATE.</li>
+      <li><strong>Deadlocks בנעילה פסימית:</strong> כשמשתמשים בנעילות פסימיות מרובות (למשל לנעול גם חשבון א' וגם חשבון ב' במקביל), חייבים להקפיד לנעול אותם תמיד באותו סדר (למשל תמיד לפי ID מהקטן לגדול), אחרת תיצרו מצב של Deadlock שבו שתי טרנזקציות מחכות זו לזו לנצח.</li>
+      <li><strong>Retry Logic בנעילה אופטימית:</strong> אם בחרתם באופטימית, תצטרכו לתכנן את הקוד שלכם כך שידע לתפוס את השגיאה (למשל StaleObjectStateException) ולבצע ניסיון חוזר (Retry) אוטומטי למשיכת הנתונים העדכניים וביצוע הפעולה מחדש.</li>
+    </ul>
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

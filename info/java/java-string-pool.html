@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - String poll </title>
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+<div class="container">
+  <main class="article">
+<h1>Java String Pool </h1>
+
+<p>
+  כפי שידוע לנו, לא נהוג לבדוק ערך של String על ידי == אלא על ידי
+  ()equals.
+  <br>
+  הסיבה היא שהשוואת == בודקת האם מדובר באותו
+  מיקום בזיכרון (אותו reference).
+</p>
+
+<p>
+  אבל בכל זאת הדוגמה הבאה תחזיר לנו <strong>true</strong>:
+</p>
+    <div class="code-container">
+<pre><code>String s1 = "hello java";
+String s2 = "hello java";
+
+System.out.println(s1 == s2);
+System.out.println(s1.equals(s2));</code></pre>
+    </div>
+<p>
+  אז מה בעצם קרה פה?
+</p>
+
+<p>
+  כמו ב-Integer Pool, גם String אינו מוזנח ב-Java.
+  על מנת לחסוך בזיכרון ולנהל משאבים בצורה יעילה,
+  Java שומרת String literals בתוך מאגר מיוחד הנקרא
+  <strong>String Pool</strong>.
+</p>
+
+<p>
+  למידע נוסף על Integer Pool:
+  <li><a href="/info/java/Java-int-pool.html">Java Int Pool</a></li>
+
+</p>
+
+<h2>מה קורה כאשר משתמשים ב-new String?</h2>
+
+<p>
+  אם ניצור String באמצעות new, ההשוואה באמצעות
+  == לא תעבוד, מכיוון שהאובייקט החדש אינו משתמש ברפרנס
+  שנמצא ב-String Pool.
+</p>
+    <div class="code-container">
+<pre><code>String s3 = new String("hello java");
+
+System.out.println(s2 == s3);
+System.out.println(s2.equals(s3));</code></pre>
+    </div>
+<p>
+  התוצאה תהיה:
+</p>
+
+<ul>
+  <li><strong>false</strong> עבור ==</li>
+  <li><strong>true</strong> עבור equals()</li>
+</ul>
+
+<h2>שימוש ב-()intern</h2>
+
+<p>
+  אם נשתמש בפקודת ()intern, ההשוואה בשתי התצורות תחזיר
+  <strong>true</strong>.
+</p>
+    <div class="code-container">
+<pre><code>String s4 = s3.intern();
+
+System.out.println(s2 == s4);
+System.out.println(s2.equals(s4));</code></pre>
+    </div>
+<p>
+  מה בעצם קרה כאן?
+</p>
+
+<p>
+  הפקודה ()intern ניגשת ל-String Pool ובודקת האם המחרוזת
+  "hello java" כבר קיימת שם.
+</p>
+
+<ul>
+  <li>אם היא קיימת - יוחזר הרפרנס הקיים מה-Pool.</li>
+  <li>אם היא לא קיימת - היא תתווסף ל-Pool ויוחזר הרפרנס החדש.</li>
+</ul>
+
+<div class="note">
+  <strong>שימו לב:</strong><br>
+  שימוש לא נכון ב-()intern עלול להכביד על ה-String Pool ולפגוע בביצועים.
+</div>
+
+<p>לדוגמה:</p>
+    <div class="code-container">
+<pre><code>UUID.randomUUID().toString().intern();</code></pre>
+    </div>
+<p>
+  הקוד הזה יכניס אלפי ערכים שונים ל-Pool ויגדיל אותו ללא צורך.
+  מכיוון שכל UUID הוא ייחודי, אין סיבה אמיתית לשמור אותו ב-String Pool.
+</p>
+
+<h2>אז איך הזיכרון עובד?</h2>
+
+<p>
+  ב-Java קיימים שני אזורי זיכרון עיקריים:
+</p>
+
+<ul>
+  <li>
+    <strong>Stack (מחסנית)</strong> -
+    שומר משתנים מקומיים ורפרנסים לאובייקטים.
+    מהיר מאוד לגישה.
+  </li>
+
+  <li>
+    <strong>Heap (ערימה)</strong> -
+    שומר את האובייקטים עצמם וכל מה שנוצר באמצעות new.
+  </li>
+</ul>
+
+<h2>String Literal</h2>
+    <div class="code-container">
+<pre><code>String s1 = "hello java";</code></pre>
+    </div>
+<p>מה קורה בזיכרון?</p>
+
+<ul>
+  <li>נוצר String ב-Heap.</li>
+  <li>המחרוזת נשמרת גם ב-String Pool.</li>
+  <li>המשתנה s1 ב-Stack מחזיק רפרנס לאובייקט.</li>
+</ul>
+
+<div class="memory-diagram">
+  Stack
+  <br>
+  └── s1 ───────────► "hello java"
+  <br><br>
+  String Pool
+  <br>
+  └── "hello java"
+</div>
+
+<h2>()new String</h2>
+    <div class="code-container">
+<pre><code>String s3 = new String("hello java");</code></pre>
+    </div>
+<p>
+  כאן ייווצר אובייקט חדש לחלוטין ב-Heap.
+</p>
+
+<div class="memory-diagram">
+  Stack
+  <br>
+  └── s3 ───────────► Object #2
+  <br><br>
+  Heap
+  <br>
+  └── Object #2 = "hello java"
+  <br><br>
+  String Pool
+  <br>
+  └── "hello java"
+</div>
+
+<h2>Java 7 לעומת Java 8</h2>
+
+<p>
+  התיאור למעלה מתאים ל-Java 8 ומעלה, אך בעבר המצב היה שונה.
+
+  ב-Java 7 ומטה היה אזור מיוחד בשם <strong>PermGen</strong>
+  (Permanent Generation).
+</p>
+
+<p>
+  PermGen היה חלק מהזיכרון של ה-JVM והכיל בעיקר metadata של מחלקות
+  וכן מידע נוסף שהמערכת הגדירה כ"קבוע".
+
+  עם השנים התברר שיש בעיה בגישה זו:
+</p>
+
+<ul>
+  <li>ל-PermGen היה גודל קבוע.</li>
+  <li>ה-Garbage Collector התקשה לנקות אותו.</li>
+  <li>Frameworks מודרניים טוענים מחלקות בצורה דינמית.</li>
+  <li>הדבר גרם לעיתים קרובות ל-OutOfMemoryError.</li>
+</ul>
+
+<p>
+  לכן Java 8 החליפה את PermGen ב-<strong>Metaspace</strong>.
+</p>
+
+<p>
+  Metaspace משתמש ב-Native Memory של מערכת ההפעלה ויכול לגדול בצורה
+  דינמית בהתאם לצורך.
+</p>
+
+<p>
+  זה לא אומר שהזיכרון אינסופי - גם כאן ניתן להגיע למגבלה,
+  אך המגבלה גדולה וגמישה בהרבה לעומת PermGen.
+</p>
+
+<h2>מבנה הזיכרון ב-Java 7</h2>
+
+<div class="memory-diagram">
+  JVM Memory
+  <br>
+  ├── Heap
+  <br>
+  │   ├── Young
+  <br>
+  │   └── Old
+  <br>
+  └── PermGen (fixed)
+</div>
+
+<h2>מבנה הזיכרון ב-Java 8+</h2>
+
+<div class="memory-diagram">
+  JVM Memory
+  <br>
+  ├── Heap
+  <br>
+  │   ├── Young
+  <br>
+  │   └── Old
+  <br>
+  └── Metaspace (native memory)
+</div>
+<br>
+<br>
+<div style="text-align: center; margin-top: 40px;">
+  <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+</div>
+</body>
+</html>
