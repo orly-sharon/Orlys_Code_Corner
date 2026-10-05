@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Fail-Fast vs Fail-Safe Iterators</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Fail-Fast vs Fail-Safe Iterators</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">Fail-Fast Iterator ו Fail-Safe Iterator מתארים אסטרטגיות שונות שבהן נוקטים Collections ב-Java כאשר מבוצע שינוי במבנה הנתונים. למשל להוסיף או למחוק איבר, בזמן שעוברים עליו באמצעות איטרטור (Iterator).</p>
+    </div>
+
+    <h2>Fail-Fast Iterator</h2>
+    <p>ברירת המחדלי ברוב מבני הנתונים מסוג אוסף (collection) של JAVA כמו כמו ArrayList, HashMap, HashSet.</p>
+    <p>האסטרטגיה הזאת טובה למניעת התנהגות בלתי צפויה (Undefined Behavior), שינוי אוסף תוך כדי מעבר עליו עלול לגרום לקריאות זיכרון שגויות, ללולאות אינסופיות או לקריסת מערכת שקטה.</p>
+    <p>ב ArrayList רגיל, האיטרטור מביט ישירות על הזיכרון החי שבו האוסף נמצא. אם בזמן שהוא עובר על האיברים, Thread אחר מוסיף איבר או מוחק איבר, הזיכרון משתנה "תחת הרגליים" של האיטרטור. האיטרטור עלול לקרוא בטעות זיכרון ריק, לדלג על איברים, או להיכנס ללולאה אינסופית. לכן, כדי למנוע אסון, Java בחרה לזרוק שגיאה מיד ConcurrentModificationException.</p>
+
+    <p><strong>איך זה עובד?</strong></p>
+    <p>לאיטרטור יש משתנה פנימי שנקרא modCount , בכל פעם שאיבר נוסף או נמחק מהאוסף, המונה הזה גדל. כשהאיטרטור רץ (()next), הוא בודק בכל צעד האם המונה של האוסף השתנה מאז שהאיטרטור נוצר.</p>
+    <p>כדי למחוק איבר בצורה בטוחה עם Fail-Fast, חייבים להשתמש במתודה ()iterator.remove</p>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> מה קורה בזמן אמת?
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        אם האיטרטור מגלה שמישהו שינה את האוסף בזמן שהוא רץ, נזרקת שגיאה מסוג ConcurrentModificationException ומפסיק את הריצה.
+      </p>
+    </div>
+
+    <h2>Fail-Safe Iterator .</h2>
+    <p>איטרטורים אלו מופיעים באוספים שמותאמים לתכנות מקבילי (Concurrent Collections), כמו ConcurrentHashMap או CopyOnWriteArrayList.</p>
+
+    <p><strong>איך זה עובד?</strong></p>
+    <p>האיטרטורים פועלים על עותק של האוסף המקורי, או על מנה נתונים מבודד ולא על האוסף ה"חי".</p>
+    <p>יש שתי שיטות עיקריות שבהן Java מיישמת את זה:</p>
+
+    <ol>
+      <li>
+        <strong>עבודה על עותק מלא (Snapshot / Copy-on-Write)</strong><br>
+        למשל ב-CopyOnWriteArrayList:<br>
+        בכל פעם כשנרצה לשנות את האוסף (להוסיף או למחוק איבר), המערכת לא נוגעת במערך המקורי שכרגע קוראים ממנו.<br>
+        במקום זאת, היא מייצרת עותק חדש לחלוטין של כל המערך בזיכרון, עושה בו את השינוי, ורק אז מעבירה את ההפניה (Reference) כך שתצביע למערך החדש.<br>
+        <strong>מה קורה לאיטרטור?</strong> האיטרטור התחיל את הריצה שלו על העותק הישן (ה-Snapshot) שהיה קיים באותו רגע. מבחינתו, האוסף מעולם לא הששתנה! הוא עובר בשקט על העותק שלו עד הסוף, בלי לדעת ובלי אכפת לו שבינתיים העולם בחוץ השתנה.
+      </li>
+      <li style="margin-top: 15px;">
+        <strong>עבודה על מבנה נתונים מבודד / Weakly Consistent</strong><br>
+        למשל ב-ConcurrentHashMap<br>
+        במפות מקביליות גדולות אי אפשר לשכפל את כל המפה בכל שינוי (זה היה זולל זיכרון ומאט את המערכת). לכן משתמשים באסטרטגיה של Weakly Consistent:<br>
+        האיטרטור עובר על צמתים (Nodes) במבנה הנתונים, אבל המבנה בנוי כך שהוספה או מחיקה של איברים מתבצעת באמצעות שינוי מצביעים (Pointers) מבוקר וזהיר, שאינו שובר את מבנה העץ או הרשת שהאיטרטור מטייל עליה.<br>
+        האיטרטור משקף את מצב האוסף לפחות מרגע שבו הוא נוצר, ואינו זורק שגיאה גם אם צמתים עודכנו תוך כדי.
+      </li>
+    </ol>
+
+    <h2>לשם השוואה קלה והבנת ההבדלים נשווה בין HashMap לבין ConcurrentHashMap</h2>
+
+    <table class="article-table">
+      <thead>
+      <tr>
+        <th>תכונה / מאפיין</th>
+        <th>HashMap</th>
+        <th>ConcurrentHashMap</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><strong>Thread Safety</strong></td>
+        <td>
+          <span class="text-status-past">Not Thread-Safe</span><br>
+          עלול לגרום לקריסות זיכרון או ללולאות אינסופיות בשימוש מקבילי.
+        </td>
+        <td>
+          <span class="text-status-present">Thread-Safe</span><br>
+          מתוכנן במיוחד לעבודה בו-זמנית של מספר Threads.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>מנגנון נעילה (Locking Mechanism)</strong></td>
+        <td>ללא נעילות כלל (לא מותאם ל-Concurrency).</td>
+        <td>נעילות מתקדמות ברמת ה-Node/Bucket ושימוש ב-CAS (ללא נעילת כל המפה).</td>
+      </tr>
+      <tr>
+        <td><strong>התנהגות האיטרטור (Iterator Type)</strong></td>
+        <td>זורק שגיאת ConcurrentModificationException מיד אם האוסף משתנה בזמן ריצה.</td>
+        <td>Weakly Consistent (Fail-Safe מיוחד)<br>עובד בשקט, אינו זורק שגיאה לעולם, אך עשוי להציג נתונים ישנים</td>
+      </tr>
+      <tr>
+        <td><strong>תמיכה בערכי null / מפתחות NULL</strong></td>
+        <td>
+          <span class="text-status-present">מותר</span><br>
+          מאפשר מפתח null אחד וערכי null כמה שרוצים.
+        </td>
+        <td>
+          <span class="text-status-past">אסור לחלוטין</span><br>
+          זרקת NullPointerException בעת ניסיון להכניס מפתח או ערך null.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>ביצועים בסביבת Single-Threaded</strong></td>
+        <td>
+          <span class="text-status-present">מהירים יותר</span><br>
+          אין overhead של מנגנוני סנכרון ונעילות
+        </td>
+        <td>
+          איטיים במעט<br>דורשים ניהול סנכרון קל מאחורי הקלעים.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>ביצועים בסביבת Multi-Threaded</strong></td>
+        <td>
+          <span class="text-status-past">לא יציבים / מסוכנים</span><br>
+          דורשים סנכרון חיצוני ידני (כמו Collections.synchronizedMap).
+        </td>
+        <td>
+          <span class="text-status-present">מצוינים וגבוהים מאוד</span><br>
+          מאפשרים קריאה וכתיבה מקבילית ומבוזרת ללא צווארי בקבוק.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

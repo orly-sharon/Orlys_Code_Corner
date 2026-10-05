@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Cost-Based Optimizer (CBO)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+  <style>
+    pre {
+      display: inline-block;
+      width: auto;
+      max-width: 100%;
+      text-align: left;
+      direction: ltr;
+    }
+    .code-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Cost-Based Optimizer (CBO)</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">ה-Cost-Based Optimizer (מייעל מבוסס עלויות) הוא ה"מוח" המרכזי של כל מסד נתונים רלציוני מודרני (כמו PostgreSQL, Oracle, SQL Server, MySQL). התפקיד שלו הוא לקחת את שאילתת ה-SQL שכתבת, לחשוב על כמה דרכים שונות לבצע אותה (Execution Plans), לחשב את העלות (Cost) של כל דרך, ולבחור את המסלול הזול והמהיר ביותר לביצוע.</p>
+    </div>
+
+    <h2>איך ה-CBO עובד מאחורי הקלעים?</h2>
+    <p>כשנריץ שאילתת SQL, יש אולי 5 או 10 דרכים שונות לשלוף את הנתונים (למשל: האם לעשות Table Scan? איזה אינדקס לבחור? באיזה סדר לחבר בין הטבלאות Nested Loop או Hash Join?). ה-CBO עובר במסע קבלת החלטות הבא:</p>
+
+    <ul>
+      <li><strong>יצירת תוכניות חלופיות (Candidate Plans):</strong> המנוע מייצר את כל האסטרטגיות החוקיות האפשריות שיביאו את התוצאה הנכונה.</li>
+      <li>
+        <strong>הערכת עלויות (Cost Estimation):</strong> עבור כל תוכנית, ה-CBO מעריך כמה משאבים היא תצרוך. המדד המרכזי מבוסס לרוב על:
+        <ul>
+          <li><strong>I/O (קריאות דיסק):</strong> כמה בלוקים של נתונים צריך לקרוא מהדיסק אל הזיכרון.</li>
+          <li><strong>CPU (עיבוד מעבד):</strong> כמה פעולות חישוב או השוואה המעבד יצטרך לבצע (למשל במיון או סינון).</li>
+        </ul>
+      </li>
+      <li><strong>בחירת התוכנית ה"זולה" ביותר:</strong> ה-CBO בוחר את התוכנית עם העלות הנמוכה ביותר ומעביר אותה למנוע הביצוע (Execution Engine).</li>
+    </ul>
+
+    <h2>על בסיס מה ה-CBO מקבל החלטות?</h2>
+    <p>ה-CBO מקבל החלטות על סמך סטטיסטיקות ששמורות במסד הנתונים על הטבלאות והאינדקסים שלהן.</p>
+    <p>הסטטיסטיקות שמורות בתוך מסד הנתונים עצמו, בתוך טבלאות מערכת פנימיות (System Catalogs / Metadata / System Tables) שמנוהלות אוטומטית על ידי הדאטה בייס. משתמשים רגילים לרוב לא יכולים (ואסור להם) לגעת בטבלאות האלו ישירות, אבל מסד הנתונים קורא אותן בכל פעם כששאילתא מורצת כדי שה-CBO יוכל לבנות את תוכנית הביצוע האופטימלית.</p>
+
+    <p><strong>סטטיסטיקות אלו כוללות:</strong></p>
+    <ul>
+      <li>כמה שורות יש בסך הכל בטבלה (Row Count).</li>
+      <li>מהו גודל הטבלה בדיסק.</li>
+      <li>כמה ערכים ייחודיים יש בכל עמודה (Cardinality).</li>
+      <li>מהם הערכים המינימליים והמקסימליים בעמודה (והיסטוגרמות של פיזור הנתונים).</li>
+    </ul>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        אם הסטטיסטיקות בטבלה שלנו לא מעודכנות (למשל כי נוספו מיליון שורות חדשות ומסד הנתונים עוד לא עשה ANALYZE או UPDATE STATISTICS), ה-CBO יעשה חישובים שגויים לחלוטין, יבחר תוכנית ביצוע גרועה (Execution Plan לא אופטימלי), והשאילתא עלולה לקרוס או לרוץ שעות.
+      </p>
+    </div>
+
+    <p>מעניין אותך לראות את הסטטיסטיקות האחרונות שיש לדאטה בייס? ישנה פקודה שנותנת לנו הצצה פנימה ב-SQL:</p>
+
+    <div class="code-container">
+      <pre><code>DBCC SHOW_STATISTICS ('users', 'IX_Users_Email');</code></pre>
+    </div>
+
+    <h2>איך הסטטיסטיקות האלו מתעדכנות? (The Update Process)</h2>
+    <p>הסטטיסטיקות אינן מתעדכנות באופן אוטומטי ושקוף, על כל שורה ושורה שמוסיפים או מוחקים; כי זה היה זולל משאבי מעבד ודיסק עצומים בזמן אמת. במקום זאת, הן מתעדכנות בכמה דרכים:</p>
+
+    <ul>
+      <li><strong>תהליך אוטומטי ברקע (Auto-Analyze / Auto-Update Statistics):</strong> למסדי נתונים מודרניים יש מנגנון ברקע שמזהה מתי חל שינוי משמעותי בטבלה (למשל, אם נוספו או שונו יותר מ-%X מהשורות). כשזה קורה, המסד מריץ מחדש סקריפט סטטיסטיקות שקט.</li>
+      <li>
+        <strong>עדכון ידני (Manual Refresh):</strong> לפעמים, אחרי פעולות מסיביות כמו טעינה לילית של מיליוני שורות, הסטטיסטיקות עדיין ישנות וה-CBO ייכנס "להלם". במצב כזה, המפתח או ה-DBA חייבים להריץ ידנית פקודת רענון:
+        <br><strong>SQL Server:</strong>
+      </li>
+    </ul>
+
+    <div class="code-container">
+      <pre><code>UPDATE STATISTICS my_table;</code></pre>
+    </div>
+
+    <p>   נרצה לראות מה ה-CBO מצא לנו כתוכנית האולטימטיבית עבור השאילתא שלנו? נשתמש ב-EXPLAIN. ניתן לראות הרחבה על הנושא כאן:<a href="/info/sql/explain.html">explain</a>
+      </p>
+
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

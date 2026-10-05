@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - HashMap Internals</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Java - HashMap Internals</h1>
+
+    <p>מבנה הנתונים HashMap הוא אחד הכלים החשובים והשימושיים ביותר ב Java. כדי להבין לעומק איך הוא עובד מאחורי הקלעים, עלינו לצלול אל המבנה הפנימי שלו, אל האופן שבו הוא מטפל בזיכרון, ואל השינויים המשמעותיים שהוא עבר בגרסאות השונות של Java.</p>
+
+    <p>Key Value הוא המבנה הבסיסי שעליו מבוסס ה HashMap. במקום לשמור פריטים ברשימה רגילה לפי אינדקס מספרי רגיל (כמו 0, 1, 2), אנחנו שומרים זוגות של מידע שבהם כל נתון מנוהל באמצעות מזהה ייחודי.</p>
+
+    <p>הצמד מורכב משני חלקים:</p>
+    <ul>
+      <li><strong>Key:</strong> המזהה הייחודי שאיתו אנחנו ניגשים לשלוף או לשמור את הנתונים (למשל: תעודת זהות, כתובת אימייל או שם משתמש).</li>
+    </ul>
+
+    <p><strong>כלל חשוב:</strong> ה Key חייב להיות ייחודי. אם ננסה להכניס ל HashMap מפתח שכבר קיים, המערכת לא תיצור Key חדש, אלא תדרוס את ה Value הישן ב Value החדש.</p>
+
+    <ul>
+      <li><strong>Value:</strong> התוכן או המידע האמיתי שאנחנו רוצים לאחסן ולשלוף (למשל: אובייקט משתמש מלא, מספר נקודות, או מחרוזת טקסט).</li>
+    </ul>
+
+    <p>בניגוד למפתחות, ערכים יכולים להיות כפולים (שני מפתחות שונים לחלוטין יכולים להצביע על בדיוק אותו ערך).</p>
+
+    <h2>מבנה הנתונים הבסיסי מאחורי הקלעים</h2>
+    <p>בבסיסו, HashMap מורכב ממערך של צמתים (Array of Nodes / Buckets). כל תא במערך הזה נקרא Bucket, ובתוכו נשמרים האובייקטים (Key Value).</p>
+    <p>כשאנחנו יוצרים HashMap, מוקצה ב Heap מערך ברירת מחדל (לרוב בגודל התחלתי של 16 תאים). לכל תא במערך יש אינדקס מספרי שנקבע על בסיס פונקציית גיבוב (Hash Function) של המפתח.</p>
+
+    <h2>איך עובדות הפעולות המרכזיות?</h2>
+
+    <h3 style="color: var(--primary, #2563eb); font-weight: 700;">פעולת ההכנסה put(K key, V value)</h3>
+    <p>כשאנחנו מוסיפים זוג Key Value ל HashMap, התהליך הבא מתבצע מאחורי הקלעים:</p>
+    <ul>
+      <li><strong>חישוב Hash:</strong> ה JVM קורא למתודת hashCode של ה Key. כדי למנוע התנגשויות שנובעות ממימוש גרוע של hashCode, Java מפעילה פונקציית פיזור נוספת (Perturbation function) כדי לערבב את הביטים.</li>
+      <li><strong>מציאת אינדקס (Bucket Index):</strong> כדי לדעת באיזה תא במערך לשמור את הנתונים, המערכת מבצעת פעולת ביטוי בינארי: hash & (capacity - 1). פעולה זו ממפה את ה Hash בדיוק לטווח האינדקסים של המערך הקיים.</li>
+      <li><strong>בדיקת התנגשויות (Collision):</strong>
+        <ul>
+          <li>אם ה Bucket פנוי לחלוטין, נוצר צומת (Node) חדש והוא נשמר שם.</li>
+          <li>אם כבר קיים אובייקט באותו תא (כלומר, שני מפתחות שונים ייצרו בדיוק את אותו אינדקס במערך), תיווצר התנגשות.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><strong>איך הנתונים נשמרים באותו תא? (ההבדל בין גרסאות Java):</strong></p>
+
+    <p><strong>ב Java 7 ומטה:</strong></p>
+    <p>הנתונים באותו תא אורגנו בתוך Linked List. כל צומת הצביע לצומת הבא אחריו. הבעיה הייתה שאם נוצר מצב קיצוני עם המון התנגשויות באותו תא, ה HashMap נאלץ לעבור אחד אחד על כל הרשימה (חיפוש לינארי), מה שהאט את הביצועים לזמן ריצה גרוע של O(n).</p>
+
+    <div class="note" style="border-right: 4px solid var(--primary, #2563eb);">
+      <p style="margin-bottom: 0;"><strong>עץ אדום שחור (Red Black Tree)</strong> הוא עץ חיפוש בינארי מאוזן אוטומטית, שבו כל צומת צבוע באדום או בשחור לפי חוקי מבנה קפדניים המבטיחים שהעץ יישאר מאוזן תמיד. הודות לאיזון זה, פעולות חיפוש, הוספה ומחיקה מובטחות להתבצע בזמן ריצה יעיל מאוד של O(log n), מה שמונע מהעץ להידרדר למבנה לינארי איטי ומאפשר ל HashMap לשמור על ביצועים גבוהים במצבים של התנגשויות רבות.</p>
+    </div>
+
+    <p><strong>מ Java 8 ואילך:</strong></p>
+    <p>כדי לפתור את צוואר הבקבוק של הרשימה המקושרת, הוסיפו מנגנון חכם שנקרא Treeification (הפיכה לעץ).</p>
+    <p>אם מספר האלמנטים באותו תא עובר סף של 8 אלמנטים, והמערך כולו גדול מספיק (לפחות 64 תאים), ה Linked List הופכת אוטומטית לעץ אדום שחור (Red Black Tree).</p>
+    <p><strong>התוצאה:</strong> במקום חיפוש איטי ברשימה, החיפוש בעץ מתבצע בזמן ריצה יעיל בהרבה של O(log n), מה שמונע קריסות ביצועים גם תחת עומסים כבדים או פקודות זדוניות (Hash Flooding).</p>
+
+    <h3 style="color: var(--primary, #2563eb); font-weight: 700;">פעולת השליפה get(K key)</h3>
+    <ul>
+      <li>ה JVM מחשב מחדש את ה Hash של המפתח ומזהה את האינדקס במערך.</li>
+      <li>הוא ניגש ל Bucket המתאים.</li>
+      <li>אם יש שם רק אובייקט אחד, הוא משווה את המפתחות בעזרת מתודת equals(). אם יש התאמה, הוא מחזיר את הערך.</li>
+      <li>אם יש מספר אובייקטים באותו Bucket (עקב התנגשות), הוא עובר עליהם אחד אחד ובודק באמצעות equals() עד שהוא מוצא את המפתח המבוקש.</li>
+    </ul>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        כשהתא הפך לעץ אדום שחור (8 אלמנטים ומעלה ב Java 8+): הוא <strong>לא!</strong> עובר עליהם אחד אחד, כאן ההבדל העצום. אם התא עבר "עציות" (Treeification), ה HashMap אינו עובר אחד אחד בצורה לינארית. במקום זאת, הוא מנווט בתוך העץ האדום שחור לפי חוקי חיפוש בינארי, מה שמביא אותו לצומת המבוקש בזמן ריצה יעיל של O(log n), ורק אז משתמש ב equals() כדי לאשר סופית את ההתאמה.
+      </p>
+    </div>
+
+    <h2>האם תמיד חייבים לממש את המטודות hashCode() ו equals()?</h2>
+
+    <h3 style="color: var(--primary, #2563eb); font-weight: 700;">מתי אין צורך לממש ידנית? כש key הוא מחלקה קיימת של Java</h3>
+    <p>אם אנחנו משתמשים במחלקות סטנדרטיות של Java בתור key כמו String, Integer, Long, או Double לא צריכים לממש כלום.</p>
+
+    <h3 style="color: var(--primary, #2563eb); font-weight: 700;">מתי חובה לממש? כשה key הוא מחלקה מותאמת אישית שאנחנו כתבנו</h3>
+    <p>אם אנחנו יוצרים מחלקה משלנו (למשל Employee, Product, UserId) ורוצים להשתמש באובייקטים ממנה בתור key ב HashMap (או כ value ב HashSet), אז ורק אז אנחנו חייבים לבצע override ולממש את שתי המתודות (hashCode ו equals).</p>
+    <p><strong>למה?</strong> כי ברירת המחדל של Java למחלקות שאנחנו כותבים מבוססת על כתובת הזיכרון (Memory Address). אם ניצור שני אובייקטים נפרדים עם בדיוק אותו תוכן (למשל שני משתמשים עם ID 1), Java תתייחס אליהם כאל שתי ישויות זרות לחלוטין כי הם יושבים במקומות שונים ב Heap.</p>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> אזהרה
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        אם נבחר לממש רק אחת מהמתודות הללו, נפר את החוזה המחייב שבין השתיים. הפרה זו מובילה כמעט תמיד לבאגים שקטים, אובדן נתונים והתנהגות בלתי צפויה במבני נתונים מבוססי גיבוב כמו HashMap.
+      </p>
+    </div>
+
+    <h3 style="color: var(--primary, #2563eb); font-weight: 700;">מימוש equals() בלבד (השארת hashCode מקורי)</h3>
+    <p>אם נעשה override רק על equals כדי להשוות אובייקטים לפי התוכן העסקי שלהם (למשל לפי ID או אימייל), אבל נשאיר את ה hashCode המקורי של Java:</p>
+    <p><strong>מה שקורה מאחורי הקלעים:</strong> ה hashCode המקורי מבוסס על כתובת הזיכרון (Memory Address) של האובייקט ב Heap. המשמעות היא ששני אובייקטים שונים לחלוטין בזיכרון, גם אם הם מכילים בדיוק את אותם נתונים בדיוק, יקבלו ערכי Hash שונים לחלוטין.</p>
+    <p><strong>התוצאה ב HashMap:</strong></p>
+    <ul>
+      <li>נכניס אובייקט key ל Map (map.put(key1, value);). הוא יישמר ב Bucket מסוים לפי ה hashCode שלו.</li>
+      <li>ננסה לשלוף את ה value באמצעות אובייקט שני שזהה בתוכן שלו (map.get(key2);).</li>
+      <li>ה HashMap יחשב ל key2 את ה hashCode שלו (ששונה מזה של key1 כי הם יושבים בכתובות זיכרון אחרות), יחפש ב Bucket הלא נכון, ויחזיר null. נרגיש כאילו הנתון "נעלם" מהזיכרון.</li>
+    </ul>
+
+    <h3 style="color: var(--primary, #2563eb); font-weight: 700;">מימוש hashCode() בלבד (השארת equals מקורי)</h3>
+    <p>אם נעשה override רק על hashCode (כדי ששני אובייקטים זהים יחזירו את אותו מספר גיבוב), אבל נשאיר את ה equals המקורי:</p>
+    <p><strong>מה שקורה מאחורי הקלעים:</strong> מתודת ה equals המקורית של Java משווה אך ורק את כתובת הזיכרון באמצעות האופרטור ==.</p>
+    <p><strong>התוצאה ב HashMap:</strong></p>
+    <ul>
+      <li>שני אובייקטים נפרדים בזיכרון (שזהים בתוכן העסקי שלהם) עשויים אמנם להגיע לאותו Bucket (בזכות ה hashCode המשותף).</li>
+      <li>אולם, כאשר ה HashMap ינסה לאתר את ה key המדויק בתוך התא, הוא יפעיל את מתודת ה equals. מכיוון שלא כתבנו override עליה, היא תבצע השוואת כתובות זיכרון ותחזיר false.</li>
+      <li>ה Map יתייחס אליהם כאל שני keys שונים לחלוטין, ויאפשר לנו להכניס כפילויות של keys שנראים לנו אותו הדבר.</li>
+    </ul>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> כלל האצבע!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        הכלל במערכות Java קובע חד משמעית: הן עובדות כצמד או לא עובדות בכלל. אם נדרש להשתמש במחלקה מותאמת אישית בתור key ב HashMap, חובה לכתוב override תמיד על שתי המתודות יחד, ולהבטיח שהן משתמשות באותם שדות בדיוק לצורך חישוב ה Hash והשוואת השוויון.
+      </p>
+    </div>
+
+    <h2>דוגמא למימוש</h2>
+
+    <div class="code-container">
+      <pre><code>import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
+
+class Employee {
+    private int id;
+    private String email;
+
+    public Employee(int id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
+    // 1. Implementing equals to compare business equality based on id and email
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id && Objects.equals(email, employee.email);
+    }
+
+    // 2. Implementing hashCode consistently using the exact same fields to maintain the contract
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
+    }
+}
+
+public class HashCodeEqualsDemo {
+    public static void main(String[] args) {
+        Map<Employee, String> employeeRoles = new HashMap<>();
+
+        Employee emp1 = new Employee(101, "alice@company.com");
+        Employee emp2 = new Employee(101, "alice@company.com"); // Different object instance, but logically equal
+
+        // Putting data into the map using emp1
+        employeeRoles.put(emp1, "Software Engineer");
+
+        // Retrieving data using emp2 (which is logically equal to emp1)
+        // Because equals() and hashCode() are properly aligned, this will successfully return "Software Engineer"
+        String role = employeeRoles.get(emp2);
+
+        System.out.println("Employee Role: " + role); // Output: Software Engineer
+    }
+}</code></pre>
+    </div>
+
+    <!-- כפתור חזרה -->
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

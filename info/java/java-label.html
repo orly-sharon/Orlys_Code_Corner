@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - labels </title>
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+<div class="container">
+  <main class="article">
+
+<h1>Java Labels</h1>
+    <div class="note">
+<p>
+  ב־Java, Label (תווית) הוא שם שמצמידים ללולאה או לבלוק קוד,
+  כדי לאפשר לפקודות break continue
+  לפעול על לולאה חיצונית ולא רק על הלולאה הנוכחית.
+</p>
+
+
+  שימוש ב־Label יכול לחסוך שימוש ב־Flag, למנוע כתיבת מתודות נוספות
+  ולהפוך את הקוד לקצר וברור יותר במקרים מסוימים.
+</div>
+
+<h2>שימוש ב-break עם Label</h2>
+
+<p>
+  בדוגמה הבאה ניתן ללולאה החיצונית את השם outer.  כאשר j == 3,
+  ולכן כל הלולאות נעצרות מיד.</p>
+    <div class="code-container">
+<pre><code>outer:
+for (int i = 0; i < 5; i++) {
+
+    for (int j = 0; j < 5; j++) {
+
+        if (j == 3) {
+            break outer;
+        }
+
+        System.out.println(i + ", " + j);
+    }
+}</code></pre>
+    </div>
+<p>הפלט:</p>
+
+0, 0
+<br>
+0, 1
+<br>
+0, 2
+<br>
+
+<p>
+  אם היינו משתמשים ב-break רגיל, היינו יוצאים רק מהלולאה הפנימית,
+  והלולאה החיצונית הייתה ממשיכה לרוץ.
+</p>
+    <div class="code-container">
+<pre><code>for (int i = 0; i < 5; i++) {
+
+    for (int j = 0; j < 5; j++) {
+
+        if (j == 3) {
+            break;
+        }
+
+        System.out.println(i + ", " + j);
+    }
+}</code></pre>
+    </div>
+<p>הפלט:</p>
+
+0, 0
+<br>
+0, 1
+<br>
+0, 2
+<br>
+1, 0
+<br>
+1, 1
+<br>
+1, 2
+<br>
+2, 0
+<br>
+2, 1
+<br>
+2, 2
+<br>
+3, 0
+<br>
+3, 1
+<br>
+3, 2
+<br>
+4, 0
+<br>
+4, 1
+<br>
+4, 2
+<br>
+
+<h2>שימוש ב-continue עם Label</h2>
+
+<p>
+  הפקודה continue מאפשרת לנו לדלג ישירות לאיטרציה הבאה של לולאה חיצונית.
+</p>
+    <div class="code-container">
+<pre><code>outer:
+for (int i = 0; i < 3; i++) {
+
+    for (int j = 0; j < 3; j++) {
+
+        if (j == 1) {
+            continue outer;
+        }
+
+        System.out.println(i + ", " + j);
+    }
+}</code></pre>
+    </div>
+<p>הפלט:</p>
+
+0, 0
+<br>
+1, 0
+<br>
+2, 0
+<br>
+
+<p>
+  כאשרj == 1 הלולאה הפנימית מופסקת,והביצוע קופץ ישירות לאיטרציה הבאה של הלולאה החיצונית.
+</p>
+
+<h2>מתי continue יכול להיות מוחלף ב-break?</h2>
+
+<p>
+  במקרים מסוימים ניתן לקבל את אותה התוצאה גם באמצעות break רגיל.
+</p>
+    <div class="code-container">
+<pre><code>for (int i = 0; i < 3; i++) {
+
+    for (int j = 0; j < 3; j++) {
+
+        if (j == 1) {
+            break;
+        }
+
+        System.out.println(i + ", " + j);
+    }
+}</code></pre>
+    </div>
+<p>הפלט:</p>
+
+0, 0
+<br>
+1, 0
+<br>
+2, 0
+
+<h2>אז למה בכלל להשתמש ב-Label?</h2>
+
+<p>
+  כאשר עובדים עם מטריצות או עם מספר לולאות מקוננות,
+  Label יכול לחסוך משתני עזר ומתודות נוספות.
+</p>
+
+<p>נניח שקיימת המטריצה הבאה ואנחנו מחפשים את הערך 5:</p>
+    <div class="code-container">
+<pre><code>int[][] matrix = {
+    {1,2,3},
+    {4,5,6},
+    {7,8,9}
+};</code></pre>
+    </div>
+<p>
+  באמצעות Label ניתן לצאת מיד מכל הלולאות ברגע שהערך נמצא:
+</p>
+    <div class="code-container">
+<pre><code>search:
+for (int i = 0; i < matrix.length; i++) {
+
+    for (int j = 0; j < matrix[i].length; j++) {
+
+        if (matrix[i][j] == 5) {
+            break search;
+        }
+    }
+}</code></pre>
+    </div>
+<h2>פתרון ללא Label</h2>
+
+<p>
+  ללא Label נצטרך להשתמש במשתנה עזר (Flag):
+</p>
+    <div class="code-container">
+<pre><code>boolean found = false;
+
+for (int i = 0; i < matrix.length; i++) {
+
+    for (int j = 0; j < matrix[i].length; j++) {
+
+        if (matrix[i][j] == 5) {
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        break;
+    }
+}</code></pre>
+    </div>
+<h2>דוגמה עם מספר לולאות מקוננות</h2>
+    <div class="code-container">
+<pre><code>outer:
+for (...) {
+
+    for (...) {
+
+        for (...) {
+
+            if (condition) {
+                break outer;
+            }
+        }
+    }
+}</code></pre>
+    </div>
+<p>
+  ללא Label נצטרך לבצע בדיקות חוזרות באמצעות משתנה עזר:
+</p>
+    <div class="code-container">
+<pre><code>for (...) {
+
+    for (...) {
+
+        for (...) {
+
+            if (condition) {
+                stop = true;
+                break;
+            }
+        }
+
+        if (stop)
+            break;
+    }
+
+    if (stop)
+        break;
+}</code></pre>
+    </div>
+<h2>מתי לא להשתמש ב-Label?</h2>
+
+<p>
+  אם קיימת דרך פשוטה וברורה יותר לפתור את הבעיה,
+  עדיף להשתמש בה.
+</p>
+
+<p>
+  לדוגמה, כאן return הרבה יותר פשוט וברור:
+</p>
+    <div class="code-container">
+<pre><code>public boolean contains(int[][] arr, int target) {
+
+    for (int[] row : arr) {
+
+        for (int num : row) {
+
+            if (num == target) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}</code></pre>
+    </div>
+<h2>שימוש ב-Streams במקום Label</h2>
+
+<p>
+  במקרים רבים ניתן להשתמש ב-Streams בצורה קריאה ופשוטה יותר.
+</p>
+
+<p>במקום:</p>
+    <div class="code-container">
+<pre><code>boolean found = false;
+
+outer:
+for (Integer x : list) {
+
+    if (x > 100) {
+        found = true;
+        break outer;
+    }
+}
+
+System.out.println(found);</code></pre>
+    </div>
+<p>נכתוב:</p>
+    <div class="code-container">
+<pre><code>boolean found =
+    list.stream()
+        .anyMatch(x -> x > 100);</code></pre>
+    </div>
+<div class="note">
+  <h2>חלופות ל-Label</h2>
+
+  <ul>
+    <li>משתנה דגל (Flag)</li>
+    <li>חילוץ הלוגיקה למתודה חיצונית</li>
+    <li>שימוש ב-return מתוך המתודה</li>
+    <li>Streams</li>
+  </ul>
+</div>
+
+<h2>כלל אצבע</h2>
+
+<h3>השתמשו ב-Label כאשר:</h3>
+
+<ul>
+  <li>✅ יש 2-4 לולאות מקוננות</li>
+  <li>✅ צריך לצאת מיד מלולאה חיצונית</li>
+  <li>✅ פתרון עם Flags מסרבל את הקוד</li>
+</ul>
+
+<h3>הימנעו מ-Label כאשר:</h3>
+
+<ul>
+  <li>❌ אפשר להשתמש ב-return</li>
+  <li>❌ אפשר לחלץ למתודה קטנה וברורה</li>
+  <li>❌ יש הרבה Labels שונים באותו קטע קוד</li>
+</ul>
+<br>
+<br>
+
+<div style="text-align: center; margin-top: 40px;">
+  <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+</div>
+</body>
+</html>

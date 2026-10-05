@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Stack, Heap & Metaspace</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Stack, Heap & Metaspace</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">הזיכרון ב-Java מחולק למספר אזורים מרכזיים, כאשר שניים מהם מרכזיים לניהול משתנים ואובייקטים: ה-Stack (מחסנית) וה-Heap (ערמה).</p>
+    </div>
+
+    <h2>ה-Stack (מחסנית)</h2>
+    <p>ה-Stack הוא אזור זיכרון שמוקצה לכל Thread בנפרד. הוא פועל בשיטת LIFO (Last In, First Out - האחרון שנכנס הוא הראשון שיוצא).</p>
+
+    <p><strong>מה נשמר בו?</strong></p>
+    <ul>
+      <li>משתנים מקומיים (Local Variables): משתנים שמוצהרים בתוך מתודות (כמו int x = 5).</li>
+      <li>פרמטרים של מתודות: הנתונים שמועברים למתודה בזמן קריאה.</li>
+      <li>כתובות זיכרון (References): מצביעים (כתובות) שמובילים לאובייקטים האמיתיים שיושבים ב-Heap.</li>
+      <li>Frames : בכל פעם שמתודה נקראת, נוצרת ב-Stack חתימה (Stack Frame) שמכילה את המשתנים שלה. ברגע שהמתודה מסתיימת, ה-Frame נמחק מיד והזיכרון משוחרר אוטומטית.</li>
+    </ul>
+
+    <p><strong>תכונות מרכזיות:</strong></p>
+    <ul>
+      <li>מהירות: הגישה ל-Stack מהירה מאוד משום שהניהול שלו לינארי ומנוהל ישירות על ידי ה-CPU.</li>
+      <li>גודל: קטן בהרבה מה-Heap. אם ממלאים אותו יותר מדי (למשל ברקורסיה אינסופית בלי תנאי עצירה), מקבלים את השגיאה המוכרת java.lang.StackOverflowError.</li>
+    </ul>
+
+    <h2>2. ה-Heap (ערמה)</h2>
+    <p>ה-Heap הוא אזור זיכרון מרכזי ומשותף שמשמש את כל התוכנית (לכל ה-Threads יש גישה אליו). הוא מיועד לאחסון דינמי של אובייקטים ומערכים.</p>
+
+    <p><strong>מה נשמר בו?</strong></p>
+    <ul>
+      <li>כל אובייקט שנוצר באמצעות המילה new (למשל: new Duck(), new String("Hello")).</li>
+      <li>שדות של אובייקטים (Instance Fields / Attributes): המשתנים הפנימיים של האובייקט (גם אם הם פרימיטיביים כמו int או boolean, כל עוד הם שייכים לאובייקט שיושב ב-Heap, הם נשמרים שם).</li>
+      <li>Wrapper Classes (כמו Integer, Long) גם נשמרות כאן כי הן אובייקטים.</li>
+    </ul>
+
+    <p>ה־Heap ב־Java מחולק לאזורים שונים (Generations) בהתבסס על ההנחה המרכזית בניהול זיכרון שנקראת "ההיפותזה הדורית" (Weak Generational Hypothesis) והיא שרוב האובייקטים בתוכנית מתים צעירים מאוד (למשל, אובייקטים שנוצרו לצורך חישוב מקומי במתודה ומיד נזרקים).</p>
+    <p>חלוקה זו נועדה לייעל דרמטית את עבודתו של ה־Garbage Collector (ה־GC), כך שלא יצטרך לסרוק את כל מיליוני האובייקטים בזיכרון בכל פעם שהוא מנקה.
+
+
+
+      <a href="/info/java/garbageCollector.html">למידע נוסף על Garbage Collector:</a>
+
+    </p>
+
+    <p><strong>ה־Heap מתחלק לשני אזורים מרכזיים:</strong></p>
+
+    <h3>1. Young Generation (הדור הצעיר)</h3>
+    <p>זהו האזור שבו נוצרים כל האובייקטים החדשים ברגע שאנחנו כותבים new. האזור הזה מתמלא מהר מאוד, ולכן ה־GC מבקר בו בתדירות גבוהה מאוד (תהליך שנקרא Minor GC).</p>
+    <p>הדור הצעיר עצמו מחולק לשלושה תתי־אזורים:</p>
+    <ul>
+      <li><strong>Eden Space (גן עדן):</strong> המקום שבו האובייקטים החדשים נולדים ונכנסים לראשונה לזיכרון. ברגע שה־Eden מתמלא, מופעל Minor GC ראשוני: אובייקטים שעדיין בשימוש מועברים החוצה, ואלו שמתים נמחקים ונעלמים לחלוטין באפס מאמץ.</li>
+      <li><strong>Survivor Spaces (S0 ו־S1 או From ו־To):</strong> שני אזורי מעבר קטנים המשמשים כ"תחנת ביניים". בכל פעם שמתבצע Minor GC ב־Eden, האובייקטים ששרדו מועברים לאחד מתושבי ה־Survivor. האזורים הללו מחליפים תפקידים לסירוגין (פעם אחד הוא From והשני הוא To). לכל אובייקט ששורד ניקוי כזה נוסף "מונה גיל" (Age). כשהוא שורד מספיק סבבים ב־Survivor (לרוב ברירת המחדל היא 15 סבבים), הוא מקודם אל הדור הישן.</li>
+    </ul>
+
+    <h3>2. Old Generation / Tenured Generation (הדור הישן)</h3>
+    <p>זהו האזור שאליו עוברים אובייקטים "ותיקים" ששרדו הרבה סבבי ניקוי בדור הצעיר (או אובייקטים ענקיים במיוחד שתפסו ישר מקום פה).</p>
+    <p><strong>מה נמצא בו?</strong> אובייקטים לטווח ארוך, כמו אובייקטי Singleton, קונפיגורציות גלובליות, קשרי מסדי נתונים (Connections), או מטמונים (Caches) שנשארים לאורך כל חיי האפליקציה.</p>
+    <p><strong>איך ה־GC מנקה אותו?</strong> ניתן להעמיק בנושא זה כאן   <a href="/info/java/garbageCollector.html">למידע נוסף על Garbage Collection (GC)</a></p>
+
+    <p><strong>תכונות מרכזיות:</strong></p>
+    <ul>
+      <li>ניהול זיכרון (Garbage Collection): בניגוד ל-Stack שמתנקה לבד כשהמתודה נגמרת, אובייקטים ב-Heap נשארים שם כל עוד יש להם לפחות Reference אחד שמוביל אליהם. כשאובייקט מאבד את כל ה-References שלו, מנגנון האיסוף האוטומטי (Garbage Collector - GC) מוחק אותו ומפנה את השטח.</li>
+      <li>גודל: גדול מאוד (ניתן להגדיר לו גבולות בעת הפעלת ה-JVM באמצעות דגמים כמו -Xmx ו־-Xms).</li>
+      <li>חריגה: אם ממלאים את כל ה-Heap באובייקטים בלי שחרור, מקבלים את השגיאה java.lang.OutOfMemoryError: Java heap space.</li>
+    </ul>
+
+    <p><strong>המחשה קצרה: Stack מול Heap בקוד</strong></p>
+    <div class="code-container">
+      <pre><code>public void createPerson() {
+    int age = 30; // 'age' (primitive) is stored directly on the Stack
+    String name = "Alice"; // 'name' reference is on the Stack, the actual String object is in the Heap
+}</code></pre>
+    </div>
+
+    <h2>3. איפה יושבים המטא-דאטה, המחלקות והקבועים? (האבולוציה בגרסאות Java)</h2>
+    <p>הגדרות של מחלקות, ממשקים, מתודות, משתנים סטטיים (static) ומטא-דאטה לא יושבים ב-Heap הרגיל ולא ב-Stack, אלא באזור נפרד ששמו השתנה משמעותית בין גירסאות Java:</p>
+
+    <p><strong>עד Java 7 (כולל) אזור ה-PermGen (Permanent Generation)</strong></p>
+    <p>אזור זה היה חלק מזיכרון ה-JVM שנקבע מראש בגודלו בזמן עליית התוכנית.</p>
+    <p><strong>הבעיה:</strong> מכיוון שהגודל היה קבוע מראש, תוכניות גדולות או שימוש כבד בטעינת מחלקות דינמית (כמו שימוש ב-Frameworks כמו Spring או Hibernate, או יצירת Classes בזמן ריצה באמצעות Reflection) גרמו שוב ושוב לשגיאה המפורסמת: java.lang.OutOfMemoryError: PermGen space. היה קשה מאוד לנהל ולכוון את הגודל שלו נכון.</p>
+
+    <p><strong>מ-Java 8 ועד היום מעבר ל-Metaspace</strong></p>
+    <p>החל מגרסה Java 8, אזור ה-PermGen בוטל לחלוטין והוחלף ב-Metaspace.</p>
+    <p><strong>השינוי המרכזי:</strong> ה-Metaspace אינו חלק עוד מזיכרון ה-JVM המוקצה, אלא הוא יושב ישירות על הזיכרון הפיזי של מערכת ההפעלה (Native Memory).</p>
+
+    <p><strong>היתרון:</strong></p>
+    <ul>
+      <li>כברירת מחדל, ה-Metaspace גדל באופן דינמי ככל שהאפליקציה צריכה עוד מקום (בהתאם לזיכרון הפנוי במחשב).</li>
+      <li>שגיאות ה-PermGen נעלמו מהעולם. אם בכל זאת יאזל הזיכרון במערכת ההפעלה, תקבל שגיאה חדשה: java.lang.OutOfMemoryError: Metaspace.</li>
+    </ul>
+
+    <p><strong>Java 7-</strong></p>
+    <div class="code-container">
+      <pre><code>JVM Memory
+├── Heap
+│   ├── Young
+│   └── Old
+└── PermGen (fixed)</code></pre>
+    </div>
+
+    <p><strong>java 8+</strong></p>
+    <div class="code-container">
+      <pre><code>JVM Memory
+├── Heap
+│   ├── Young
+│   └── Old
+└── Metaspace (native memory)</code></pre>
+    </div>
+
+    <div class="pc-pillar-card warning-highlight" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> <strong>אז ב JAVA8 ומעלה אין בעיה של זיכרון? הוא לא יכול להיגמר אף פעם?</strong>
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        Java 8 החליפה אותו ב־Metaspace שמשתמש ב־native memory ויכול לגדול דינמית, מה שהפך class loading והרצת frameworks להרבה יותר יציבים. אבל! הזיכרון נגזר ממערכת ההפעלה, כמה שהוא גדול, הוא עדיין מוגבל ולכן הוא כן יכול להיגמר.
+      </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

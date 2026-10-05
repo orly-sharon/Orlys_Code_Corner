@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - assert </title>
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+<div class="container" dir="rtl">
+  <section class="article">
+
+    <h1>Java assert </h1>
+
+    <div class="pc-confidentiality-box">
+      <div class="pc-confidentiality-title">Java assert</div>
+      <p class="pc-confidentiality-text" style="margin-bottom: 0;">ה-assert ב-Java הוא כלי רב-עוצמה המיועד לבדיקת תקינות לוגית במהלך פיתוח ובדיקות (Testing). הוא מאפשר למתכנת להגדיר תנאים שחייבים להתקיים בנקודה מסוימת בקוד, ואם התנאי אינו מתקיים, התוכנית תעצור ותזרוק AssertionError.</p>
+    </div>
+
+    <div class="pc-pillar-card warning-highlight">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary">
+        לפני הכל, assert אינו פועל בצורה אוטומטית ויש להפעילו! אין לבלבל בין assert לבין assertEquals שפועל בצורה אוטומטית. <br>
+        איך נפעיל assert? נוסיף ב vm arguments את הערך ea- . ללא הערך הזה, assert לא יפעל ולא יוציא שגיאה במצב שבו אנו מצפים לשגיאה. ניתן להריץ את האפליקציה שלנו עם הפרמטר הזה על ידי הפקודה הבאה: <code>java -ea appName</code>
+      </p>
+    </div>
+    <div class="alert-box-danger">
+      <p>אין להשתמש ב assert כבדיקה בסביבת production. זה משמש אותנו המפתחים כבדיקה שלנו, בהרצת הקוד לפני שחרורו הסופי. אם נשאיר בקוד את הבדיקה וה vm arguments מוגדר, יכולה לעוף לנו שגיאת AssertionError בזמן ריצה.</p>
+    </div>
+    <h2>דרכי שימוש</h2>
+    <p>ישנן שתי דרכים להשתמש ב-assert:</p>
+    <ul>
+      <li>;assert condition  אם התנאי שקרי, נזרק AssertionError ללא הודעה.</li>
+      <li>;assert condition : message  אם התנאי שקרי, נזרק AssertionError עם הודעה מפורטת זאת הדרך המומלצת להשתמש בו, על מנת לקבל מידע מפורט על הקוד. במידה ויש לנו כמה assert בקוד, ונזרוק שגיאה ללא הודעה, לא נדע מי מהם גרם לבעיה.</li>
+    </ul>
+
+    <p>בדוגמה הבאה ניתן לראות שימוש עם assert שבודק כי הסכום שהוכנס הוא חיובי , הבדיקה הבאה כי היתרה שלנו גדולה מאפס. <br>
+      שימו לב שזה הדרך בה יש גם הודעה מה ביצענו בבדיקת ה assert. ללא ההודעה, אם הייתה טעות באחת מהבדיקות, לא היינו יודעים מה נפל בבדיקה</p>
+
+    <div class="code-container">
+      <pre><code>public class BankAccount {
+private double balance;
+public void withdraw(double amount) {
+assert amount > 0 : "positive amount: " + amount;
+ balance -= amount;
+ assert balance >= 0 : "balance under zero!";
+}
+ } </code></pre>
+    </div>
+
+    <div class="success-box">
+      <ul>
+        <li><strong>אל תסמכו על assert ללוגיקה עסקית:</strong> מכיוון שניתן לכבות אותו, לעולם אל תשתמש בו כדי לאכוף חוקים קריטיים (כמו אבטחה או ניקוי נתונים).</li>
+        <li><strong>השתמשו בו ככלי דיבאג:</strong> הוא מעולה לשלב הפיתוח והבדיקות (Unit Testing).</li>
+        <li><strong>הודעות מפורטות:</strong> תמיד השתמשו בגרסה עם ההודעה (:"message"), זה חוסך שעות של ניחושים כשמתקבלת שגיאה.</li>
+      </ul>
+    </div>
+
+    <h2>ניתן לשלב assert ב-JUnit</h2>
+    <p>בזמן הרצת טסטים, לעיתים נרצה לוודא מצב פנימי של אובייקט תוך כדי הריצה של ה-Test. כדי שה-assert יעבוד בטסטים שלך, עליך לוודא שה-VM של ה-Test מוגדר עם הדגל -ea.</p>
+
+    <div class="alert-box-danger">
+      <strong>שימו לב!</strong> במידה והVM הזה לא מופעל assertEquals  יפעל כרגיל!
+    </div>
+
+    <table class="article-table">
+      <thead>
+      <tr>
+        <th>מאפיין</th>
+        <th>תיאור</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><strong>assertEquals</strong></td>
+        <td><span class="badge badge-yellow">org.junit.jupiter.api.Assertions.assertEquals</span> - נועד לטסטים,  וכל עוד יש לנו את הimport הנכון, הוא תמיד ירוץ.</td>
+      </tr>
+      <tr>
+        <td><strong>assert (Java keyword)</strong></td>
+        <td><span class="badge badge-orange">Keyword</span> - נועד לבדיקת לוגיקה פנימית. הוא ירוץ רק אם ה-JVM הופעל עם ea-.</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <p>דוגמה לקוד המשלב assert ו assertEquals :</p>
+    <p>השורה הזאת אחראית על ריצת הטסט עצמו ועל קוד שאנו רוצים לבדוק, תפעל תמיד כל עוד הimport נכון.</p>
+    <div class="example-box">
+      assertEquals(0, account.getBalance(), "balance should be zero 0");
+    </div>
+
+    <p>השורה הזאת תפעל רק כשנריץ את ה vm arguments הנכון.</p>
+    <div class="example-box">
+      assert account.getBalance() >= 0 : "balance is zero!";
+    </div>
+
+
+    <h2>קוד מלא לדוגמה:</h2>
+    <div class="code-container">
+      <pre><code>import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BankAccountTest {
+
+    @Test
+    void testWithdrawalLogic() {
+        BankAccount account = new BankAccount();
+
+        account.withdraw(100);
+        assertEquals(0, account.getBalance(), "balance should be zero 0");
+
+
+        assert account.getBalance() >= 0 : "balance is zero!";
+    }
+}</code></pre>
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+  </section>
+</div>
+
+
+</body>
+</html>

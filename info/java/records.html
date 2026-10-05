@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Records</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Java - Record</h1>
+
+    <p>החל מ JAVA 16 ומעלה, האופציה של שימוש ב record פתוחה לנו כמפתחים.</p>
+
+    <h2>למה אנחנו צריכים Record?</h2>
+    <p>אם היינו רוצים מחלקה שתחזיק לנו נתונים "יבשים" כמו גיל, שם, טלפון וכו' היינו צריכים לכתוב מחלקה עם מלא קוד: קונסטרקטור, Getter ים, ()equals(), hashCode, ו() toString.</p>
+    <p>Record בא לייתר לנו את כתיבת הקוד המלא, הוא מחלקה מיוחדת שמוגדרת כנתונים טהורים (Data Carrier). ברגע שנגדיר Record, הקומפיילר של Java מייצר עבורנו אוטומטית את כל הקונסטרקטורים, המתודות וההשוואות מאחורי הקלעים.</p>
+
+    <h2>איך מייצרים record?</h2>
+    <p>שורה אחת ויש לנו record! </p>
+    <div class="code-container">
+      <pre><code>public record User(String name, int age, String phoneNumber) { }</code></pre>
+    </div>
+
+    <h2>איך משתמשים ב record?</h2>
+    <p>ניצור רשומה עם כל השדות שהגדרנו, ואז פשוט אפשר לקרוא לכל פיסת מידע שהוספנו בקוד.</p>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        כפי שניתן לראות בקוד ה toString כבר נוצר לנו אוטומטית, ללא כל מעורבות שלנו.
+      </p>
+    </div>
+
+    <div class="code-container">
+      <pre><code>User user = new User("Alice", 30, "050 12345678");
+System.out.println(user.name()); // "Alice"
+System.out.println(user);        // User[name=Alice, age=30, phoneNumber=050 12345678]</code></pre>
+    </div>
+
+    <h2>מה השימושים העיקריים ב record?</h2>
+    <ul>
+      <li><strong>העברת נתונים DTOs / Data Transfer Objects:</strong> מעבר נתונים בין שכבות במערכת או קבלת מידע מ API חיצוני.</li>
+      <li><strong>תתי מחלקות של Sealed Classes:</strong> . אם אתם לא מכירים את sealed class ניתן לקרוא עוד על הנושא
+        <a href="/info/java/sealedClass.html">כאן</a>.</li>
+
+      <li><strong>כאשר הנתונים קבועים מראש:</strong> כשאנחנו יודעים שברגע שהאובייקט נוצר, הערכים שלו לא אמורים להשתנות לעולם.</li>
+    </ul>
+
+    <h3>ירושה של Record</h3>
+    <ul>
+      <li><strong>הם final:</strong> אי אפשר לרשת מחלקת Record אחרת, ואי אפשר ליצור תת מחלקה מתוך Record קיים.</li>
+      <li><strong>הם יורשים אוטומטית מ java.lang.Record:</strong> בדיוק כמו שכל מחלקה רגילה יורשת מ Object, כל Record יורש מאב קצה בשם java.lang.Record. מכיוון ש Java אינה תומכת בירושה ריבוי מחלקות, Record אינו יכול לרשת מחלקה אחרת.</li>
+      <li><strong>מימוש implements:</strong> למרות שהם לא יכולים לרשת מחלקות, הם לגמרי יכולים לממש ממשקים (כפי שראינו ב sealed class).</li>
+    </ul>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        <strong>Record הם אימוטביליים (Immutable) לחלוטין:</strong> כל השדות ב Record מוגדרים אוטומטית כ private final. אי אפשר לשנות את הערך של שדה אחרי שה Record נוצר אין Setter. אם צריך ערך שונה, יוצרים אובייקט חדש. רוצים להרחיב על נושא ה Immutable?     <a href="/info/java/immutableObjects.html">כאן</a> תמצאו עוד מידע עליו.
+      </p>
+      <p class="warning-text-primary" style="margin-top: 10px; margin-bottom: 0;">
+        <strong>יתכנו בעיות עם פריימוורקים ישנים (כמו JPA/Hibernate):</strong> פריימוורקים מסוימים לניהול בסיסי נתונים דורשים קונסטרקטור ריק (No args constructor) ואפשרות לשנות שדות (Setters). מכיוון של Records אין את אלה, עבודה איתם בתוך ישויות DB דורשת לפעמים התאמות או ספריות צד שלישי כמו Jackson ב JSON שדווקא תומך בהם מעולה.
+      </p>
+      <p class="warning-text-primary" style="margin-top: 10px; margin-bottom: 0;">
+        <strong>אי אפשר להוסיף שדות מנוהלים נוספים:</strong> כל השדות חייבים להיות מוגדרים ישירות בכותרת של ה Record, השדות שהוגדרו במלואם וללא חסרים.
+      </p>
+    </div>
+
+    <h3>שדות ומתודות סטטיים</h3>
+    <p>למרות שאסור להוסיף שדות רגילים, כלומר שדות שניתנים לשינוי עם set, מותר לגמרי להוסיף שדות סטטיים: כמו קבועים (public static final String DEFAULT_NAME = "Guest") ומתודות סטטיות.</p>
+    <p>זה נפוץ מאוד למשל כשנרצה ליצור מתודת Factory (כמו of(...)) שמייצרת את ה Record בצורה חכמה. במקום שקוד חיצוני יצטרך לקרוא ישירות ל new User(...) ולהסתבך עם העברת פרמטרים או ברירת מחדל, אנחנו קוראים למתודה בעלת משמעות (כמו User.of או User.createGuest)) שתעשה את העבודה מאחורי הקלעים: היא יכולה להוסיף ערכי ברירת מחדל, לנקות נתונים, או אפילו להחליט איזו גרסה של אובייקט ליצור בהתאם למה שהועבר.</p>
+
+    <div class="code-container">
+      <pre><code>public record User(String name, int age, String phoneNumber) {
+
+    // 1. Static constant fields shared across all record instances
+    public static final int DEFAULT_AGE = 18;
+    public static final String DEFAULT_PHONE = "050 00000000";
+
+    // Compact Constructor for standard validation
+    public User {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be null or blank!");
+        }
+    }
+
+    // 2. Static Factory Method: Creates a User with a default phone number
+    public static User of(String name, int age) {
+        // Calls the standard constructor with a fallback phone number
+        return new User(name, age, DEFAULT_PHONE);
+    }
+
+    // 3. Static Factory Method: Creates an adult user with a default age
+    public static User createAdult(String name, String phoneNumber) {
+        // Uses the static constant DEFAULT_AGE
+        return new User(name, DEFAULT_AGE, phoneNumber);
+    }
+}</code></pre>
+    </div>
+
+    <p>איך נשתמש במתודות שיצרנו? כמו כל מתודה אחרת בקוד (דוגמת רצה ב MAIN):</p>
+
+    <div class="code-container">
+      <pre><code>public class Main {
+    public static void main(String[] args) {
+
+        // Using static factory method 'of' (provides default phone automatically)
+        User user1 = User.of("Alice", 25);
+        System.out.println(user1);
+        // Output: User[name=Alice, age=25, phoneNumber=050 00000000]
+
+        // Using static factory method 'createAdult' (provides default age automatically)
+        User user2 = User.createAdult("Bob", "054 12345678");
+        System.out.println(user2);
+        // Output: User[name=Bob, age=18, phoneNumber=054 12345678]
+
+        // Accessing the static constant fields directly from the Record name
+        System.out.println("Default user age is: " + User.DEFAULT_AGE);
+    }
+}</code></pre>
+    </div>
+
+    <h2>Compact Constructor</h2>
+    <p>למרות שלא נדרש Constructor ב record, ניתן להוסיף Constructor על מנת ליצור ולדיציה לנתונים שלנו.</p>
+
+    <h3>איך זה עובד?</h3>
+    <p>ב Compact Constructor, אנחנו לא כותבים את הפרמטרים בסוגריים ולא מעבירים מחדש את השדות ל this. Java כבר יודעת לבד מה הפרמטרים כי הגדרנו אותם בשורת ה Record הראשית. אנחנו פשוט ניגשים לשדות ישירות ובודקים אותם לפני שהם נשמרים.</p>
+
+    <p><strong>דוגמת קוד:</strong></p>
+    <p>נניח שאנחנו רוצים לוודא שגיל של משתמש לא יכול להיות שלילי, וששם המשתמש לעולם אינו ריק או null:</p>
+
+    <div class="code-container">
+      <pre><code>public record User(String name, int age, String phoneNumber) {
+
+    // Compact Constructor - no parameter parentheses required!
+    public User {
+        // 1. Check if the name is null or blank
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be null or blank!");
+        }
+
+        // 2. Check if the age is valid
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative: " + age);
+        }
+
+        // 3. Validate the phone number:
+        //   Must not be null
+        //   Must be strictly greater than 12 characters long
+        //   Must have a hyphen (' ') exactly after the first 3 characters (index 3)
+        //   All other characters (before and after the hyphen) must be digits only
+        if (phoneNumber == null || phoneNumber.length() != 12) {
+            throw new IllegalArgumentException("Phone number must be exactly 12 characters long!");
+        }
+
+        if (phoneNumber.charAt(3) != ' ') {
+            throw new IllegalArgumentException("Phone number must contain a hyphen (' ') after the first 3 characters!");
+        }
+
+        // Validate that everything else consists strictly of digits
+        for (int i = 0; i < phoneNumber.length(); i++) {
+            if (i == 3) continue; // Skip the hyphen at index 3
+
+            if (!Character.isDigit(phoneNumber.charAt(i))) {
+                throw new IllegalArgumentException("Phone number can only contain digits (except for the hyphen at index 3)!");
+            }
+        }
+
+        // No need to write this.name = name; > Java assigns the fields automatically at the end of the block!
+    }
+}</code></pre>
+    </div>
+
+    <h3>מה מיוחד בזה?</h3>
+    <ul>
+      <li><strong>קוד מובן:</strong>this.name = name; וכו'. כאן, הקומפיילר מטפל בהשמת הערכים באופן אוטומטי, מיד אחרי Compact Constructor שלנו מסיים את ריצתו בהצלחה.</li>
+      <li><strong>חסינות מוחלטת:</strong>new User("", 5, "050 12345678"), Compact Constructor יעצור את הכל, יזרוק את השגיאה, ואי אפשר יהיה לייצר אובייקט לא תקין במערכת.</li>
+    </ul>
+
+    <p>זה הופך את ה Records לא רק למחלקות נתונים נוחות, אלא גם ליותר בטוחות באמצעות ולידציות.</p>
+
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

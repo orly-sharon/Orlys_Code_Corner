@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Sealed Classes</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Java - Sealed Classes</h1>
+
+    <p>עד JAVA 17 , כשבנינו class חדש, היו לנו שתי אופציות ליורשה:</p>
+    <ul>
+      <li>ירושה פתוחה לחלוטין: ניתן לייצור מחלקה חדשה שיורשת ממך (extends).</li>
+      <li>חסימה מוחלטת (final): אף אחד בעולם לא יכול לרשת את המחלקה שלך.</li>
+    </ul>
+    <p>ואז הגיע חידוש מטורף בתחום, למה לא לעשות איזה "יצור ביניים", שמאפשר מראש למי ניתן להוריש וכל השאר חסומים?</p>
+
+    <p>פה נכנס Sealed Classes , מחלקה שנותנת לנו להחליט מי יכול לרשת ומי לא. העיקרון של הירושה במחלקה הזאת עובד על Whitelist אנחנו מגדירים מראש מה מותר , וזה ואך ורק זה יכול לרשת מהמחלקקה שלנו.</p>
+    <p>לדוגמה:</p>
+
+    <div class="code-container">
+      <pre><code>// We define a sealed interface and explicitly state who can implement it
+public sealed interface Shape permits Circle, Square {
+    double area();
+}
+
+// Allowed subclass 1
+public final class Circle implements Shape {
+    double radius;
+    public double area() { return Math.PI * radius * radius; }
+}
+
+// Allowed subclass 2
+public final class Square implements Shape {
+    double side;
+    public double area() { return side * side; }
+}</code></pre>
+    </div>
+
+    <p>יש לשים לב לשינוי בכתיבה, בואו נפרק את מילות המפתח החשובות בקוד :</p>
+    <p>תתי המחלקות חייבות להיות באותו package או באותו Module, במידה והמערכת שלנו בנויה בצורת מודלים.</p>
+
+   public sealed
+    <p><strong>public:</strong> גישה ציבורית, כל מחלקה בפרויקט יכולה לראות ולהשתמש בממשק הזה.</p>
+    <p><strong>sealed:</strong> מילת המפתח החשובה ביותר כאן! היא אומרת לקומפיילר: שים לב, מי שיכול לרשת את זה מוגבל, וזאת הרשימה!</p>
+
+    <p><strong>Permits:</strong> מגדירה באופן יחודי וברור את "המשפחה המצומצמת". רק המחלקות Circle (עיגול) ו Square (ריבוע) רשאיות לממש את הממשק Shape. אם מחלקה אחרת (למשל Triangle) תנסה לכתוב implements Shape, הקומפיילר יזרוק שגיאה מיד.</p>
+
+    <h2>חוק שלושת ה Modifiers לתתי המחלקות שיורשות מ sealed</h2>
+    <p>ברגע שמחלקה או ממשק מוגדרים כ sealed, כל מחלקה שמופיעה ברשימת ה permits חייבת להגדיר את עצמה באחת מתוך שלוש אפשרויות בלבד, אחרת הקומפיילר יזרוק שגיאה:</p>
+    <ul>
+      <li><strong>final:</strong> אף אחד אחר לא יכול לרשת את תת המחלקה הזו (הנפוץ ביותר, במיוחד בשילוב עם Records).</li>
+      <li><strong>sealed:</strong> ממשיך את השרשרת החצי סגורה. כלומר, תת המחלקות בעצמן הופכות ל sealed ודורשות רשימת permits משלהן עבור הדור הבא.</li>
+      <li><strong>non-sealed:</strong> "שובר" את הסגירות ומחזיר את המצב לקדמותו עבור תת המחלקה הזו. כלומר, ממנה והלאה, כל אחד בעולם יכול לרשת אותה בלי הגבלה.</li>
+    </ul>
+
+    <p>דוגמה המשלבת את כל סוגי תת המחלקות האפשריות :</p>
+
+    <div class="code-container">
+      <pre><code>public class HierarchyExample {
+
+    // 1. The top-level sealed interface. It explicitly permits only two branches.
+    public sealed interface Vehicle permits Car, Truck {
+        String getType();
+    }
+
+    // 2. Branch A: 'final' closes the inheritance chain completely.
+    // No one can extend 'Car'.
+    public final class Car implements Vehicle {
+        @Override
+        public String getType() {
+            return "Car (Sealed branch closed with final)";
+        }
+    }
+
+    // 3. Branch B: 'sealed' continues the restriction down the tree.
+    // It must explicitly state who can extend it next.
+    public sealed interface Truck extends Vehicle permits HeavyTruck, LightTruck {
+        int getCapacity();
+    }
+
+    // 3.1. Sub-branch 1: 'final' closes this specific truck type.
+    public final class HeavyTruck implements Truck {
+        @Override
+        public String getType() { return "Heavy Truck"; }
+        @Override
+        public int getCapacity() { return 20000; }
+    }
+
+    // 3.2. Sub-branch 2: 'non-sealed' breaks the restriction!
+    // It reopens the hierarchy, allowing anyone to extend 'LightTruck' freely.
+    public non-sealed class LightTruck implements Truck {
+        @Override
+        public String getType() { return "Light Truck"; }
+        @Override
+        public int getCapacity() { return 3000; }
+    }
+
+    // 4. Because LightTruck is 'non-sealed', external or custom extensions are now allowed:
+    public static class DeliveryVan extends LightTruck {
+        // This is completely legal because LightTruck is non-sealed!
+    }
+}</code></pre>
+    </div>
+
+    <h2>Sealed Classes ו Records</h2>
+    <p>השילוב של Sealed Interfaces יחד עם Records נחשב לאחד התכונות הטובות ביותר ב Java 21 ומעלה. היא מאפשרת למפתחים לממש ארכיטקטורה שנקראת בשפות תכנות פונקציונליות Algebraic Data Types (ADTs) כלומר, מבני נתונים מתמטיים/לוגיים סגורים.</p>
+
+    <p><strong>למה הם מתאימים זה לזה בצורה מושלמת?</strong></p>
+    <ul>
+           <strong>חסות מלאה ושקיפות נתונים:</strong> Records נועדו בדיוק בשביל דבר אחד: לשאת נתונים טהורים (Data Carriers) בלי לוגיקה מסובכת, והם מטבעם final, ניתן לקרוא בהרחבה על הנושא </li>
+
+      <a href="/info/java/sealedClass.html">כאן</a>
+      .
+      <li><strong>Sealed Classes</strong> נועדו בדיוק בשביל להגדיר משפחה סגורה וידועה מראש של תתי מחלקות.</li>
+    </ul>
+    <p>ברגע שמחברים אותם, אנחנו מקבלים מבנה שבו הממשק הסגור מייצג מושג כללי (למשל: תשלום, תוצאת פעולה, או שגיאה), וה Records המורשים מייצגים את התרחישים האפשריים הספציפיים שלו.</p>
+    <p>דוגמה קלאסית: ניהול תוצאת פעולה (Result / Either) במקום להשתמש בחריגות (Exceptions) יקרות או ב null מסוכן, אפשר להגדיר תוצאה שמחזירה או הצלחה או כישלון:</p>
+
+    <div class="code-container">
+      <pre><code>public sealed interface OperationResult permits OperationResult.Success, OperationResult.Failure {
+
+    record Success(Object data) implements OperationResult {}
+    record Failure(String errorCode, String errorMessage) implements OperationResult {}
+
+}</code></pre>
+    </div>
+
+    <p>היתרון: ה Records יושבים ישירות בתוך הממשק, או באותו package. הם קצרים מאוד לכתיבה (ללא Getter או קונסטרקטורים מיותרים).</p>
+    <h2>תמיכה מלאה ב Reflection</h2>
+    <p>מכיוון ש sealed הוא מנגנון שמשנה את מבנה המחלקות ב Java, מערכת ה Reflection API (שמאפשרת לבדוק מחלקות ואובייקטים בזמן ריצה) עודכנה באופן מלא כדי לאפשר בדיקה של המבנים האלו.</p>
+    <p>הנה כמה מתודות מרכזיות שנוספו למחלקת java.lang.Class ומאפשרות לשלוט ולחקור מחלקות sealed בזמן ריצה:</p>
+
+    <h3 >isSealed</h3>
+    <p>אם יש לנו אובייקט או מחלקה, ואנחנו רוצים לדעת אם היא מוגדרת כ sealed:</p>
+
+    <div class="code-container">
+      <pre><code>Class<?> classForChack = Shape.class;
+boolean isItSealed = classForChack.isSealed(); // return true</code></pre>
+    </div>
+
+    <h3 >שליפת רשימת היורשים getPermittedSubclasses</h3>
+    <p>המתודה הזו מאפשרת לשלוף מערך של כל המחלקות שקיבלו יכולת לרשת את המחלקה, מתוך פקודת ה permits:</p>
+
+    <div class="code-container">
+      <pre><code>Class<?>[] permittedSubclasses = Shape.getPermittedSubclasses();
+
+for (Class<?> sub : permittedSubclasses) {
+    System.out.println("Allowed subclass: " + sub.getName());
+}</code></pre>
+    </div>
+
+    <h3 >בדיקה האם מחלקה מממשת ישירות מחלקה סגורה</h3>
+    <p>בנוסף, אפשר לבדוק את הקשר ההדדי בין המחלקות בעזרת מתודות קיימות כמו isInstance או לבדוק את ה Superclass / Interfaces כרגיל ( getInterfaces/getSuperclass).</p>
+    <p>ספריות מתקדמות (כמו ספריות מיפוי, ספריות JSON כמו Jackson, או פריימוורקים של Serialization) משתמשות במתדות ה Reflection האלו כדי:</p>
+    <ul>
+      <li>לזהות אוטומטית, אילו תרחישים קיימים במערכת מבלי להזריק להן רשימות ידניות.</li>
+      <li>לבנות סריאליזציה חכמה לJSON, שמזהה מיד איזה Record ספציפי מגיע מהרשת ומנתבת אותו למבנה הנתונים הנכון.</li>
+    </ul>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

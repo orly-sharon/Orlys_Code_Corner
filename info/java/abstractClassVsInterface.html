@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Abstract class Vs. Interface</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Abstract Class vs Interface</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">ההבדל המרכזי בין abstract class לבין interface מתבטא במטרה התכנונית שלהם: abstract class מייצגת קשר מסוג IS-A: משמש ליצירת היררכיה ומשפחה. למשל, Dog הוא Animal. הם חולקים DNA משותף (קוד, שדות, לוגיקה). אם יש לנו קוד אמיתי שאנחנו רוצים שכל הילדים יירשו קומפלט, מחלקה אבסטרקטית היא הפתרון.</p>
+
+
+    <p> בעוד שinterface מייצג קשר מסוג CAN-DO / HAS-A Capability משמש להוספת יכולות חוצות משפחות. למשל, Car יכול להיות Flyable וגם Electric, וגם Duck יכול להיות Flyable. אין קשר משפחתי בין מכונית לברווז, אבל לשניהם יש את היכולת לעוף. ממשקים מאפשרים גמישות מוחלטת שלא תלויה בהיררכיית הירושה.</p>
+</div>
+    <h2>יתרונות וחסרונות</h2>
+
+    <h3>Abstract Class</h3>
+    <p><strong>יתרונות:</strong></p>
+    <ul>
+      <li>מאפשר שיתוף קוד ממשי (Code Reuse) וחסכון בכתיבת קוד כפול באמצעות מתודות מוכנות מראש.</li>
+      <li>מאפשר לשמור מצב פנימי (State) באמצעות שדות (Fields) וקונסטרוקטורים משותפים.</li>
+    </ul>
+    <p><strong>חסרונות:</strong></p>
+    <ul>
+      <li>מגביל את התכנון הודות למגבלת הירושה הבודדת (Single Inheritance)- מחלקה לא יכולה לרשת מחלקה אבסטרקטית אחרת אם היא כבר יורשת מחלקה אחת.</li>
+    </ul>
+
+    <h3>Interface</h3>
+    <p><strong>יתרונות:</strong></p>
+    <ul>
+      <li>מעניק גמישות מרבית הודות לתמיכה בריבוי ממשקים (Multiple Inheritance of Type), מה שמאפשר למחלקה "לאמץ" כמה תפקידים שונים.</li>
+      <li>יוצר הפרדה מוחלטת (Decoupling) בין החוזה לבין המימוש בפועל.</li>
+    </ul>
+    <p><strong>חסרונות:</strong></p>
+    <ul>
+      <li>אינו מאפשר שיתוף של משתני מופע או קונסטרוקטורים, מה שיכול לדרוש כתיבת קוד חזרתי במידה ואין שימוש במתודות ברירת מחדל (default).</li>
+    </ul>
+
+    <h2>השוואה בין Abstract Class ל-Interface</h2>
+
+    <table class="article-table">
+      <thead>
+      <tr>
+        <th>תכונה</th>
+        <th>Abstract Class</th>
+        <th>Interface</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><strong>ירושה (Inheritance)</strong></td>
+        <td>תומכת בירושה בודדת בלבד (מחלקת-בת יכולה לרשת מחלקה אבסטרקטיבית אחת).</td>
+        <td>תומכת בריבוי ממשקים (מחלקה יכולה לממש כמה ממשקים במקביל).</td>
+      </tr>
+      <tr>
+        <td><strong>מצב (State / Fields)</strong></td>
+        <td>יכולה להכיל משתני מופע (Fields) עם כל רמת נגישות (private, protected, public).</td>
+        <td>לרוב מכילה רק קבועים (public static final). לא יכולה להחזיק משתני מצב משתנים (Instance fields).</td>
+      </tr>
+      <tr>
+        <td><strong>קונסטרוקטורים</strong></td>
+        <td>יכולה להכיל קונסטרוקטור שמופעל באמצעות super() מתוך מחלקות הבת.</td>
+        <td>אין לה קונסטרוקטורים כלל (אי אפשר לאתחל אותה ישירות לא ניתן לקרוא ל NEW).</td>
+      </tr>
+      <tr>
+        <td><strong>סוגי מתודות</strong></td>
+        <td>יכולה להכיל מתודות אבסטרקטיות (ללא גוף) וגם מתודות מוגמרות עם מימוש מלא.</td>
+        <td>באופן מסורתי הכילה רק חתימות מתודות; החל מגרסאות מתקדמות (כמו Java 8 ) מאפשרת מתודות ברירת מחדל (default) ומתודות סטטיות.</td>
+      </tr>
+      <tr>
+        <td><strong>הוספת מתודה</strong></td>
+        <td>אם נרצה להוסיף מתודה רגילה (עם גוף) ל-Abstract Class בעתיד, נוכל לעשות זאת בקלות וכל מחלקות הבת יקבלו אותה מיד בלי שום בעיה.</td>
+        <td>הוספת מתודה לInterface מסוכנת יותר (או דרשה שינויים): היסטורית, אם הוספת מתודה ל-Interface, כל המחלקות שממשות אותו נשברו בקומפילציה כי הן חייבות לממש גם אותה. לכן הציגו ב-Java 8 את ה-default methods כדי לאפשר הוספת מתודות לממשקים קיימים בלי לשבור את הקוד הישן.</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <h2>מתי לבחור במה? (כלל אצבע פרקטי)</h2>
+
+    <p><strong>בחרנו ב-Interface כש:</strong></p>
+    <ul>
+      <li>נרצה להגדיר חוזה משותף למחלקות שאין ביניהן קשר משפחתי.</li>
+      <li>נצטרך תמיכה בריבוי ירושות (Multiple Inheritance), כלומר שטיפוס יוכל לממש מספר התנהגויות שונות.</li>
+      <li>נרצה ליצור הפרדה מוחלטת (Decoupling) בין ההגדרה למימוש.</li>
+    </ul>
+
+    <p><strong>בחרנו ב-Abstract Class כש:</strong></p>
+    <ul>
+      <li>נרצה לשתף קוד אמיתי (מתודות עם מימוש מלא) בין מחלקות קרובות.</li>
+      <li>נצטרך לשמור מצב פנימי (Fields עם ערכים משתנים כמו name או status) ולנהל קונסטרוקטורים משותפים.</li>
+      <li>המחלקות שלנו חולקות זהות משותפת חזקה (היררכיה ברורה).</li>
+    </ul>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

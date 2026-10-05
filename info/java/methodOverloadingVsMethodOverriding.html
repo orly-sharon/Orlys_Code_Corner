@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Method Overloading vs Method Overriding</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Method overloading Vs. method overriding</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">ההבדל המרכזי בין Method Overloading לבין Method Overriding טמון בזמן שבו המערכת מחליטה איזו מתודה להפעיל, ובקשר המשפחתי הנדרש בין המחלקות.</p>
+    </div>
+
+    <h2> Method Overloading</h2>
+    <p>העמסה מתרחשת כאשר אנחנו מגדירים באותה מחלקה מספר מתודות בעלות אותו שם, אך עם חתימת פרמטרים שונה (מספר שונה של פרמטרים, סוגי נתונים שונים, או סדר שונה שלהם).</p>
+    <p><strong>מטרה:</strong> לאפשר לאותה פעולה להתבצע בצורות שונות בהתאם לנתונים שמועברים אליה (למשל, מתודת add שיכולה לחבר שני מספרים שלמים, שלושה מספרים, או מספרים עשרוניים).</p>
+    <p><strong>זמן החלטה (Binding):</strong> מתרחש בזמן הקומפילציה (Compile-time polymorphism / Static binding). הקומפיילר יודע בדיוק באיזו מתודה להשתמש לפי הפרמטרים ששלחנו.</p>
+
+    <p><strong>כללים מרכזיים:</strong></p>
+    <ul>
+      <li>שמות המתודות חייבים להיות זהים, אך חתימת הפרמטרים חייבת להיות שונה.</li>
+      <li>סוג הערך המחזיר (Return Type) לבדו אינו מספיק כדי ליצור Overloading (אי אפשר ששתי מתודות יהיו זהות לחלוטין, חוץ מזה שאחת מחזירה int והשנייה void).</li>
+      <li>לא נדרש קשר של ירושה; זה יכול לקרות בתוך אותה מחלקה בדיוק.</li>
+    </ul>
+
+    <p><strong>דוגמת קוד ל-Overloading:</strong></p>
+    <div class="code-container">
+      <pre><code>public class MathUtils {
+
+    // Overloaded method taking two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Overloaded method taking three integers
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Overloaded method taking double values
+    public double add(double a, double b) {
+        return a + b;
+    }
+}</code></pre>
+    </div>
+
+    <h2> Method Overriding</h2>
+    <p>דריסה מתרחשת כאשר מחלקת-בת (Subclass) מספקת מימוש משל עצמה למתודה שכבר קיימת במחלקת האב (Superclass) או בממשק, בדיוק באותה חתימה.</p>
+    <p><strong>מטרה:</strong> לאפשר למחלקת הבת לשנות או להתאים את ההתנהגות של מחלקת האב לצרכים הייחודיים שלה (למשל, מחלקת Animal מגדירה ()makeSound, ומחלקת Cat דורסת אותה כדי לעשות "Meow").</p>
+    <p><strong>זמן החלטה (Binding):</strong> מתרחש בזמן ריצה (Runtime polymorphism / Dynamic Dispatch). המערכת מסתכלת על סוג האובייקט האמיתי שנמצא ב-Heap (ולא על סוג הטיפוס ב-Stack) ומחליטה איזו מתודה להפעיל.</p>
+
+    <p><strong>כללים מרכזיים:</strong></p>
+    <ul>
+      <li>חתימת המתודה (שם המתודה, סוגי הפרמטרים והסדר שלהם) חייבת להיות זהה לחלוטין למתודה במחלקת האב.</li>
+      <li>מחלקת הבת צריכה להשתמש באנוטציה Override@ כדי לוודא שהדריסה אכן חוקית בקומפילציה.</li>
+      <li>אי אפשר לדרוס מתודות שהוגדרו כ־final או static.</li>
+      <li>דורש קשר של ירושה (Inheritance) או מימוש ממשק.</li>
+    </ul>
+
+    <p><strong>דוגמת קוד ל-Overriding:</strong></p>
+    <div class="code-container">
+      <pre><code>class Animal {
+    // Parent class method
+    public void makeSound() {
+        System.out.println("Animal makes a general sound");
+    }
+}
+
+class Cat extends Animal {
+    // Overriding the parent method
+    @Override
+    public void makeSound() {
+        System.out.println("Cat says: Meow Meow");
+    }
+}</code></pre>
+    </div>
+
+    <h2>טבלת השוואה מהירה</h2>
+
+    <table class="article-table">
+      <thead>
+      <tr>
+        <th>תכונה</th>
+        <th>Method Overloading</th>
+        <th>Method Overriding</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><strong>מיקום הקוד</strong></td>
+        <td>באותה מחלקה (או דרך ירושה באותה משפחה).</td>
+        <td>חייב להיות בשתי מחלקות שונות הקשורות בירושה (אב ובן).</td>
+      </tr>
+      <tr>
+        <td><strong>חתימת פרמטרים</strong></td>
+        <td>חייבת להיות שונה (כדי שהקומפיילר יבדיל ביניהן).</td>
+        <td>חייבת להיות זהה לחלוטין.</td>
+      </tr>
+      <tr>
+        <td><strong>זמן החלטה</strong></td>
+        <td>Compile-time (סטטי).</td>
+        <td>Runtime (דינמי / Dynamic Dispatch).</td>
+      </tr>
+      <tr>
+        <td><strong>סוג הערך המחזיר</strong></td>
+        <td>יכול להיות שונה או זהה.</td>
+        <td>חייב להיות זהה (או תת-טיפוס תואם - Covariant return type).</td>
+      </tr>
+      <tr>
+        <td><strong>מנגנון פולימורפיזם</strong></td>
+        <td>Static Polymorphism</td>
+        <td>Dynamic Polymorphism</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <h2>Dynamic Polymorphism (פולימורפיזם דינמי / Runtime Polymorphism)</h2>
+    <p>פולימורפיזם דינמי מתרחש בזמן ריצת התוכנית (Runtime). במצב זה, הקומפיילר בזמן ההידור עדיין לא יודע בדיוק איזה קוד יורץ, וההחלטה מתקבלת רק כשהאפליקציה פועלת בפועל מול האובייקטים שבזיכרון (ה-Heap).</p>
+    <p><strong>איך זה בא לידי ביטוי?</strong> זה מתבצע באמצעות Method Overriding בשילוב עם ירושה או מימוש ממשקים, כאשר משתמשים במשתנה מטיפוס אב (או interface) שמצביע על אובייקט של מחלקה בת.</p>
+    <p><strong>איך המערכת מחליטה?</strong> התוכנית "מסתכלת" על סוג האובייקט האמיתי שיושב ב-Heap (ולא על הטיפוס שמוגדר ב-Stack). בעזרת מנגנון שנקרא Dynamic Method Dispatch (או Late Binding), המערכת נעזרת בטבלת וירטואלית (vtable) כדי לשלוף את המתודה המעודכנת ביותר של האובייקט הספציפי בזמן אמת.</p>
+    <p><strong>יתרון מרכזי:</strong> גמישות עצומה והרחבה של קוד (Extensibility). אפשר לכתוב לוגיקה כללית (כמו לעבור על רשימה של כל בעלי החיים ולקרוא ל-()makeSound) בלי לדעת מראש אילו סוגי בעלי חיים ספציפיים יהיו שם, והמערכת תדע להפעיל את הקול הנכון לכל חיה באופן אוטומטי בזמן ריצה.</p>
+
+    <h2>Static Polymorphism (פולימורפיזם סטטי / Compile-Time Polymorphism)</h2>
+    <p>פולימורפיזם סטטי מתרחש בזמן הקומפילציה (זמן הידור, טרם הפעלת התוכנית). הקומפיילר יודע בדיוק איזה קוד להריץ עוד לפני שהאפליקציה בכלל עלתה לזיכרון.</p>
+    <p><strong>איך זה בא לידי ביטוי?</strong> זה קורה בעיקר באמצעות Method Overloading (העמסת מתודות) שאפשרה לנו להשתמש באותו שם מתודה עם פרמטרים שונים, או דרך מתודות סטטיות (static methods).</p>
+    <p><strong>איך המערכת מחליטה?</strong> הקומפיילר בוחן את חתימת המתודה ואת סוגי המשתנים ששלחנו לה ברגע כתיבת הקוד. לפי סוג הנתונים המועברים בסוגריים הוא "מדביק" את הכתובת המדויקת של המתודה לקוד (תהליך שנקרא Early Binding או Static Binding).</p>
+    <p><strong>יתרון מרכזי:</strong> ביצועים מהירים מאוד בזמן ריצה, כיוון שאין שום חישוב או בדיקה שצריך לבצע, תוך כדי שהתוכנית רצה. הכל כבר נקבע מראש על ידי הקומפיילר.</p>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

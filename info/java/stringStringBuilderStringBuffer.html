@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - String Vs. StringBuilder Vs. StringBuffer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>String, StringBuilder vs StringBuffer</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">ההבדל המרכזי בין String, StringBuilder ו־StringBuffer ב־Java קשור לשאלה האם המחרוזת ניתנת לשינוי והאם היא בטוחה לשימוש ב Thread-Safe.</p>
+
+      <p>
+        למידע נוסף על  Immutable  מול Mutable ניתן לקרוא כאן:
+        <a href="/info/java/immutableObjects.html">Java immutable objects</a>
+
+      </p>
+    </div>
+
+    <h2>String</h2>
+    <p>מחלקת String היא Immutable (בלתי ניתנת לשינוי). מרגע שנוצר אובייקט מסוג String בזיכרון, אי אפשר לשנות את תוכנו לעולם. כל פעולה שנראית כאילו משנה את המחרוזת (כמו חיבור מחרוזות עם +) מייצרת למעשה אובייקט חדש לגמרי ב־Heap.</p>
+
+    <p><strong>ניהול זיכרון ו־String Pool:</strong></p>
+    <p>מחרוזות שנוצרות כליטרל (למשל: ;"String s = "Hello) נשמרות באזור מיוחד ב־Heap שנקרא String Pool , במטרה לחסוך מקום ולמחזר מחרוזות זהות. ניתן לראות הרחבה על נושא זה <<a href="/info/java/java-string-pool.html"> במאמר על string pool באתר  </a> </p>
+    <p>אם מחברים מחרוזות בלולאה באמצעות +, נוצרים המון אובייקטים זמניים ב־Heap שמעמיסים על ה־Garbage Collector (GC) ופוגעים דרמטית בביצועים.</p>
+
+    <p><strong>מתי להשתמש?</strong> כאשר מדובר בטקסטים קבועים שלא משתנים תדיר, או כשנרצה לנצל את ה־String Pool.</p>
+
+    <h2>2. StringBuilder (גמישות וביצועים גבוהים)</h2>
+    <p>מחלקת StringBuilder היא Mutable (ניתנת לשינוי). היא נועדה בדיוק כדי לפתור את בעיית הביצועים של חיבור מחרוזות מרובות.</p>
+
+    <p><strong>ניהול זיכרון:</strong></p>
+    <p>האובייקט שומר מערך פנימי (Buffer) ב־Heap. כאשר משנים את המחרוזת (למשל באמצעות .()append), התוכן נוסף לאותו אזור זיכרון קיים מבלי לייצר אובייקטים חדשים ב־Heap (כל עוד יש מקום פנוי במערך; אם צריך, הוא מקצה מערך חדש וגדול יותר מאחורי הקלעים).</p>
+
+    <p><strong>Thread Safety:</strong></p>
+    <p>היא אינה מסונכרנת (Not Thread-Safe). משמעות הדבר היא ששני Threads שונים לא יכולים לעבוד עליה בו זמנית, אחרת ייווצרו בעיות בנתונים.</p>
+
+    <p><strong>יתרון מרכזי:</strong> מהירות עצומה ויעילות גבוהה בניהול זיכרון לעומת String.</p>
+    <p><strong>מתי להשתמש?</strong> ברוב המקרים שבהם נרצה לבנות מחרוזות ארוכות או לבצע שינויים מרובים בתוך מתודה יחידה (Single-Threaded).</p>
+
+    <h2>3. StringBuffer (הגרסה הבטוחה ל multi Thread )</h2>
+    <p>מחלקת StringBuffer דומה לחלוטין ל־StringBuilder היא גם Mutable (ניתנת לשינוי) ועובדת עם מערך פנימי ב־Heap.</p>
+
+    <p><strong>ההבדל הקריטי סנכרון (Thread Safety):</strong></p>
+    <p>כל המתודות המרכזיות ב־StringBuffer מוגדרות כ־synchronized. כלומר, היא בטוחה לחלוטין לשימוש בסביבה Multi-threaded, שבה מספר thread ניגשים לאותה מחרוזת במקביל.</p>
+
+    <p><strong>המחיר בביצועים:</strong></p>
+    <p>מנגנון הנעילה והשחרור (Synchronization overhead) הופך אותה לאיטית יותר בהשוואה ל־StringBuilder.</p>
+
+    <p><strong>מתי להשתמש?</strong> רק כאשר יש צורך מוכח בשיתוף אותו אובייקט מחרוזת בין מספר thread שונים במקביל (כיום השימוש בה נדיר יחסית, שכן ברוב המוחלט של המקרים בקוד מודרני מעדיפים את StringBuilder).</p>
+
+    <h2>טבלת השוואה טכנית</h2>
+
+    <table class="article-table">
+      <thead>
+      <tr>
+        <th>תכונה</th>
+        <th>String</th>
+        <th>StringBuilder</th>
+        <th>StringBuffer</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><strong>מוטביליות (Mutability)</strong></td>
+        <td>אי־מוטבילי (Immutable)</td>
+        <td>מוטבילי (Mutable)</td>
+        <td>מוטבילי (Mutable)</td>
+      </tr>
+      <tr>
+        <td><strong> Thread-Safe</strong></td>
+        <td>כן (כי אי אפשר לשנות אותו)</td>
+        <td>לא (Not Thread-Safe)</td>
+        <td>כן (Thread-Safe / Synchronized)</td>
+      </tr>
+      <tr>
+        <td><strong>ביצועים בשינויים מרובים</strong></td>
+        <td>גרועים (יוצר הרבה אובייקטים ב־Heap)</td>
+        <td>מהירים ויעילים ביותר</td>
+        <td>איטי יותר מ־StringBuilder בגלל הסנכרון</td>
+      </tr>
+      <tr>
+        <td><strong>אזור אחסון בזיכרון</strong></td>
+        <td>Heap (וגם String Pool לליטרלים)</td>
+        <td>Heap</td>
+        <td>Heap</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="code-container">
+      <pre><code>public class StringComparisonDemo {
+    public static void main(String[] args) {
+
+        // 1. String: Immutable (Every modification creates a new object in the Heap)
+        String immutableStr = "Hello";
+        // A new String object is created in memory; 'immutableStr' now points to it
+        immutableStr = immutableStr + " World";
+        System.out.println("String: " + immutableStr);
+
+        //output: Hello World
+
+        // 2. StringBuilder: Mutable (Modifies the same object in place, highly efficient)
+        StringBuilder mutableBuilder = new StringBuilder("Hello");
+        // Appends text to the existing internal buffer without creating new objects
+        mutableBuilder.append(" World");
+        mutableBuilder.append(" from Java!");
+        System.out.println("StringBuilder: " + mutableBuilder.toString());
+
+        //output: Hello World from Java!
+
+        // 3. StringBuffer: Mutable and Thread-Safe (Synchronized methods for multi-threading)
+        StringBuffer threadSafeBuffer = new StringBuffer("Safe");
+        // Safe to use across multiple threads simultaneously due to synchronization overhead
+        threadSafeBuffer.append(" Threading");
+        System.out.println("StringBuffer: " + threadSafeBuffer.toString());
+
+       //output: Safe Threading
+    }
+}</code></pre>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java - Switch Expressions Vs. Switch Statement</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style/style.css">
+</head>
+<body>
+
+<div class="container">
+  <main class="article">
+
+    <h1>Switch Expressions Vs. Switch Statement</h1>
+
+    <div class="note">
+      <p style="margin-bottom: 0;">החל מגרסה Java 14 ישנה מהפכה במבנה ה switch המסורתי. מעבר משימוש בו כ Statement (פקודה שמבצעת פעולות) לשימוש בו כ Expression (ביטוי שמחזיר ערך ישירות).</p>
+    </div>
+
+    <h2>יתרונות Switch Expressions (חדש - Java 14 ומעלה) לעומת Switch Statement (ישן - Java 13 ומטה).</h2>
+
+    <h3 style="margin-top: 30px;">1. אין Fall-through (אין זליגה אוטומטית)</h3>
+    <p><strong>ב Switch Statement (ישן):</strong> אם שכחת לכתוב break בסוף case מסוים, הקוד המשיך לרוץ אוטומטית לתוך ה-case הבא (תופעה שנקראת Fall-through). זו הייתה אחת הסיבות הנפוצות לבאגים ב Java.</p>
+
+    <p>לדוגמה קטע קוד עם הגישה הישנה:</p>
+    <div class="code-container">
+      <pre><code>String dayType = "SATURDAY";
+String message;
+
+switch (dayType) {
+    case "MONDAY":
+    case "TUESDAY":
+    case "WEDNESDAY":
+    case "THURSDAY":
+    case "FRIDAY":
+        // This runs for weekdays
+        System.out.println("Processing a standard workday...");
+        message = "Weekday";
+        break; // MANDATORY: Without this break, code would leak into the next case!
+
+    case "SATURDAY":
+    case "SUNDAY":
+        // This runs for weekends
+        message = "Weekend";
+        break; // MANDATORY: Without this break, code would leak into default!
+
+    default:
+        // This runs if no other case matches
+        System.out.println("Invalid day provided.");
+        message = "Unknown";
+        break;
+}
+
+System.out.println("Result: " + message);</code></pre>
+    </div>
+
+    <p><strong>Switch Expressions (חדש):</strong></p>
+
+    <p>לדוגמה קטע קוד עם הגישה החדשה:</p>
+    <div class="code-container">
+      <pre><code>String dayType = "SATURDAY";
+
+String message = switch (dayType) {
+    case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> {
+        // This block runs ONLY for weekdays and exits immediately afterwards
+        System.out.println("Processing a standard workday...");
+        yield "Weekday";
+    }
+    // This runs for weekends
+    case "SATURDAY", "SUNDAY" -> "Weekend";
+
+    default -> {
+        // This only executes if none of the above match
+        System.out.println("Invalid day provided.");
+        yield "Unknown";
+    }
+};
+
+System.out.println("Result: " + message);</code></pre>
+    </div>
+
+    <h3 style="margin-top: 30px;">2. קיבוץ ערכים בשורה אחת (Multiple Constants)</h3>
+    <p>התחביר החדש מאפשר לרכז מספר תנאים שונים שמבצעים בדיוק את אותה הפעולה, תחת שורה אחת מופרדת בפסיקים.</p>
+    <div class="code-container">
+      <pre><code>case "MONDAY", "FRIDAY", "SUNDAY" -> 6;</code></pre>
+    </div>
+    <p>ולא:</p>
+    <div class="code-container">
+      <pre><code>case "MONDAY":
+case "TUESDAY":
+case "WEDNESDAY":
+case "THURSDAY":
+case "FRIDY":</code></pre>
+    </div>
+
+    <h3 style="margin-top: 30px;">3. חובה לכסות את כל האפשרויות (Exhaustiveness)</h3>
+    <p>כאשר משתמשים ב-Switch Expressions (חדש), הקומפיילר דורש שהקוד יכסה את כל הערכים האפשריים מבחינה לוגית, אחרת הקוד לא יתקמפל ותתקבל שגיאת קומפילציה.<br>
+      אם נכתוב switch על Enum, הקומפיילר מצפה שנכסה את כל הערכים האפשריים של אותו Enum.<br>
+      אם מדובר במשתנה רגיל (כמו String או int), חובה לכלול תמיד סעיף default שיסגור את כל המקרים הבלתי צפויים.</p>
+
+    <h3 style="margin-top: 30px;">4. ערך החזרה אחיד מכל ה Cases</h3>
+    <p>מכיוון שמשתנה מקבל את הערך מתוצאת ה-switch, כל ה-caseים כולל ה-default חייבים להחזיר את אותו סוג טיפוס (Type).<br>
+      אי אפשר ש-case אחד יחזיר String ואחר יחזיר int. הקומפיילר ידרוש עקביות במשתנים המוחזרים.</p>
+
+    <h3 style="margin-top: 30px;">5. שילוב עם שגיאות (Exceptions)</h3>
+    <p>בתוך case בין אם בחץ או בתוך בלוק עם yield, מותר לזרוק שגיאה Exception אם משהו לא תקין. הקומפיילר חכם מספיק כדי להבין ששגיאה שנזרקת עוצרת את הריצה, ולכן היא לא פוגעת בדרישה להחזיר ערך תקין.</p>
+    <div class="code-container">
+      <pre><code>int val = switch (input) {
+    case 1 -> 10;
+    default -> throw new IllegalArgumentException("Invalid input: " + input);
+};</code></pre>
+    </div>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+        כאשר עוברים ל Java 14 ומעלה, יש נטייה להתבלבל בין הגישה הישנה לחדשה. ולכן אם נכתוב בטעות return באמצע הswitch נעצור את כל המטודה ולא נמשיך הלאה במקרים האפשריים.
+      </p>
+    </div>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> דוגמה לשימוש לא נכון!
+      </div>
+      <div class="code-container" style="text-align: left;">
+        <pre><code>// Buggy implementation using return
+public static String evaluateStatusBuggy(String status) {
+    String message = switch (status) {
+        case "ACTIVE" -> {
+            System.out.println("Executing logic for ACTIVE status...");
+            // BUG: 'return' exits the ENTIRE evaluateStatusBuggy method immediately!
+            // It does NOT just return a value to the switch expression.
+            return "Accidental early exit!";
+        }
+        default -> {
+            yield "Unknown status.";
+        }
+    };
+    // This line is dead code for "ACTIVE" because the method already returned above
+    return message;
+}</code></pre>
+      </div>
+    </div>
+
+    <h2>ההבדל בארכיטקטורה (Scope & Context):</h2>
+    <ul>
+      <li>מתודה היא בלוק קוד ראשי שמסתיים תמיד עם return.</li>
+      <li>switch עם בלוקים {} בתוך case הוא למעשה בלוק מקונן (Nested Block) שיושב בתוך מתודה.</li>
+    </ul>
+    <p>כאשר מפתחים חדשים/ישנים משדרגים גרסת Java, ורואים סוגריים מסולסלים {} בתוך ה-case, ההרגל לפרש זאת אוטומטית כמו מתודה קטנה, ולכן האינסטינקט הראשוני הוא לכתוב return כדי להחזיר את הערך.</p>
+
+    <p><strong>מה קורה בפועל כשמשתמשים ב-return בטעות?</strong></p>
+    <p>מילת המפתח return אומרת ל-Java: "תעצרי הכל, צאי מיד מהמתודה הנוכחית וחזרי למקום שבו קראת לה".<br>
+      כתוצאה מכך, הקוד שאמור לקבל את תוצאת ה-switch (במקרה שלנו המשתנה message) מעולם לא מקבל כלום, והשורה שאחרי ה-switch במתודה הופכת ל-Dead Code – קוד מת שלאעולם לא יגיעו אליו.</p>
+
+    <p><strong>התפקיד הייחודי של yield:</strong></p>
+    <p>לעומת זאת, yield הוא פקודה ייעודית שנוצרה אך ורק עבור switch expressions. היא אומרת ל-Java: אל תצאי מהמתודה! רק תעבירי את הערך הספציפי הזה החוצה אל תוך המשתנה שמחכה בתוצאת ה-switch, ותני למתודה להמשיך לרוץ רגיל.</p>
+
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 40px 0;">
+
+    <h2>Java 21</h2>
+
+    <p><strong>החל מגרסה Java 21 הושק באופן רשמי טיפול ב-null בתוך switch!</strong> (ניתן למצוא אותו החל מ-Java 17 בחלק מהגרסאות כ-Preview Feature)</p>
+    <p>בגרסאות עבר, אם היינו שולחים ערך שהוא null לתוך switch היינו מקבלים NullPointerException.  עם case null, ה switch יזהה שהאובייקט null ולא יעוף בשגיאה!</p>
+    <div class="code-container">
+      <pre><code>String result = switch (input) {
+    case null -> "It was null!";
+    case String s -> "String: " + s;
+    default -> "Something else";
+};</code></pre>
+    </div>
+
+    <div class="alert-box-danger" style="margin: 30px 0;">
+      <div class="warning-title">
+        <span>⚠️</span> שימו לב!
+      </div>
+      <p class="warning-text-primary" style="margin-bottom: 0;">
+         בהרבה מקרים, מבחינה לוגית, אין הבדל מבחינת התנהגות בין קבלת אובייקט null לבין קבלת אובייקט מסוג לא ידוע, מכיוון ששני המקרים מהווים קלט לא תקין. במקום לכתוב שתי שורות נפרדות שעושות בדיוק את אותו הדבר, התחביר המודרני מאפשר לאחד אותם עם פסיק:
+        <br>
+        <code>case null, default -></code><br>
+        ולכן, לא חייבים לבדוק אם האובייקט null בשורה הראשונה ב switch.
+      </p>
+    </div>
+
+    <p>לדוגמה:</p>
+    <div class="code-container">
+      <pre><code>public class NullDefaultExample {
+    public static String evaluateInput(Object input) {
+        return switch (input) {
+            // Handles valid string inputs
+            case String s -> "Valid string: " + s;
+
+            // Combines null and any other unexpected types into a single branch
+            case null, default -> "Error: Input is either null or an unsupported type!";
+        };
+    }
+}</code></pre>
+    </div>
+
+    <p style="margin-top: 30px;"><strong>החל מגרסה Java 21 הושק באופן רשמי Pattern Matching for Switch</strong> (ניתן למצוא אותו החל מ Java 17 בחלק מהגרסאות כ Preview Feature).</p>
+    <p>בעבר, עד גרסת Java 21 ידענו לתת ל switch רק ערכים בודדים, מספרים, אותיות, Enum וכו'. פה הגיעה הבשורה החדשה: switch יכול לבדוק אובייקטים ולזהות דינמית מהו הסוג שנשלח.</p>
+    <div class="code-container">
+      <pre><code>static String format(Object obj) {
+    return switch (obj) {
+        case Integer i -> "It's an integer: " + i;
+        case String s -> "It's a string of length " + s.length();
+        case Double d -> "It's a double: " + d;
+        default -> "Unknown type";
+    };
+}</code></pre>
+    </div>
+
+    <p>לא רק שהוא יודע לזהות את האובייקט, יש לו את האופציה של <strong>Guard Patterns  תנאי המשך באמצעות when</strong>. אנחנו יכולים להוסיף לו תנאים, ממש כמו מיני if בתוך ה switch:</p>
+    <div class="code-container">
+      <pre><code>case String s when s.length() > 10 -> "A very long string";
+case String s -> "A short string";</code></pre>
+    </div>
+
+    <p>וככה ניתן לשלב את שניהם ולחסוך המון if-else ולעשות את כל ה"מיון" ב-switch. לדוגמה, שילוב של שתי התכונות האלו ב switch אחד (שימו לב לשילוב של Pattern Matching יחד עם null case):</p>
+    <div class="code-container">
+      <pre><code>public class SimplePatternExample {
+    public static String evaluate(Object obj) {
+        return switch (obj) {
+            // Guard pattern: handles positive numbers only
+            case Integer i when i > 0 -> "Positive integer: " + i;
+
+            // Regular pattern: handles zero or negative numbers
+            case Integer i -> "Zero or negative integer: " + i;
+
+            // Guard pattern: handles long strings (> 5 chars)
+            case String s when s.length() > 5 -> "Long string: " + s;
+
+            // Regular pattern: handles short strings
+            case String s -> "Short string: " + s;
+
+            // Safe handling for null inputs
+            case null -> "Value is null";
+
+            // Fallback for any other types
+            default -> "Unknown type";
+        };
+    }
+}</code></pre>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid var(--border); margin: 40px 0;">
+
+    <h2>עבודה עם Sealed Class</h2>
+    <p>
+      אם אתם לא מכירים את sealed class ניתן לקרוא עוד על הנושא
+     <a href="/info/java/sealedClass.html">כאן</a>
+      .
+    </p>
+
+    <p>Switch Expressions יכול להשתמש ב sealed class, ומייתר לחלוטין את הצורך בכתיבת default!</p>
+    <p>בזכות העובדה ש sealed class מקובעת בדיוק מיהם היורשים שלה, הקומפיילר של Java חכם מספיק כדי להבטיח את הדברים הבאים:</p>
+    <ul>
+      <li><strong>כל האופציות מכוסות (Exhaustiveness):</strong> יש רשימה מוגדרת מראש של האופציות ולכן הקומפיילר יודע בדיוק מהן.</li>
+      <li><strong>לא נדרש default:</strong> מכיוון שאין אופציות נוספות אפשריות, הוא לא דורש ממך לכתוב default.</li>
+      <li><strong>התראה אוטומטית לעתיד:</strong> ב-sealed class, הקומפיילר מיד יתריע ויזרוק שגיאת קומפילציה בכל מקומות ה switch במערכת ששכחו לטפל בתת-המחלקה החדשה שהתווספה.</li>
+    </ul>
+
+    <p><strong>דוגמה בקוד:</strong></p>
+    <div class="code-container">
+      <pre><code>public static String getAreaDescription(Shape shape) {
+    return switch (shape) {
+        // The compiler automatically matches the Circle type and unwraps it
+        case Circle c -> "Circle area: " + c.area();
+
+        // The compiler automatically matches the Square type
+        case Square s -> "Square area: " + s.area();
+
+        // No 'default' needed! The compiler is fully satisfied (exhaustiveness)
+        // because we covered all possible classes allowed by the sealed 'Shape' permits list.
+    };
+}</code></pre>
+    </div>
+
+    <p>זה שילוב מדהים! ככה אין אופציות שנשכחות גם אם נעדכן את ה sealed class בעתיד.</p>
+
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="../../index.html" class="back-btn">🏠 Back to Orly's Code Corner</a>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>
